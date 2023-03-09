@@ -1,20 +1,21 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 
-class LoginPage extends StatefulWidget {
-  const LoginPage({Key? key}) : super(key: key);
+class LoginScreen extends StatefulWidget {
+  const LoginScreen({Key? key}) : super(key: key);
 
   @override
-  State<LoginPage> createState() => _LoginPageState();
+  State<LoginScreen> createState() => _LoginScreenState();
 }
 
-class _LoginPageState extends State<LoginPage> {
+class _LoginScreenState extends State<LoginScreen> {
   signIn() {}
   signUp() {}
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        body: SizedBox(
+      resizeToAvoidBottomInset: false,
+      body: SizedBox(
       width: double.infinity,
       height: double.infinity,
       child: Column(
@@ -29,17 +30,13 @@ class _LoginPageState extends State<LoginPage> {
           Container(
             width: 350,
             padding: const EdgeInsets.only(left: 16, right: 16),
-            child: const TextField(
-              style: TextStyle(fontSize: 15, color: Colors.black),
+            child: TextField(
+              style: TextStyle(fontSize: 15, color: Colors.grey.shade900),
               keyboardType: TextInputType.emailAddress,
-              decoration: InputDecoration(
+              decoration: const InputDecoration(
                   fillColor: Colors.white,
-                  filled: true,
                   border: OutlineInputBorder(
-                      borderSide: BorderSide(
-                        style: BorderStyle.solid,
-                        color: Color(0xffd9d9d9),
-                      ),
+                      borderSide: BorderSide(color: Colors.black12),
                       borderRadius: BorderRadius.all(Radius.circular(20))),
                   hintText: "Email"),
             ),

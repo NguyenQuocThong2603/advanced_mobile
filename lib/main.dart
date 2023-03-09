@@ -1,4 +1,4 @@
-import 'package:advanced_mobile/src/screens/login/login.dart';
+import 'package:advanced_mobile/src/screens/tutors/tutors.dart';
 import 'package:flutter/material.dart';
 
 void main() {
@@ -25,7 +25,7 @@ class MyApp extends StatelessWidget {
         // is not restarted.
         primarySwatch: Colors.blue,
       ),
-      home: const LoginPage(),
+      home: const TutorsScreen(),
     );
   }
 }
