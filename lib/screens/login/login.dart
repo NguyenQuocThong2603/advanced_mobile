@@ -1,16 +1,10 @@
+import 'package:advanced_mobile/config/color.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 
-class LoginScreen extends StatefulWidget {
+class LoginScreen extends StatelessWidget {
   const LoginScreen({Key? key}) : super(key: key);
 
-  @override
-  State<LoginScreen> createState() => _LoginScreenState();
-}
-
-class _LoginScreenState extends State<LoginScreen> {
-  signIn() {}
-  signUp() {}
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -62,10 +56,10 @@ class _LoginScreenState extends State<LoginScreen> {
             child: Align(
                 alignment: Alignment.bottomRight,
                 child: GestureDetector(
-                  child: const Text('Forgot Password?',
+                  child: Text('Forgot Password?',
                       style: TextStyle(
                         fontSize: 16,
-                        color: Color.fromRGBO(40, 106, 210, 1),
+                        color: AppColors.primary,
                       )),
                 )),
           ),
@@ -74,9 +68,9 @@ class _LoginScreenState extends State<LoginScreen> {
               margin: const EdgeInsets.only(top: 12, bottom: 16),
               padding: const EdgeInsets.only(left: 16, right: 16),
               child: TextButton(
-                onPressed: signIn(),
+                onPressed: () {},
                 style: TextButton.styleFrom(
-                  backgroundColor: const Color.fromRGBO(0, 113, 240, 1),
+                  backgroundColor: AppColors.primary,
                   padding: const EdgeInsets.all(12),
                   shape: const RoundedRectangleBorder(
                     borderRadius: BorderRadius.all(Radius.circular(20)),
@@ -125,9 +119,9 @@ class _LoginScreenState extends State<LoginScreen> {
                     children: [
                   TextSpan(
                       text: 'Sign up',
-                      recognizer: TapGestureRecognizer().onTap = signUp(),
-                      style: const TextStyle(
-                          color: Color.fromRGBO(40, 106, 210, 1), fontSize: 16,fontWeight: FontWeight.w500))
+                      recognizer: TapGestureRecognizer()..onTap = () {},
+                      style: TextStyle(
+                          color: AppColors.primary, fontSize: 16,fontWeight: FontWeight.w500))
                 ])),
           )
         ],

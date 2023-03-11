@@ -1,4 +1,8 @@
-import 'package:advanced_mobile/src/screens/tutors/tutors.dart';
+
+import 'package:advanced_mobile/screens/content.dart';
+import 'package:advanced_mobile/screens/course_detail/course_detail.dart';
+import 'package:advanced_mobile/screens/login/login.dart';
+import 'package:advanced_mobile/screens/tutor_detail/tutor_detail.dart';
 import 'package:flutter/material.dart';
 
 void main() {
@@ -25,7 +29,7 @@ class MyApp extends StatelessWidget {
         // is not restarted.
         primarySwatch: Colors.blue,
       ),
-      home: const TutorsScreen(),
+      home: const CourseDetailScreen(),
     );
   }
 }
