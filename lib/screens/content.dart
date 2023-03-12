@@ -1,5 +1,7 @@
 import 'package:advanced_mobile/screens/courses/courses.dart';
+import 'package:advanced_mobile/screens/history/history.dart';
 import 'package:advanced_mobile/screens/tutors/tutors.dart';
+import 'package:advanced_mobile/screens/upcoming/upcoming.dart';
 import 'package:flutter/material.dart';
 
 class ContentScreen extends StatefulWidget {
@@ -14,9 +16,8 @@ class _ContentScreenState extends State<ContentScreen> {
   final listScreen = const <Widget> [
     TutorsScreen(),
     CoursesScreen(),
-    SizedBox(),
-    SizedBox(),
-    SizedBox(),
+    UpcomingScreen(),
+    HistoryScreen(),
   ];
   var curIndex = 0;
 
@@ -29,8 +30,8 @@ class _ContentScreenState extends State<ContentScreen> {
           currentIndex: curIndex,
           items: const <BottomNavigationBarItem>[
             BottomNavigationBarItem(
-              icon: Icon(Icons.home),
-              label: 'Home',
+              icon: Icon(Icons.groups),
+              label: 'Tutors',
             ),
             BottomNavigationBarItem(
               icon: Icon(Icons.chat_bubble),
@@ -41,8 +42,8 @@ class _ContentScreenState extends State<ContentScreen> {
               label: 'Upcoming',
             ),
             BottomNavigationBarItem(
-              icon: Icon(Icons.groups),
-              label: 'Tutors',
+              icon: Icon(Icons.history),
+              label: 'History',
             ),
             BottomNavigationBarItem(
               icon: Icon(Icons.settings),

@@ -45,7 +45,7 @@ class _CourseDetailScreenState extends State<CourseDetailScreen> {
                     children: [
                       Container(
                           margin: const EdgeInsets.only(right: 4),
-                          child: Icon(Icons.help_outline,color: Colors.pink,)
+                          child: const Icon(Icons.help_outline,color: Colors.pink,)
                       ),
                       const Text('Why take this course',style: TextStyle(fontSize: 18, fontWeight: FontWeight.w500),),
                     ],
@@ -125,9 +125,9 @@ class _CourseDetailScreenState extends State<CourseDetailScreen> {
                                   mainAxisAlignment: MainAxisAlignment.center,
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: const [
-                                    Text('1.',style: TextStyle(color: Colors.black,fontSize: 25),),
+                                    Text('1.',style: TextStyle(fontSize: 25),),
                                     Text('Recycling for Sustainability',
-                                      style: TextStyle(color: Colors.black,fontSize: 25),
+                                      style: TextStyle(fontSize: 25),
                                     )
                                   ],
                                 ),
