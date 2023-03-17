@@ -3,25 +3,65 @@ import 'package:advanced_mobile/screens/tutor_detail/general_information.dart';
 import 'package:advanced_mobile/screens/tutor_detail/specification_information.dart';
 import 'package:flutter/material.dart';
 import 'package:video_player/video_player.dart';
+import 'package:chewie/chewie.dart';
 
 
 class TutorDetailScreen extends StatefulWidget {
-  const TutorDetailScreen({Key? key}) : super(key: key);
+  const TutorDetailScreen({
+    videoPlayerController,
+    Key? key
+  }) : super(key: key);
 
   @override
   State<TutorDetailScreen> createState() => _TutorDetailScreenState();
 }
 
 class _TutorDetailScreenState extends State<TutorDetailScreen> {
+  late VideoPlayerController _videoPlayerController;
+  ChewieController? _chewieController;
+  @override
+  void initState() {
+    super.initState();
+    initializePlayer();
+  }
+  @override
+  void dispose() {
+    _videoPlayerController.dispose();
+    _chewieController?.dispose();
+    super.dispose();
+  }
+
+  void initializePlayer() async {
+    _videoPlayerController =
+        VideoPlayerController.network("https://api.app.lettutor.com/video/4d54d3d7-d2a9-42e5-97a2-5ed38af5789avideo1627913015871.mp4");
+    await _videoPlayerController.initialize().then((value) => setState(() {}));
+    _chewieController = ChewieController(
+      videoPlayerController: _videoPlayerController,
+      showOptions: false,
+      autoPlay: true,
+    );
+  }
   @override
   Widget build(BuildContext context) {
+    final aspectRatio = _videoPlayerController.value.isInitialized ? _videoPlayerController.value.aspectRatio : 3/2;
+    print('aspectRatio: ${aspectRatio}');
     return Scaffold(
       appBar: AppBar(
         title: Row(
-          children: const[
-            Icon(Icons.arrow_back, color: Colors.black,size: 30,),
+          children: [
+            GestureDetector(
+                onTap: () {
+                  Navigator.pop(context);
+                },
+                child: const Icon(Icons.arrow_back, color: Colors.black,size: 30,)
+            ),
+            Container(
+                margin: const EdgeInsets.only(left: 8),
+                child: const Text('Abby',style: TextStyle(color: Colors.black),)
+            )
           ],
         ),
+        automaticallyImplyLeading: false,
         backgroundColor: Colors.white,
       ),
       body: Padding(
@@ -31,6 +71,15 @@ class _TutorDetailScreenState extends State<TutorDetailScreen> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
+              Container(
+                color: Colors.black,
+                width: MediaQuery.of(context).size.width,
+                margin: const EdgeInsets.only(bottom: 10),
+                child: AspectRatio(
+                  aspectRatio: aspectRatio,
+                  child: _chewieController!=null ? Chewie(controller: _chewieController as ChewieController) : Container(),
+                ),
+              ),
               const GeneralInformation(),
               const SpecificationInformation(),
               const Text('Rating and Comment(0)', style: TextStyle(color: Color.fromRGBO(0, 113, 240, 1),fontSize: 16),),

@@ -1,5 +1,6 @@
 import 'package:advanced_mobile/screens/courses/courses.dart';
 import 'package:advanced_mobile/screens/history/history.dart';
+import 'package:advanced_mobile/screens/setting/setting.dart';
 import 'package:advanced_mobile/screens/tutors/tutors.dart';
 import 'package:advanced_mobile/screens/upcoming/upcoming.dart';
 import 'package:flutter/material.dart';
@@ -18,6 +19,8 @@ class _ContentScreenState extends State<ContentScreen> {
     CoursesScreen(),
     UpcomingScreen(),
     HistoryScreen(),
+    SettingScreen(),
+
   ];
   var curIndex = 0;
 
@@ -34,7 +37,7 @@ class _ContentScreenState extends State<ContentScreen> {
               label: 'Tutors',
             ),
             BottomNavigationBarItem(
-              icon: Icon(Icons.chat_bubble),
+              icon: Icon(Icons.menu_book),
               label: 'Courses',
             ),
             BottomNavigationBarItem(

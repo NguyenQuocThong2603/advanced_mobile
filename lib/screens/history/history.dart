@@ -12,6 +12,7 @@ class HistoryScreen extends StatelessWidget {
             style: TextStyle(color: Colors.black),
           ),
           backgroundColor: Colors.white,
+          automaticallyImplyLeading: false,
           elevation: 0,
         ),
         body: Padding(
@@ -37,14 +38,14 @@ class HistoryScreen extends StatelessWidget {
                         ],
                       ),
                       child: Container(
-                        padding: const EdgeInsets.all(15),
+                        padding: const EdgeInsets.only(top: 15),
                         child: Column(
                           mainAxisAlignment: MainAxisAlignment.start,
                           children: [
                             Row(
                               children: [
                                 Container(
-                                    margin: const EdgeInsets.only(right: 8, left: 15),
+                                    margin: const EdgeInsets.only(right: 8, left: 15, bottom: 15),
                                     child: const Image(image: NetworkImage('https://cdn-icons-png.flaticon.com/512/147/147133.png',scale: 8))
                                 ),
                                 Column(
@@ -78,6 +79,49 @@ class HistoryScreen extends StatelessWidget {
                                 )
                               ],
                             ),
+                            Row(
+                              children: [
+                                Expanded(
+                                  child: GestureDetector(
+                                    child: Container(
+                                      padding: const EdgeInsets.only(top: 10, bottom: 10),
+                                      decoration: BoxDecoration(
+                                          border: Border.all(color: Colors.grey[200] as Color),
+                                          borderRadius: const BorderRadius.only(topLeft: Radius.circular(4), bottomLeft: Radius.circular(4))),
+                                      child: Row(
+                                        mainAxisAlignment: MainAxisAlignment.center,
+                                        children: const [
+                                          Text(
+                                            'Watch record',
+                                            style: TextStyle(color: Colors.red),
+                                          )
+                                        ],
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                                Expanded(
+                                  child: GestureDetector(
+                                    child: Container(
+                                      padding: const EdgeInsets.only(top: 10, bottom: 10),
+                                      decoration: BoxDecoration(
+                                          border: Border.all(color: Colors.blue),
+                                          color: Colors.blue,
+                                          borderRadius: const BorderRadius.only(topRight: Radius.circular(4), bottomRight: Radius.circular(6))),
+                                      child: Row(
+                                        mainAxisAlignment: MainAxisAlignment.center,
+                                        children: const [
+                                          Text(
+                                            'Give feedback',
+                                            style: TextStyle(color: Colors.white),
+                                          )
+                                        ],
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            )
                           ],
                         ),
                       ),
@@ -97,14 +141,14 @@ class HistoryScreen extends StatelessWidget {
                         ],
                       ),
                       child: Container(
-                        padding: const EdgeInsets.all(15),
+                        padding: const EdgeInsets.only(top: 15),
                         child: Column(
                           mainAxisAlignment: MainAxisAlignment.start,
                           children: [
                             Row(
                               children: [
                                 Container(
-                                    margin: const EdgeInsets.only(right: 8, left: 15),
+                                    margin: const EdgeInsets.only(right: 8, left: 15, bottom: 15),
                                     child: const Image(image: NetworkImage('https://cdn-icons-png.flaticon.com/512/147/147133.png',scale: 8))
                                 ),
                                 Column(
@@ -138,10 +182,53 @@ class HistoryScreen extends StatelessWidget {
                                 )
                               ],
                             ),
+                            Row(
+                              children: [
+                                Expanded(
+                                  child: GestureDetector(
+                                    child: Container(
+                                      padding: const EdgeInsets.only(top: 10, bottom: 10),
+                                      decoration: BoxDecoration(
+                                          border: Border.all(color: Colors.grey[200] as Color),
+                                          borderRadius: const BorderRadius.only(topLeft: Radius.circular(4), bottomLeft: Radius.circular(4))),
+                                      child: Row(
+                                        mainAxisAlignment: MainAxisAlignment.center,
+                                        children: const [
+                                          Text(
+                                            'Watch record',
+                                            style: TextStyle(color: Colors.red),
+                                          )
+                                        ],
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                                Expanded(
+                                  child: GestureDetector(
+                                    child: Container(
+                                      padding: const EdgeInsets.only(top: 10, bottom: 10),
+                                      decoration: BoxDecoration(
+                                          border: Border.all(color: Colors.blue),
+                                          color: Colors.blue,
+                                          borderRadius: const BorderRadius.only(topRight: Radius.circular(4), bottomRight: Radius.circular(6))),
+                                      child: Row(
+                                        mainAxisAlignment: MainAxisAlignment.center,
+                                        children: const [
+                                          Text(
+                                            'Give feedback',
+                                            style: TextStyle(color: Colors.white),
+                                          )
+                                        ],
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            )
                           ],
                         ),
                       ),
-                    )
+                    ),
                   ],
                 ),
               )

@@ -1,4 +1,5 @@
 import 'package:advanced_mobile/config/color.dart';
+import 'package:advanced_mobile/screens/content.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 
@@ -67,8 +68,10 @@ class LoginScreen extends StatelessWidget {
               width: 350,
               margin: const EdgeInsets.only(top: 12, bottom: 16),
               padding: const EdgeInsets.only(left: 16, right: 16),
-              child: TextButton(
-                onPressed: () {},
+              child: FilledButton.tonal(
+                onPressed: () {
+                  Navigator.push(context, MaterialPageRoute(builder: (context)=> const ContentScreen()));
+                },
                 style: TextButton.styleFrom(
                   backgroundColor: AppColors.primary,
                   padding: const EdgeInsets.all(12),

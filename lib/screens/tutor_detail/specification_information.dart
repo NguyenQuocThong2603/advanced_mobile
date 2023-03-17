@@ -1,3 +1,4 @@
+import 'package:advanced_mobile/screens/course_detail/course_detail.dart';
 import 'package:flutter/material.dart';
 
 class SpecificationInformation extends StatelessWidget {
@@ -129,6 +130,9 @@ class SpecificationInformation extends StatelessWidget {
                   child: SizedBox(
                     width: 200,
                     child: GestureDetector(
+                      onTap: () {
+                        Navigator.push(context, MaterialPageRoute(builder: (context) => const CourseDetailScreen()));
+                      },
                       child: Container(
                         decoration: BoxDecoration(
                           color: Colors.white,
@@ -180,6 +184,9 @@ class SpecificationInformation extends StatelessWidget {
                   child: SizedBox(
                     width: 200,
                     child: GestureDetector(
+                      onTap: () {
+                        Navigator.push(context, MaterialPageRoute(builder: (context) => const CourseDetailScreen()));
+                      },
                       child: Container(
                         decoration: BoxDecoration(
                           color: Colors.white,

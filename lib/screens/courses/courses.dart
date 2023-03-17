@@ -1,4 +1,5 @@
-import 'package:advanced_mobile/screens/courses/course_item.dart';
+import 'package:advanced_mobile/screens/courses/books_list.dart';
+import 'package:advanced_mobile/screens/courses/course_list.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -9,7 +10,8 @@ class CoursesScreen extends StatefulWidget {
   @override
   State<CoursesScreen> createState() => _CoursesScreenState();
 }
-class _CoursesScreenState extends State<CoursesScreen> {
+class _CoursesScreenState extends State<CoursesScreen> with TickerProviderStateMixin{
+
   @override
   Widget build(BuildContext context){
     return DefaultTabController(
@@ -22,6 +24,7 @@ class _CoursesScreenState extends State<CoursesScreen> {
               style: TextStyle(color: Colors.black),
             ),
             backgroundColor: Colors.white,
+            automaticallyImplyLeading: false,
             elevation: 0,
             bottom: TabBar(
               tabs: [
@@ -87,17 +90,12 @@ class _CoursesScreenState extends State<CoursesScreen> {
                               borderRadius: BorderRadius.all(Radius.circular(20))),
                           hintText: "Search Courses")),
                 const SizedBox(height: 15),
-                Expanded(
-                  child: ListView(
-                    scrollDirection: Axis.vertical,
-                    children: const [
-                      CourseItem(),
-                      CourseItem(),
-                      CourseItem(),
-                      CourseItem(),
-                      CourseItem(),
-                      CourseItem(),
-                    ],
+                const Expanded(
+                  child: TabBarView(
+                      children:[
+                        CourseList(),
+                        BookList(),
+                      ]
                   ),
                 ),
               ],

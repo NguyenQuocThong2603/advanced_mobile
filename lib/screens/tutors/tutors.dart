@@ -1,4 +1,5 @@
 import 'package:advanced_mobile/config/color.dart';
+import 'package:advanced_mobile/screens/tutor_detail/tutor_detail.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 
@@ -19,6 +20,7 @@ class _TutorsScreenState extends State<TutorsScreen> {
           'Tutors',
           style: TextStyle(color: Colors.black),
         ),
+        automaticallyImplyLeading: false,
         backgroundColor: Colors.white,
         elevation: 0,
       ),
@@ -103,6 +105,9 @@ class _TutorsScreenState extends State<TutorsScreen> {
                 scrollDirection: Axis.vertical,
                 children: [
                   GestureDetector(
+                    onTap: () {
+                      Navigator.push(context, MaterialPageRoute(builder: (context) => const TutorDetailScreen()));
+                    },
                     child: Container(
                         margin: const EdgeInsets.only(bottom: 16),
                         padding: const EdgeInsets.symmetric(horizontal: 20),

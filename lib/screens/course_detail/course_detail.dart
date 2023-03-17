@@ -1,4 +1,5 @@
 import 'package:advanced_mobile/config/color.dart';
+import 'package:advanced_mobile/screens/topic_detail/topic_detail.dart';
 import 'package:flutter/material.dart';
 
 class CourseDetailScreen extends StatefulWidget {
@@ -15,14 +16,19 @@ class _CourseDetailScreenState extends State<CourseDetailScreen> {
       appBar: AppBar(
         title: Row(
           children: [
-            GestureDetector(child: const Icon(Icons.arrow_back, color: Colors.black,size: 30,)),
-            Container(
+            GestureDetector(
+                onTap: () {
+                  Navigator.pop(context);
+                },
+                child: const Icon(Icons.arrow_back, color: Colors.black,size: 30,)
+            ),            Container(
                 margin: const EdgeInsets.only(left: 8),
                 child: const Text('Caring for our Planet',style: TextStyle(color: Colors.black),),
             ),
         ],
         ),
         backgroundColor: Colors.white,
+        automaticallyImplyLeading: false,
       ),
       body: SingleChildScrollView(
         scrollDirection: Axis.vertical,
@@ -119,6 +125,9 @@ class _CourseDetailScreenState extends State<CourseDetailScreen> {
                               ],
                             ),
                             child: GestureDetector(
+                              onTap: (){
+                                Navigator.push(context, MaterialPageRoute(builder: (context) => const TopicDetailScreen()));
+                              },
                               child: Container(
                                 padding: const EdgeInsets.all(15),
                                 child: Column(

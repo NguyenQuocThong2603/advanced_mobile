@@ -10,13 +10,19 @@ class TopicDetailScreen extends StatelessWidget {
       appBar: AppBar(
         title: Row(
           children: [
-            GestureDetector(child: const Icon(Icons.arrow_back, color: Colors.black,size: 30,)),
+            GestureDetector(
+                onTap: () {
+                  Navigator.pop(context);
+                },
+                child: const Icon(Icons.arrow_back, color: Colors.black,size: 30,)
+            ),
             Container(
               margin: const EdgeInsets.only(left: 8),
               child: const Text('The Internet',style: TextStyle(color: Colors.black),),
             ),
           ],
         ),
+        automaticallyImplyLeading: false,
         backgroundColor: Colors.white,
       ),
       body: Container(

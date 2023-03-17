@@ -17,6 +17,7 @@ class _UpcomingScreenState extends State<UpcomingScreen> {
           style: TextStyle(color: Colors.black),
         ),
         backgroundColor: Colors.white,
+        automaticallyImplyLeading: false,
         elevation: 0,
       ),
       body: Padding(
@@ -113,7 +114,8 @@ class _UpcomingScreenState extends State<UpcomingScreen> {
                                       decoration: BoxDecoration(
                                           border: Border.all(color: Colors.blue),
                                           color: Colors.blue,
-                                          borderRadius: const BorderRadius.only(topRight: Radius.circular(4), bottomRight: Radius.circular(4))),
+                                          borderRadius: const BorderRadius.only(topRight: Radius.circular(4),
+                                              bottomRight: Radius.circular(20))),
                                       child: Row(
                                         mainAxisAlignment: MainAxisAlignment.center,
                                         children: const [
@@ -217,9 +219,9 @@ class _UpcomingScreenState extends State<UpcomingScreen> {
                                     child: Container(
                                       padding: const EdgeInsets.only(top: 10, bottom: 10),
                                       decoration: BoxDecoration(
-                                          border: Border.all(color: Colors.grey.shade300),
+                                          // border: Border.all(color: Colors.grey.shade300),
                                           color: Colors.grey.shade400,
-                                          borderRadius: const BorderRadius.only(topRight: Radius.circular(4), bottomRight: Radius.circular(4))),
+                                          borderRadius: const BorderRadius.only(bottomRight: Radius.circular(20))),
                                       child: Row(
                                         mainAxisAlignment: MainAxisAlignment.center,
                                         children: const [

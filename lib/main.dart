@@ -1,6 +1,7 @@
 
 import 'package:advanced_mobile/screens/content.dart';
 import 'package:advanced_mobile/screens/course_detail/course_detail.dart';
+import 'package:advanced_mobile/screens/login/forgot_password.dart';
 import 'package:advanced_mobile/screens/login/login.dart';
 import 'package:advanced_mobile/screens/topic_detail/topic_detail.dart';
 import 'package:advanced_mobile/screens/tutor_detail/tutor_detail.dart';
@@ -30,7 +31,7 @@ class MyApp extends StatelessWidget {
         // is not restarted.
         primarySwatch: Colors.blue,
       ),
-      home: const TutorDetailScreen(),
+      home: const LoginScreen(),
     );
   }
 }

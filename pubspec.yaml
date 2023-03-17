@@ -38,6 +38,8 @@ dependencies:
   flutter_svg: ^2.0.3
   video_player: ^2.6.0
   syncfusion_flutter_pdfviewer: ^20.4.53
+  chewie: ^1.4.0
+  syncfusion_flutter_calendar: ^20.4.54
 
 dev_dependencies:
   flutter_test:
