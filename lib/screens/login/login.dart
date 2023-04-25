@@ -1,10 +1,37 @@
 import 'package:advanced_mobile/config/color.dart';
 import 'package:advanced_mobile/screens/content.dart';
+import 'package:advanced_mobile/screens/login/forgot_password.dart';
+import 'package:advanced_mobile/screens/login/register.dart';
+import 'package:advanced_mobile/services/auth_service.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
-class LoginScreen extends StatelessWidget {
+class LoginScreen extends StatefulWidget {
   const LoginScreen({Key? key}) : super(key: key);
+
+  @override
+  State<LoginScreen> createState() => _LoginScreenState();
+}
+
+class _LoginScreenState extends State<LoginScreen> {
+  late TextEditingController emailInputController;
+  late TextEditingController passwordInputController;
+
+  @override
+  void initState(){
+    super.initState();
+    emailInputController = TextEditingController();
+    passwordInputController = TextEditingController();
+  }
+
+  @override
+  void dispose(){
+    emailInputController.dispose();
+    passwordInputController.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -26,6 +53,7 @@ class LoginScreen extends StatelessWidget {
             width: 350,
             padding: const EdgeInsets.only(left: 16, right: 16),
             child: TextField(
+              controller: emailInputController,
               style: TextStyle(fontSize: 15, color: Colors.grey.shade900),
               keyboardType: TextInputType.emailAddress,
               decoration: const InputDecoration(
@@ -41,6 +69,7 @@ class LoginScreen extends StatelessWidget {
             margin: const EdgeInsets.only(top: 32, bottom: 16),
             padding: const EdgeInsets.only(left: 16, right: 16),
             child: TextField(
+              controller: passwordInputController,
               style: TextStyle(fontSize: 15, color: Colors.grey.shade900),
               obscureText: true,
               decoration: const InputDecoration(
@@ -57,6 +86,9 @@ class LoginScreen extends StatelessWidget {
             child: Align(
                 alignment: Alignment.bottomRight,
                 child: GestureDetector(
+                  onTap: (){
+                    Navigator.push(context, MaterialPageRoute(builder: (context)=> const ForgotPasswordScreen()));
+                  },
                   child: Text('Forgot Password?',
                       style: TextStyle(
                         fontSize: 16,
@@ -69,8 +101,22 @@ class LoginScreen extends StatelessWidget {
               margin: const EdgeInsets.only(top: 12, bottom: 16),
               padding: const EdgeInsets.only(left: 16, right: 16),
               child: FilledButton.tonal(
-                onPressed: () {
-                  Navigator.push(context, MaterialPageRoute(builder: (context)=> const ContentScreen()));
+                onPressed: () async {
+                  try{
+                    await AuthService.login(emailInputController.text, passwordInputController.text);
+                    Navigator.pushReplacement(context, MaterialPageRoute(builder: (context)=> const ContentScreen()));
+                  } catch(error){
+                    print(error);
+                    Fluttertoast.showToast(
+                        msg: error.toString().split(':')[1],
+                        toastLength: Toast.LENGTH_LONG,
+                        gravity: ToastGravity.TOP,
+                        timeInSecForIosWeb: 1,
+                        backgroundColor: Colors.red,
+                        textColor: Colors.white,
+                        fontSize: 16.0
+                    );
+                  }
                 },
                 style: TextButton.styleFrom(
                   backgroundColor: AppColors.primary,
@@ -122,7 +168,9 @@ class LoginScreen extends StatelessWidget {
                     children: [
                   TextSpan(
                       text: 'Sign up',
-                      recognizer: TapGestureRecognizer()..onTap = () {},
+                      recognizer: TapGestureRecognizer()..onTap = () {
+                        Navigator.push(context, MaterialPageRoute(builder: (context)=> const RegisterScreen()));
+                      },
                       style: TextStyle(
                           color: AppColors.primary, fontSize: 16,fontWeight: FontWeight.w500))
                 ])),

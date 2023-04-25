@@ -2,6 +2,7 @@ import 'package:advanced_mobile/config/color.dart';
 import 'package:advanced_mobile/screens/tutor_detail/general_information.dart';
 import 'package:advanced_mobile/screens/tutor_detail/specification_information.dart';
 import 'package:flutter/material.dart';
+import 'package:syncfusion_flutter_calendar/calendar.dart';
 import 'package:video_player/video_player.dart';
 import 'package:chewie/chewie.dart';
 
@@ -82,6 +83,20 @@ class _TutorDetailScreenState extends State<TutorDetailScreen> {
               ),
               const GeneralInformation(),
               const SpecificationInformation(),
+              Container(
+                margin: const EdgeInsets.only(bottom: 16),
+                child: SfCalendar(
+                  view: CalendarView.week,
+                  timeSlotViewSettings: const TimeSlotViewSettings(
+                      startHour: 9.5,
+                      endHour: 16.5,
+                      timeInterval: Duration(minutes: 30),
+                      timeFormat: 'hh:mm'
+                  ),
+                  showNavigationArrow: true,
+                  viewNavigationMode: ViewNavigationMode.none,
+                ),
+              ),
               const Text('Rating and Comment(0)', style: TextStyle(color: Color.fromRGBO(0, 113, 240, 1),fontSize: 16),),
               Container(
                 padding: const EdgeInsets.all(8),

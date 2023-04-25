@@ -1,3 +1,7 @@
+import 'dart:convert';
+
+import 'package:advanced_mobile/config/preference.dart';
+import 'package:advanced_mobile/models/user/token_model.dart';
 import 'package:advanced_mobile/screens/courses/courses.dart';
 import 'package:advanced_mobile/screens/history/history.dart';
 import 'package:advanced_mobile/screens/setting/setting.dart';
@@ -6,7 +10,9 @@ import 'package:advanced_mobile/screens/upcoming/upcoming.dart';
 import 'package:flutter/material.dart';
 
 class ContentScreen extends StatefulWidget {
-  const ContentScreen({Key? key}) : super(key: key);
+  const ContentScreen({
+    Key? key,
+  }) : super(key: key);
 
   @override
   State<ContentScreen> createState() => _ContentScreenState();
@@ -23,6 +29,11 @@ class _ContentScreenState extends State<ContentScreen> {
 
   ];
   var curIndex = 0;
+
+  @override
+  void initState(){
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
