@@ -1,14 +1,11 @@
-
 import 'package:advanced_mobile/config/preference.dart';
 import 'package:advanced_mobile/interceptors/interceptor.dart';
+import 'package:advanced_mobile/providers/chat_provider.dart';
 import 'package:advanced_mobile/providers/course.provider.dart';
 import 'package:advanced_mobile/providers/tutor_provider.dart';
-import 'package:advanced_mobile/screens/content.dart';
-import 'package:advanced_mobile/screens/course_detail/course_detail.dart';
-import 'package:advanced_mobile/screens/login/forgot_password.dart';
+import 'package:advanced_mobile/providers/upcoming_provider.dart';
+import 'package:advanced_mobile/providers/user_provider.dart';
 import 'package:advanced_mobile/screens/login/login.dart';
-import 'package:advanced_mobile/screens/topic_detail/topic_detail.dart';
-import 'package:advanced_mobile/screens/tutor_detail/tutor_detail.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -28,7 +25,10 @@ class MyApp extends StatelessWidget {
     return MultiProvider(
       providers: [
         ChangeNotifierProvider(create: (_)=> TutorProvider()),
-        ChangeNotifierProvider(create: (_)=> CourseProvider())
+        ChangeNotifierProvider(create: (_)=> CourseProvider()),
+        ChangeNotifierProvider(create: (_)=> UpcomingProvider()),
+        ChangeNotifierProvider(create: (_)=> ChatProvider(),),
+        ChangeNotifierProvider(create: (_)=> UserProvider(),),
       ],
       child: MaterialApp(
         debugShowCheckedModeBanner: false,

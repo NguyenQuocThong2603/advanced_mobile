@@ -1,6 +1,8 @@
 import 'package:advanced_mobile/models/schedule/schedule_model.dart';
 import 'package:advanced_mobile/models/tutor/tutor_model.dart';
 import 'package:advanced_mobile/models/user/feedback_model.dart';
+import 'package:advanced_mobile/models/user/user_model.dart';
+import 'package:advanced_mobile/screens/login/login.dart';
 import 'package:advanced_mobile/services/tutor_service.dart';
 import 'package:advanced_mobile/utils/tutor_utils.dart';
 import 'package:flutter/material.dart';
@@ -25,10 +27,10 @@ class TutorProvider extends ChangeNotifier{
     endTimestamp = DateTime(lastDayOfWeek.year,lastDayOfWeek.month,lastDayOfWeek.day).millisecondsSinceEpoch -1;
   }
 
-  Future<void> getListTutors(String speciality, BuildContext context) async{
+  Future<void> getListTutors(String speciality, context) async{
       final response = await TutorService.getListTutors(speciality);
       if(response.data['statusCode'] == 401){
-        Navigator.pop(context);
+        Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (context) => const LoginScreen()), (route) => false);
       }
       if (response.data['statusCode'] == 200) {
         final List<dynamic> data = response.data['rows'];
@@ -57,7 +59,7 @@ class TutorProvider extends ChangeNotifier{
     notifyListeners();
     final response = await TutorService.searchTutorByName(name,speciality,data);
     if(response.data['statusCode'] == 401){
-      Navigator.pop(context);
+      Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (context) => const LoginScreen()), (route) => false);
     }
     if (response.data['statusCode'] == 200) {
       final List<dynamic> data = response.data['rows'];
@@ -72,7 +74,7 @@ class TutorProvider extends ChangeNotifier{
   Future<void> getTutorInformation(String tutorId,context) async{
     final response = await TutorService.getTutorInformation(tutorId);
     if(response.data['statusCode'] == 401){
-      Navigator.pop(context);
+      Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (context) => const LoginScreen()), (route) => false);
     }
     if (response.data['statusCode'] == 200) {
       tutorInfo = Tutor.fromJson(response.data);
@@ -90,7 +92,7 @@ class TutorProvider extends ChangeNotifier{
   Future<void> manageFavoriteTutor(String tutorId,context) async {
     final response = await TutorService.manageFavoriteTutor(tutorId);
     if(response.data['statusCode'] == 401){
-      Navigator.pop(context);
+      Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (context) => const LoginScreen()), (route) => false);
     }
     if (response.data['statusCode'] == 200) {
       if(response.data['result'] == 1){
@@ -105,7 +107,10 @@ class TutorProvider extends ChangeNotifier{
     }
   }
 
-  Future<void> getScheduleOfTutor(String tutorId,DateTime? startDate, DateTime? endDate,context) async {
+  Future<void> getScheduleOfTutor(
+      String tutorId,
+      DateTime? startDate, DateTime? endDate,
+      User user,context) async {
     if(startDate !=null){
       startTimestamp = startDate.millisecondsSinceEpoch;
     }
@@ -114,7 +119,7 @@ class TutorProvider extends ChangeNotifier{
     }
     final response = await TutorService.getScheduleOfTutor(tutorId, startTimestamp, endTimestamp);
     if(response.data['statusCode'] == 401){
-      Navigator.pop(context);
+      Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (context) => const LoginScreen()), (route) => false);
     }
     if (response.data['statusCode'] == 200) {
       regions = [];
@@ -122,19 +127,31 @@ class TutorProvider extends ChangeNotifier{
       schedules = data.map((schedule) => Schedule.fromJson(schedule)).toList();
       for(int i =0 ; i<schedules.length; i++){
         if(schedules[i].isBooked == true){
-          regions.add(TimeRegion(
-            startTime: DateTime.fromMillisecondsSinceEpoch(schedules[i].startTimestamp),
-            endTime: DateTime.fromMillisecondsSinceEpoch(schedules[i].endTimestamp),
-            text: '${schedules[i].scheduleDetails[0].id}:Booked',
-          ),
-          );
+          if(schedules[i].scheduleDetails[0].bookingInfo.last.userId == user.id){
+            regions.add(TimeRegion(
+                startTime: DateTime.fromMillisecondsSinceEpoch(schedules[i].startTimestamp),
+                endTime: DateTime.fromMillisecondsSinceEpoch(schedules[i].endTimestamp),
+                text: 'Booked',
+                enablePointerInteraction: false
+            ),
+            );
+          }else {
+            regions.add(TimeRegion(
+                startTime: DateTime.fromMillisecondsSinceEpoch(schedules[i].startTimestamp),
+                endTime: DateTime.fromMillisecondsSinceEpoch(schedules[i].endTimestamp),
+                text: 'Reserved',
+                enablePointerInteraction: false
+            ),
+            );
+          }
         }
         else{
           if(DateTime.now().millisecondsSinceEpoch > schedules[i].startTimestamp){
             regions.add(TimeRegion(
               startTime: DateTime.fromMillisecondsSinceEpoch(schedules[i].startTimestamp),
               endTime: DateTime.fromMillisecondsSinceEpoch(schedules[i].endTimestamp),
-              text: '${schedules[i].scheduleDetails[0].id}:Can not book',
+              text: 'Can not book',
+              enablePointerInteraction: false
             ),
             );
           }
@@ -142,7 +159,7 @@ class TutorProvider extends ChangeNotifier{
             regions.add(TimeRegion(
               startTime: DateTime.fromMillisecondsSinceEpoch(schedules[i].startTimestamp),
               endTime: DateTime.fromMillisecondsSinceEpoch(schedules[i].endTimestamp),
-              text: '${schedules[i].scheduleDetails[0].id}:Book',
+              text: 'Book',
             ),
             );
           }
@@ -157,7 +174,7 @@ class TutorProvider extends ChangeNotifier{
   Future<void> getFeedbacks(String tutorId,context) async{
     final response = await TutorService.getFeedbacks(tutorId);
     if(response.data['statusCode'] == 401){
-      Navigator.pop(context);
+      Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (context) => const LoginScreen()), (route) => false);
     }
     if (response.data['statusCode'] == 200) {
       final List<dynamic> data = response.data['data']['rows'];
@@ -168,9 +185,38 @@ class TutorProvider extends ChangeNotifier{
     }
   }
 
-  Future<void> bookClass(DateTime date,context) async {
+  Future<void> bookClass(DateTime date,String note,context) async {
+    int nowTimestamp = DateTime.now().millisecondsSinceEpoch;
     int timestamp = date.millisecondsSinceEpoch;
-    Iterable<Schedule> bookingClass = schedules.where((element) => element.startTimestamp == timestamp);
-    
+    int? index;
+    List<Schedule> bookingClass = [];
+    for(int i= 0;i<schedules.length;i++){
+      if(schedules[i].startTimestamp == timestamp &&
+          schedules[i].isBooked == false &&
+          nowTimestamp < schedules[i].startTimestamp){
+        index = i;
+        bookingClass.add(schedules[i]);
+        break;
+      }
+    }
+    if(index != null){
+      final response = await TutorService.bookClass(bookingClass[0].scheduleDetails[0].id,note);
+      if(response.data['statusCode'] == 401){
+        Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (context) => const LoginScreen()), (route) => false);
+      }
+      if (response.data['statusCode'] != 200) {
+        throw Exception(response.data['message']);
+      }
+    }
+  }
+
+  Future<void> reportTutor(String tutorId,String content,context) async {
+    final response = await TutorService.reportTutor(tutorId, content);
+    if (response.data['statusCode'] == 401) {
+      Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (context) => const LoginScreen()), (route) => false);
+    }
+    if (response.data['statusCode'] != 200) {
+      throw Exception(response.data['message']);
+    }
   }
 }

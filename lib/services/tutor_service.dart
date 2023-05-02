@@ -1,5 +1,4 @@
 import 'package:advanced_mobile/interceptors/interceptor.dart';
-import 'package:advanced_mobile/models/tutor/tutor_model.dart';
 import 'package:dio/dio.dart';
 
 class TutorService {
@@ -57,6 +56,14 @@ class TutorService {
     final response = await dio.post('$url/booking',data: {
       "scheduleDetailIds": [scheduleDetailIds],
       "note": note
+    });
+    return response;
+  }
+
+  static Future<Response<dynamic>> reportTutor(String tutorId, String content) async {
+    final response = await dio.post('$url/report',data: {
+      "tutorId": tutorId,
+      "content": content
     });
     return response;
   }

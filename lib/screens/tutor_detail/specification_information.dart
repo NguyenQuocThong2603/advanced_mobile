@@ -94,7 +94,8 @@ class SpecificationInformation extends StatelessWidget {
                     width: 200,
                     child: GestureDetector(
                       onTap: () {
-                        Navigator.push(context, MaterialPageRoute(builder: (context) => const CourseDetailScreen()));
+                        Navigator.push(context, MaterialPageRoute(builder: (context) =>
+                            CourseDetailScreen(courseId: tutor.user!.courses[index].id)));
                       },
                       child: Container(
                         decoration: BoxDecoration(

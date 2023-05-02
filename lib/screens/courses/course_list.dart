@@ -1,3 +1,4 @@
+import 'package:advanced_mobile/config/level.dart';
 import 'package:advanced_mobile/models/course/course_model.dart';
 import 'package:advanced_mobile/screens/course_detail/course_detail.dart';
 import 'package:flutter/material.dart';
@@ -18,7 +19,8 @@ class CourseList extends StatelessWidget {
         itemBuilder: (context,index){
          return GestureDetector(
            onTap: () {
-             Navigator.push(context, MaterialPageRoute(builder: (context)=> const CourseDetailScreen()));
+             Navigator.push(context, MaterialPageRoute(builder: (context)=>
+                 CourseDetailScreen(courseId: courses[index].id,)));
            },
            child: Container(
              margin: const EdgeInsets.only(top: 6, bottom: 8),
@@ -65,7 +67,7 @@ class CourseList extends StatelessWidget {
                        ),
                        Row(
                          children: [
-                           Text('${courses[index].level} • ', style: const TextStyle(fontSize: 16),),
+                           Text('${levelsMap[courses[index].level]} • ', style: const TextStyle(fontSize: 16),),
                            Text('${courses[index].lessons} lessons',style: const TextStyle(fontSize: 16),)
                          ],
                        )

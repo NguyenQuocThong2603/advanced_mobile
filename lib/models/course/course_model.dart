@@ -1,3 +1,5 @@
+import 'package:advanced_mobile/models/course/topic_model.dart';
+
 class Course {
   late String id;
   late String name;
@@ -13,6 +15,7 @@ class Course {
   late String createdAt;
   late String updatedAt;
   late int lessons;
+  List<Topic> topics = [];
 
   Course({
     required this.id,
@@ -28,7 +31,7 @@ class Course {
     required this.visible,
     required this.createdAt,
     required this.updatedAt,
-    required this.lessons
+    required this.lessons,
   });
 
   Course.fromJson(Map<String, dynamic> json) {
@@ -47,6 +50,7 @@ class Course {
     updatedAt = json['updatedAt'] ?? "";
     if(json['topics']!= null ){
       lessons = json['topics'].length ?? 0;
+      json['topics'].forEach((topic) => topics.add(Topic.fromJson(topic)));
     }
   }
 
@@ -66,6 +70,7 @@ class Course {
     data['createdAt'] = createdAt;
     data['updatedAt'] = updatedAt;
     data['lessons'] = lessons;
+    data['topics'] = topics;
     return data;
   }
 }

@@ -1,16 +1,20 @@
 import 'package:advanced_mobile/config/color.dart';
 import 'package:advanced_mobile/config/specialities.dart';
 import 'package:advanced_mobile/providers/tutor_provider.dart';
+import 'package:advanced_mobile/providers/upcoming_provider.dart';
 import 'package:advanced_mobile/screens/tutors/dropdown_menu.dart';
 import 'package:advanced_mobile/screens/tutors/search_field.dart';
 import 'package:advanced_mobile/screens/tutors/tutor_card.dart';
+import 'package:advanced_mobile/screens/tutors/upcoming_banner.dart';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 
 class TutorsScreen extends StatefulWidget {
-  const TutorsScreen({Key? key}) : super(key: key);
+  const TutorsScreen({
+    Key? key,
+  }) : super(key: key);
 
   @override
   State<TutorsScreen> createState() => _TutorsScreenState();
@@ -26,6 +30,7 @@ class _TutorsScreenState extends State<TutorsScreen> {
     searchInputController = TextEditingController();
     WidgetsBinding.instance.addPostFrameCallback((_) async{
       await context.read<TutorProvider>().getListTutors(specialities[selectedIndex]['key']!, context);
+      await context.read<UpcomingProvider>().getTotalLessonTime(context);
     });
   }
   @override
@@ -50,6 +55,7 @@ class _TutorsScreenState extends State<TutorsScreen> {
           return Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
+                UpcomingBanner(),
                 SearchField(
                     speciality: specialities[selectedIndex]['key']!,
                     tutorProvider: tutorProvider,),
@@ -115,7 +121,7 @@ class _TutorsScreenState extends State<TutorsScreen> {
                       tutor: tutors[index],
                       listSpeciality: listSpeciality,
                       tutorProvider: tutorProvider,
-                      speciality: specialities[selectedIndex]['key']!);
+                      speciality: specialities[selectedIndex]['key']!,);
                     },
                   ),
                 )

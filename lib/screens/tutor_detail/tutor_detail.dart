@@ -1,9 +1,11 @@
-import 'package:advanced_mobile/config/color.dart';
+import 'package:advanced_mobile/models/user/user_model.dart';
 import 'package:advanced_mobile/providers/tutor_provider.dart';
+import 'package:advanced_mobile/providers/user_provider.dart';
 import 'package:advanced_mobile/screens/tutor_detail/comment._cart.dart';
 import 'package:advanced_mobile/screens/tutor_detail/general_information.dart';
 import 'package:advanced_mobile/screens/tutor_detail/specification_information.dart';
-import 'package:advanced_mobile/utils/regionBuilder.dart';
+import 'package:advanced_mobile/utils/region_builder.dart';
+import 'package:advanced_mobile/utils/show_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:loading_indicator/loading_indicator.dart';
@@ -20,7 +22,6 @@ class TutorDetailScreen extends StatefulWidget {
     required this.tutorId,
   }) : super(key: key);
   final String tutorId;
-
   @override
   State<TutorDetailScreen> createState() => _TutorDetailScreenState();
 }
@@ -34,7 +35,10 @@ class _TutorDetailScreenState extends State<TutorDetailScreen> {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) async{
       await context.read<TutorProvider>().getTutorInformation(widget.tutorId, context);
-      await context.read<TutorProvider>().getScheduleOfTutor(widget.tutorId,null,null,context);
+      await context.read<TutorProvider>().getScheduleOfTutor(
+          widget.tutorId,null,null,
+          Provider.of<UserProvider>(context,listen: false).userInfo,
+          context);
       await context.read<TutorProvider>().getFeedbacks(widget.tutorId, context);
       initializePlayer();});
   }
@@ -62,7 +66,6 @@ class _TutorDetailScreenState extends State<TutorDetailScreen> {
   @override
   Widget build(BuildContext context) {
     DateTime now = DateTime.now();
-    DateTime minDate = DateTime(now.year,now.month,now.day).subtract(const Duration(seconds: 1));
     return Consumer<TutorProvider>(
       builder: (context, tutorProvider,_) {
         return tutorProvider.tutorInfo == null ?
@@ -119,7 +122,7 @@ class _TutorDetailScreenState extends State<TutorDetailScreen> {
                     child: SfCalendar(
                       onTap: (CalendarTapDetails details) async {
                         DateTime date = details.date!;
-                        await tutorProvider.bookClass(date, context);
+                        showBookingDialog(context, tutorProvider, date, widget.tutorId);
                       },
                       showCurrentTimeIndicator: false,
                       specialRegions: tutorProvider.regions,
@@ -140,7 +143,10 @@ class _TutorDetailScreenState extends State<TutorDetailScreen> {
                         SchedulerBinding.instance.addPostFrameCallback((duration) async {
                           DateTime firstDate = viewChangedDetails.visibleDates.first;
                           DateTime lastDate = viewChangedDetails.visibleDates.last;
-                          await tutorProvider.getScheduleOfTutor(widget.tutorId, firstDate,lastDate, context);
+                          await tutorProvider.getScheduleOfTutor(
+                              widget.tutorId, firstDate,lastDate,
+                              Provider.of<UserProvider>(context).userInfo,
+                              context);
                         });
                       },
                     ),

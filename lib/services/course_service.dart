@@ -12,4 +12,9 @@ class CourseService {
     });
     return response;
   }
+
+  static Future<Response<dynamic>> getCourseDetail(String courseId) async{
+    final response = await dio.get('$url/course/$courseId');
+    return response;
+  }
 }

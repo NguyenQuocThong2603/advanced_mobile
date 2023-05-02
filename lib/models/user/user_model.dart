@@ -71,8 +71,11 @@ class User{
         courses.add(Course.fromJson(v));
       });
     }
-    walletInfo = json['walletInfo'];
+    if (json['walletInfo'] != null) {
+      walletInfo = Wallet.fromJson(json['walletInfo']);
+    }
   }
+
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = {};

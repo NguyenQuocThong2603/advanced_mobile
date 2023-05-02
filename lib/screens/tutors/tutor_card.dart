@@ -2,6 +2,7 @@ import 'package:advanced_mobile/config/color.dart';
 import 'package:advanced_mobile/config/countries.dart';
 import 'package:advanced_mobile/config/specialities.dart';
 import 'package:advanced_mobile/models/tutor/tutor_model.dart';
+import 'package:advanced_mobile/models/user/user_model.dart';
 import 'package:advanced_mobile/providers/tutor_provider.dart';
 import 'package:advanced_mobile/screens/tutor_detail/tutor_detail.dart';
 import 'package:flutter/material.dart';
@@ -13,7 +14,7 @@ class TutorCard extends StatefulWidget {
     required this.tutor,
     required this.listSpeciality,
     required this.tutorProvider,
-    required this.speciality
+    required this.speciality,
   }) : super(key: key);
 
   final Tutor tutor;
@@ -61,7 +62,7 @@ class _TutorCardState extends State<TutorCard> {
                                     errorBuilder: (BuildContext context, Object exception, StackTrace? stackTrace) {
                                       return ClipRRect(
                                           borderRadius: BorderRadius.circular(MediaQuery.of(context).size.width),
-                                          child: Container(
+                                          child: SizedBox(
                                             width: 70,
                                             height: 70,
                                             child: SvgPicture.asset("asset/svg/default_avatar.svg"),

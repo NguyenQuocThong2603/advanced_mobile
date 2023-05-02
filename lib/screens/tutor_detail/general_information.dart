@@ -1,6 +1,7 @@
 import 'package:advanced_mobile/config/countries.dart';
 import 'package:advanced_mobile/models/tutor/tutor_model.dart';
 import 'package:advanced_mobile/providers/tutor_provider.dart';
+import 'package:advanced_mobile/utils/show_dialog.dart';
 import 'package:advanced_mobile/widgets/toast.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -84,31 +85,35 @@ class GeneralInformation extends StatelessWidget {
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceAround,
                 children: [
-                  Column(
-                    children: [
-                      GestureDetector(
-                        onTap: () async {
-                          try{
-                            await tutorProvider.manageFavoriteTutor(tutor.user!.id, context);
-                          } catch(error){
-                            print(error);
-                            showErrorToast('Error: Something went wrong, please try later!');
-                          }
-                        },
-                        child: tutor.isFavouriteTutor != true ? const Icon(Icons.favorite_outline,color: Color.fromRGBO(0, 113, 240, 1),)
+                  GestureDetector(
+                    onTap: () async {
+                      try{
+                        await tutorProvider.manageFavoriteTutor(tutor.user!.id, context);
+                      } catch(error){
+                        showErrorToast('Error: Something went wrong, please try later!');
+                      }
+                    },
+                    child: Column(
+                      children: [
+                        tutor.isFavouriteTutor != true ? const Icon(Icons.favorite_outline,color: Color.fromRGBO(0, 113, 240, 1),)
                             : const Icon(Icons.favorite,color: Colors.pink,),
-                      ),
-                      Text('Favourite',
-                        style: tutor.isFavouriteTutor != true ? const TextStyle(color: Color.fromRGBO(0, 113, 240, 1))
-                                : const TextStyle(color: Colors.pink),
-                      )
-                    ],
+                        Text('Favourite',
+                          style: tutor.isFavouriteTutor != true ? const TextStyle(color: Color.fromRGBO(0, 113, 240, 1))
+                                  : const TextStyle(color: Colors.pink),
+                        )
+                      ],
+                    ),
                   ),
-                  Column(
-                    children: const[
-                      Icon(Icons.report, color: Color.fromRGBO(0, 113, 240, 1),),
-                      Text('Report', style: TextStyle(color: Color.fromRGBO(0, 113, 240, 1)),)
-                    ],
+                  GestureDetector(
+                    onTap: (){
+                      showReportDialog(context,tutor.user!.id,tutor.user!.name,tutorProvider);
+                    },
+                    child: Column(
+                      children: const[
+                        Icon(Icons.report, color: Color.fromRGBO(0, 113, 240, 1),),
+                        Text('Report', style: TextStyle(color: Color.fromRGBO(0, 113, 240, 1)),)
+                      ],
+                    ),
                   ),
                 ],
               ),
