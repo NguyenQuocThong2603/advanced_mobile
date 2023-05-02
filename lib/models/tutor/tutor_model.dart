@@ -1,3 +1,5 @@
+import 'package:advanced_mobile/models/user/user_model.dart';
+
 class Tutor {
   late String id;
   late String userId;
@@ -21,6 +23,10 @@ class Tutor {
   late int price;
   String? name;
   String? avatar;
+  String? country;
+  bool? isFavouriteTutor;
+  User? user;
+  int? totalFeedback;
 
   Tutor({
     required this.id,
@@ -43,10 +49,14 @@ class Tutor {
     this.isFavorite,
     this.rating,
     required this.price,
+    required this.country,
+    this.user,
+    this.isFavouriteTutor,
+    this.totalFeedback
   });
 
   Tutor.fromJson(Map<String, dynamic> json) {
-    id = json['id'];
+    id = json['id'] ?? "";
     userId = json['userId'] ?? "";
     video = json['video'];
     bio = json['bio'] ?? "";
@@ -59,15 +69,19 @@ class Tutor {
     languages = json['languages'] ?? "";
     specialties = json['specialties'] ?? "";
     resume = json['resume'];
-    isActivated = json['isActivated'];
+    isActivated = json['isActivated'] ?? true;
     isNative = json['isNative'];
-    createdAt = json['createdAt'];
-    updatedAt = json['updatedAt'];
-    isFavorite = json['isFavorite'];
+    createdAt = json['createdAt'] ?? "";
+    updatedAt = json['updatedAt']?? "";
+    isFavorite = json['isfavoritetutor'] == null ? false: true;
     rating = json['rating'] != null ? json['rating'].toDouble() : 0;
     price = json['price'] ?? 0;
     name = json['name'];
     avatar = json['avatar'];
+    country = json['country'];
+    isFavouriteTutor = json['isFavorite'];
+    user = json["User"] != null ? User.fromJson(json['User']) : null;
+    totalFeedback = json["totalFeedback"];
   }
 
   Map<String, dynamic> toJson() {
@@ -94,6 +108,10 @@ class Tutor {
     data['price'] = price;
     data['name'] = name;
     data['avatar'] = avatar;
+    data['country'] = country;
+    data['user'] = user?.toJson();
+    data['isFavorite'] = isFavouriteTutor;
+    data['totalFeedback'] = totalFeedback;
     return data;
   }
 }

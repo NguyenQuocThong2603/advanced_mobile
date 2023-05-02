@@ -20,7 +20,6 @@ class NationalitiesMenu extends StatefulWidget {
 }
 
 class _NationalitiesMenuState extends State<NationalitiesMenu> {
-  String dropdownValue = 'None';
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -43,7 +42,7 @@ class _NationalitiesMenuState extends State<NationalitiesMenu> {
                   await widget.tutorProvider.searchTutorByName(
                       widget.name,
                       widget.speciality,
-                      widget.nationalities[widget.tutorProvider.nationalityIndex],
+                      value!,
                       context
                   );
                 },

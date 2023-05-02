@@ -1,6 +1,7 @@
 
 import 'package:advanced_mobile/config/preference.dart';
 import 'package:advanced_mobile/interceptors/interceptor.dart';
+import 'package:advanced_mobile/providers/course.provider.dart';
 import 'package:advanced_mobile/providers/tutor_provider.dart';
 import 'package:advanced_mobile/screens/content.dart';
 import 'package:advanced_mobile/screens/course_detail/course_detail.dart';
@@ -26,9 +27,11 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MultiProvider(
       providers: [
-        ChangeNotifierProvider(create: (_)=> TutorProvider())
+        ChangeNotifierProvider(create: (_)=> TutorProvider()),
+        ChangeNotifierProvider(create: (_)=> CourseProvider())
       ],
       child: MaterialApp(
+        debugShowCheckedModeBanner: false,
         title: 'Flutter Demo',
         theme: ThemeData(
           // This is the theme of your application.

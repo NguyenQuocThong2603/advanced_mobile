@@ -13,7 +13,7 @@ class DioInstance {
   DioInstance(){
     dio.interceptors.add(InterceptorsWrapper(
       onRequest: onRequest,
-      onResponse: onResponse
+      onResponse: onResponse,
     ));
     dioWithoutToken.interceptors.add(InterceptorsWrapper(
         onResponse: onResponse

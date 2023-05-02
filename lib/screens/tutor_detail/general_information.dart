@@ -1,7 +1,18 @@
+import 'package:advanced_mobile/config/countries.dart';
+import 'package:advanced_mobile/models/tutor/tutor_model.dart';
+import 'package:advanced_mobile/providers/tutor_provider.dart';
+import 'package:advanced_mobile/widgets/toast.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 
 class GeneralInformation extends StatelessWidget {
-  const GeneralInformation({Key? key}) : super(key: key);
+  const GeneralInformation({
+    Key? key,
+    required this.tutor,
+    required this.tutorProvider
+  }) : super(key: key);
+  final Tutor tutor;
+  final TutorProvider tutorProvider;
 
   @override
   Widget build(BuildContext context) {
@@ -11,10 +22,27 @@ class GeneralInformation extends StatelessWidget {
           children: [
             Container(
                 margin: const EdgeInsets.only(right: 8),
-                child: const Image(
-                    image: NetworkImage(
-                        'https://cdn-icons-png.flaticon.com/512/147/147133.png',
-                        scale: 6))
+                child: ClipRRect(
+                  borderRadius: BorderRadius.circular(MediaQuery.of(context).size.width),
+                  child: Image(
+                      image: NetworkImage(
+                          tutor.user!.avatar,
+                          scale: 6),
+                      width: 80,
+                      height: 80,
+                      fit: BoxFit.cover,
+                      errorBuilder: (BuildContext context, Object exception, StackTrace? stackTrace) {
+                        return ClipRRect(
+                            borderRadius: BorderRadius.circular(MediaQuery.of(context).size.width),
+                            child: SizedBox(
+                              width: 80,
+                              height: 80,
+                              child: SvgPicture.asset("asset/svg/default_avatar.svg"),
+                            )
+                        );
+                      },
+                  ),
+                )
             ),
             Expanded(
               child:  Column(
@@ -23,14 +51,11 @@ class GeneralInformation extends StatelessWidget {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      const Text('Abby', style: TextStyle(fontSize: 20),),
+                      Text(tutor.user!.name, style: const TextStyle(fontSize: 20),),
                       Row(
                         children: [
-                          Icon(Icons.star_rate_rounded,color: Colors.yellow.shade700,),
-                          Icon(Icons.star_rate_rounded,color: Colors.yellow.shade700,),
-                          Icon(Icons.star_rate_rounded,color: Colors.yellow.shade700,),
-                          Icon(Icons.star_rate_rounded,color: Colors.yellow.shade700,),
-                          Icon(Icons.star_rate_rounded,color: Colors.yellow.shade700,),
+                          for(int i = 0; i< tutor.rating!.round();i++)
+                            Icon(Icons.star_rate_rounded,color: Colors.yellow.shade700,)
                         ],
                       )
                     ],
@@ -39,41 +64,20 @@ class GeneralInformation extends StatelessWidget {
                     margin: const EdgeInsets.symmetric(vertical: 4),
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: const [
-                        Text('Teacher', style: TextStyle(color: Color(0xff787878)),),
-                        Icon(Icons.favorite_outline,color: Colors.pink,)
+                      children:  [
+                        Text(tutor.profession, style: const TextStyle(color: Color(0xff787878)),),
                       ],
                     ),
                   ),
-                  const Text('Philippines the')
+                  countriesMapping[tutor.user!.country!] !=null
+                      ? Text(countriesMapping[tutor.user!.country!]!)
+                      : Text(tutor.user!.country!)
                 ],
               ),
             ),
           ],
         ),
-        Container(
-          margin: const EdgeInsets.symmetric(vertical: 8),
-          child: Row(
-            children: [
-              Expanded(
-                  child: TextButton(
-                    onPressed: () {},
-                    style: TextButton.styleFrom(
-                      backgroundColor: const Color.fromRGBO(0, 113, 240, 1),
-                      padding: const EdgeInsets.all(12),
-                      shape: const RoundedRectangleBorder(
-                        borderRadius: BorderRadius.all(Radius.circular(20)),
-                      ),
-                    ),
-                    child: const Text(
-                      'Booking',
-                      style: TextStyle(fontSize: 16, color: Colors.white),
-                    ),
-                  )
-              )
-            ],
-          ),
-        ),
+        const SizedBox(height: 8,),
         Row(
           children: [
             Expanded(
@@ -81,9 +85,23 @@ class GeneralInformation extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.spaceAround,
                 children: [
                   Column(
-                    children: const[
-                      Icon(Icons.message, color: Color.fromRGBO(0, 113, 240, 1),),
-                      Text('Message', style: TextStyle(color: Color.fromRGBO(0, 113, 240, 1)),)
+                    children: [
+                      GestureDetector(
+                        onTap: () async {
+                          try{
+                            await tutorProvider.manageFavoriteTutor(tutor.user!.id, context);
+                          } catch(error){
+                            print(error);
+                            showErrorToast('Error: Something went wrong, please try later!');
+                          }
+                        },
+                        child: tutor.isFavouriteTutor != true ? const Icon(Icons.favorite_outline,color: Color.fromRGBO(0, 113, 240, 1),)
+                            : const Icon(Icons.favorite,color: Colors.pink,),
+                      ),
+                      Text('Favourite',
+                        style: tutor.isFavouriteTutor != true ? const TextStyle(color: Color.fromRGBO(0, 113, 240, 1))
+                                : const TextStyle(color: Colors.pink),
+                      )
                     ],
                   ),
                   Column(
@@ -99,8 +117,9 @@ class GeneralInformation extends StatelessWidget {
         ),
         Container(
           margin: const EdgeInsets.symmetric(vertical: 24),
-          child: const Text('I am passionate about running and fitness, I often compete in trail/mountain running events and I love pushing myself. I am training to one day take part in ultra-endurance events. I also enjoy watching rugby on the weekends, reading and watching podcasts on Youtube. My most memorable life experience would be living in and traveling around Southeast Asia.',
-            style: TextStyle(fontSize: 16, height: 1.3),
+          child: Text(
+            tutor.bio,
+            style: const TextStyle(fontSize: 16, height: 1.3),
           ),
         ),
       ],

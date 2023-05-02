@@ -26,4 +26,38 @@ class TutorService {
     });
     return response;
   }
+
+  static Future<Response<dynamic>> getTutorInformation(String tutorId) async {
+    final response = await dio.get('$url/tutor/$tutorId');
+    return response;
+  }
+
+  static Future<Response<dynamic>> manageFavoriteTutor(String tutorId) async {
+    final response = await dio.post('$url/user/manageFavoriteTutor',data: {
+      "tutorId": tutorId
+    });
+    return response;
+  }
+
+  static Future<Response<dynamic>> getScheduleOfTutor(String tutorId, int startTimestamp, int endTimestamp) async {
+    final response = await dio.get('$url/schedule',queryParameters: {
+      "tutorId": tutorId,
+      "startTimestamp": startTimestamp,
+      "endTimestamp": endTimestamp
+    });
+    return response;
+  }
+
+  static Future<Response<dynamic>> getFeedbacks(String tutorId) async {
+    final response = await dio.get('$url/feedback/v2/$tutorId');
+    return response;
+  }
+
+  static Future<Response<dynamic>> bookClass(String scheduleDetailIds, String note) async {
+    final response = await dio.post('$url/booking',data: {
+      "scheduleDetailIds": [scheduleDetailIds],
+      "note": note
+    });
+    return response;
+  }
 }

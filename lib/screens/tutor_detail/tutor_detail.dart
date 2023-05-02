@@ -1,7 +1,13 @@
 import 'package:advanced_mobile/config/color.dart';
+import 'package:advanced_mobile/providers/tutor_provider.dart';
+import 'package:advanced_mobile/screens/tutor_detail/comment._cart.dart';
 import 'package:advanced_mobile/screens/tutor_detail/general_information.dart';
 import 'package:advanced_mobile/screens/tutor_detail/specification_information.dart';
+import 'package:advanced_mobile/utils/regionBuilder.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/scheduler.dart';
+import 'package:loading_indicator/loading_indicator.dart';
+import 'package:provider/provider.dart';
 import 'package:syncfusion_flutter_calendar/calendar.dart';
 import 'package:video_player/video_player.dart';
 import 'package:chewie/chewie.dart';
@@ -10,8 +16,10 @@ import 'package:chewie/chewie.dart';
 class TutorDetailScreen extends StatefulWidget {
   const TutorDetailScreen({
     videoPlayerController,
-    Key? key
+    Key? key,
+    required this.tutorId,
   }) : super(key: key);
+  final String tutorId;
 
   @override
   State<TutorDetailScreen> createState() => _TutorDetailScreenState();
@@ -19,167 +27,135 @@ class TutorDetailScreen extends StatefulWidget {
 
 class _TutorDetailScreenState extends State<TutorDetailScreen> {
   late VideoPlayerController _videoPlayerController;
+  final CalendarController _calendarController = CalendarController();
   ChewieController? _chewieController;
   @override
   void initState() {
     super.initState();
-    initializePlayer();
+    WidgetsBinding.instance.addPostFrameCallback((_) async{
+      await context.read<TutorProvider>().getTutorInformation(widget.tutorId, context);
+      await context.read<TutorProvider>().getScheduleOfTutor(widget.tutorId,null,null,context);
+      await context.read<TutorProvider>().getFeedbacks(widget.tutorId, context);
+      initializePlayer();});
   }
   @override
   void dispose() {
     _videoPlayerController.dispose();
     _chewieController?.dispose();
+    _calendarController.dispose();
     super.dispose();
   }
 
   void initializePlayer() async {
     _videoPlayerController =
-        VideoPlayerController.network("https://api.app.lettutor.com/video/4d54d3d7-d2a9-42e5-97a2-5ed38af5789avideo1627913015871.mp4");
-    await _videoPlayerController.initialize().then((value) => setState(() {}));
+        VideoPlayerController.network(context.read<TutorProvider>().tutorInfo!.video!);
+    await _videoPlayerController.initialize();
     _chewieController = ChewieController(
       videoPlayerController: _videoPlayerController,
       showOptions: false,
       autoPlay: true,
     );
+    setState(() {
+      _chewieController;
+    });
   }
   @override
   Widget build(BuildContext context) {
-    final aspectRatio = _videoPlayerController.value.isInitialized ? _videoPlayerController.value.aspectRatio : 3/2;
-    print('aspectRatio: ${aspectRatio}');
-    return Scaffold(
-      appBar: AppBar(
-        title: Row(
-          children: [
-            GestureDetector(
-                onTap: () {
-                  Navigator.pop(context);
-                },
-                child: const Icon(Icons.arrow_back, color: Colors.black,size: 30,)
+    DateTime now = DateTime.now();
+    DateTime minDate = DateTime(now.year,now.month,now.day).subtract(const Duration(seconds: 1));
+    return Consumer<TutorProvider>(
+      builder: (context, tutorProvider,_) {
+        return tutorProvider.tutorInfo == null ?
+        const Scaffold(
+          body: Center(
+            child: SizedBox(
+              height: 50,
+              width: 50,
+              child: LoadingIndicator(
+                indicatorType: Indicator.circleStrokeSpin,
+                strokeWidth: 2.0,
+              ),
             ),
-            Container(
-                margin: const EdgeInsets.only(left: 8),
-                child: const Text('Abby',style: TextStyle(color: Colors.black),)
-            )
-          ],
-        ),
-        automaticallyImplyLeading: false,
-        backgroundColor: Colors.white,
-      ),
-      body: Padding(
-        padding: const EdgeInsets.all(15),
-        child: SingleChildScrollView(
-          scrollDirection: Axis.vertical,
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Container(
-                color: Colors.black,
-                width: MediaQuery.of(context).size.width,
-                margin: const EdgeInsets.only(bottom: 10),
-                child: AspectRatio(
-                  aspectRatio: aspectRatio,
-                  child: _chewieController!=null ? Chewie(controller: _chewieController as ChewieController) : Container(),
-                ),
-              ),
-              const GeneralInformation(),
-              const SpecificationInformation(),
-              Container(
-                margin: const EdgeInsets.only(bottom: 16),
-                child: SfCalendar(
-                  view: CalendarView.week,
-                  timeSlotViewSettings: const TimeSlotViewSettings(
-                      startHour: 9.5,
-                      endHour: 16.5,
-                      timeInterval: Duration(minutes: 30),
-                      timeFormat: 'hh:mm'
-                  ),
-                  showNavigationArrow: true,
-                  viewNavigationMode: ViewNavigationMode.none,
-                ),
-              ),
-              const Text('Rating and Comment(0)', style: TextStyle(color: Color.fromRGBO(0, 113, 240, 1),fontSize: 16),),
-              Container(
-                padding: const EdgeInsets.all(8),
-                margin: const EdgeInsets.only(top: 8, bottom: 16, left: 8),
-                decoration: BoxDecoration(
-                  color: Colors.white,
-                  border: Border.all(color: Colors.black12, width: 1),
-                  boxShadow: const [
-                    BoxShadow(
-                      color: Color.fromRGBO(0, 0, 0, 0.4),
-                      blurRadius: 1,
-                      offset: Offset(0, 0),
-                    )
-                  ],
-                ),
-                child: Column(
-                  children: [
-                    Row(
-                      children: [
-                        Container(
-                            margin: const EdgeInsets.only(right: 8),
-                            child: const Image(
-                                image: NetworkImage(
-                                    'https://cdn-icons-png.flaticon.com/512/147/147133.png',
-                                    scale: 8))
-                        ),
-                        Expanded(
-                            child:Column(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Container(
-                                  margin: const EdgeInsets.only(top: 4),
-                                  child: Row(
-                                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                      children: [
-                                        const SizedBox(
-                                            width: 150,
-                                            child: Text('Nguyễn Quốc Thông', style: TextStyle(fontSize: 14),)
-                                        ),
-                                        Row(
-                                          mainAxisAlignment: MainAxisAlignment.center ,
-                                          children: [
-                                            Icon(Icons.star_rate_rounded,color: Colors.yellow.shade700,),
-                                            Icon(Icons.star_rate_rounded,color: Colors.yellow.shade700,),
-                                            Icon(Icons.star_rate_rounded,color: Colors.yellow.shade700,),
-                                            Icon(Icons.star_rate_rounded,color: Colors.yellow.shade700,),
-                                            Icon(Icons.star_rate_rounded,color: Colors.yellow.shade700,),
-                                          ],
-                                        )
-                                      ]
-                                  ),
-                                ),
-                              ],
-                            )
-                        )
-                      ],
-                    ),
-                    Row(mainAxisAlignment: MainAxisAlignment.start,
-                      children: [
-                        Container(
-                          margin: const EdgeInsets.symmetric(vertical: 16),
-                          child: const Text(
-                              'This tutor is so good!'
-                          ),
-                        ),
-                      ],
-                    ),
-                    Row(mainAxisAlignment: MainAxisAlignment.end,
-                      children: [
-                        Text(
-                          'Mon, 3/14/2023 12:35 AM',
-                          style: TextStyle(color: AppColors.textGrey),
-                        ),
-                      ],
-                    )
-                  ],
-                ),
-              )
-            ],
           ),
-        ),
-      ),
+        ) : Scaffold(
+          appBar: AppBar(
+            title: Row(
+              children: [
+                GestureDetector(
+                    onTap: () {
+                      tutorProvider.removeTutorInfo(context);
+                    },
+                    child: const Icon(Icons.arrow_back, color: Colors.black,size: 30,)
+                ),
+                Container(
+                    margin: const EdgeInsets.only(left: 8),
+                    child: Text(tutorProvider.tutorInfo!.user!.name,style: const TextStyle(color: Colors.black),)
+                )
+              ],
+            ),
+            automaticallyImplyLeading: false,
+            backgroundColor: Colors.white,
+          ),
+          body: Padding(
+            padding: const EdgeInsets.all(15),
+            child: SingleChildScrollView(
+              scrollDirection: Axis.vertical,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Container(
+                    color: Colors.black,
+                    width: MediaQuery.of(context).size.width,
+                    margin: const EdgeInsets.only(bottom: 10),
+                    child: AspectRatio(
+                      aspectRatio: 3/2,
+                      child: _chewieController!=null ? Chewie(controller: _chewieController as ChewieController) : Container(),
+                    ),
+                  ),
+                  GeneralInformation(tutor: tutorProvider.tutorInfo!,tutorProvider: tutorProvider,),
+                  SpecificationInformation(tutor: tutorProvider.tutorInfo!),
+                  Container(
+                    margin: const EdgeInsets.only(bottom: 16),
+                    child: SfCalendar(
+                      onTap: (CalendarTapDetails details) async {
+                        DateTime date = details.date!;
+                        await tutorProvider.bookClass(date, context);
+                      },
+                      showCurrentTimeIndicator: false,
+                      specialRegions: tutorProvider.regions,
+                      view: CalendarView.week,
+                      firstDayOfWeek: now.weekday,
+                      timeSlotViewSettings: const TimeSlotViewSettings(
+                        timeInterval: Duration(minutes: 25),
+                        timeFormat: 'hh:mm a',
+                        timeIntervalWidth: 60,
+                        timeIntervalHeight: 50
+                      ),
+                      showNavigationArrow: true,
+                      viewNavigationMode: ViewNavigationMode.none,
+                      timeRegionBuilder: regionBuilder,
+                      minDate: DateTime(now.year,now.month,now.day),
+                      controller: _calendarController,
+                      onViewChanged: (ViewChangedDetails viewChangedDetails) {
+                        SchedulerBinding.instance.addPostFrameCallback((duration) async {
+                          DateTime firstDate = viewChangedDetails.visibleDates.first;
+                          DateTime lastDate = viewChangedDetails.visibleDates.last;
+                          await tutorProvider.getScheduleOfTutor(widget.tutorId, firstDate,lastDate, context);
+                        });
+                      },
+                    ),
+                  ),
+                  Text(
+                    'Rating and Comment(${tutorProvider.tutorInfo!.totalFeedback})',
+                    style: const TextStyle(color: Color.fromRGBO(0, 113, 240, 1),fontSize: 16),),
+                  for (int i =0;i<tutorProvider.feedbacks.length;i++)
+                    CommentCard(feedback: tutorProvider.feedbacks[i]),
+                ],
+              ),
+            ),
+          ),
+        );
+      }
     );
   }
 }

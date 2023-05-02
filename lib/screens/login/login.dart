@@ -3,10 +3,10 @@ import 'package:advanced_mobile/screens/content.dart';
 import 'package:advanced_mobile/screens/login/forgot_password.dart';
 import 'package:advanced_mobile/screens/login/register.dart';
 import 'package:advanced_mobile/services/auth_service.dart';
+import 'package:advanced_mobile/widgets/toast.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({Key? key}) : super(key: key);
@@ -106,16 +106,7 @@ class _LoginScreenState extends State<LoginScreen> {
                     await AuthService.login(emailInputController.text, passwordInputController.text);
                     Navigator.pushReplacement(context, MaterialPageRoute(builder: (context)=> const ContentScreen()));
                   } catch(error){
-                    print(error);
-                    Fluttertoast.showToast(
-                        msg: error.toString().split(':')[1],
-                        toastLength: Toast.LENGTH_LONG,
-                        gravity: ToastGravity.TOP,
-                        timeInSecForIosWeb: 1,
-                        backgroundColor: Colors.red,
-                        textColor: Colors.white,
-                        fontSize: 16.0
-                    );
+                    showErrorToast(error);
                   }
                 },
                 style: TextButton.styleFrom(
