@@ -1,6 +1,7 @@
 import 'package:advanced_mobile/config/color.dart';
 import 'package:advanced_mobile/models/schedule/booking_info_model.dart';
 import 'package:advanced_mobile/providers/upcoming_provider.dart';
+import 'package:advanced_mobile/screens/video_call/video_call.dart';
 import 'package:advanced_mobile/utils/formatDateFromTimestamp.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -219,8 +220,11 @@ class _UpcomingScreenState extends State<UpcomingScreen> {
                                         child: const Text('Cancel',style: TextStyle(color: Colors.red),)
                                     ),
                                     ElevatedButton(
-                                        onPressed: index == 0 ? (){} : null,
-
+                                        onPressed: index == 0 ? (){
+                                          Navigator.push(context,
+                                              MaterialPageRoute(builder: (context) =>
+                                                  VideoCallScreen(upcomingProvider:upcomingProvider,upcomingClasses: upcomingProvider.upcomingClasses,)));
+                                        } : null,
                                         child: const Text('Go to meeting',style: TextStyle(color: Colors.white),)
                                     ),
                                   ],

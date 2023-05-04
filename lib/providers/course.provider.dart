@@ -24,13 +24,17 @@ class CourseProvider extends ChangeNotifier {
     }
   }
 
+  void removeTutorInfo(context){
+    courseInfo = null;
+    Navigator.pop(context);
+  }
+
   Future<void> getCourseDetail(context, String courseId) async{
     final response = await CourseService.getCourseDetail(courseId);
     if(response.data['statusCode'] == 401){
       logout(context);
     }
     if (response.data['statusCode'] == 200) {
-      print(response.data);
       courseInfo = Course.fromJson(response.data['data']);
       notifyListeners();
     } else {

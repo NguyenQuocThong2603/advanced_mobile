@@ -60,15 +60,12 @@ class _VideoCallScreenState extends State<VideoCallScreen> {
   @override
   Widget build(BuildContext context) {
     String formatTimeStart = formatDateFromTimestamp('E, dd, MMMM, yy HH:mm', lastBooking!.scheduleDetailInfo!.startPeriodTimestamp);
-    int now = DateTime.now().millisecondsSinceEpoch;
-    int startTimestamp = lastBooking!.scheduleDetailInfo!.startPeriodTimestamp;
-    int differenceTimestamp = (startTimestamp - now);
-    if(differenceTimestamp < 0){
-      Navigator.pop(context);
-      _joinMeeting();
-    }
     timer ??= Timer.periodic(const Duration(seconds: 1), (timer) async {
       if(mounted){
+        int now = DateTime.now().millisecondsSinceEpoch;
+        int startTimestamp = lastBooking!.scheduleDetailInfo!.startPeriodTimestamp;
+        int differenceTimestamp = (startTimestamp - now);
+        differenceTimestamp = -1;
         if(differenceTimestamp > 0){
           final time = Duration(milliseconds: differenceTimestamp);
           final hours = time.inHours.remainder(60).toString().padLeft(2, '0');
@@ -79,9 +76,13 @@ class _VideoCallScreenState extends State<VideoCallScreen> {
             isLoading = false;
           });
         }
+        else{
+          Navigator.pop(context);
+          _joinMeeting();
+        }
       }
     });
-    return isLoading ? Scaffold(
+    return Scaffold(
       appBar: AppBar(
         title: Row(
           children: [
@@ -101,7 +102,10 @@ class _VideoCallScreenState extends State<VideoCallScreen> {
         automaticallyImplyLeading: false,
         elevation: 0,
       ),
-      body: Center(
+      body: isLoading ? SpinKitRing(
+          color: AppColors.primary,
+          size: 50,
+        ) : Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
@@ -110,9 +114,6 @@ class _VideoCallScreenState extends State<VideoCallScreen> {
           ],
         ),
       ),
-    ) : SpinKitRing(
-    color: AppColors.primary,
-    size: 50,
     );
   }
   _joinMeeting() async {

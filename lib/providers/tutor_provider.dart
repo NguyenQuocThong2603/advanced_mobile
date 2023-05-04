@@ -45,7 +45,7 @@ class TutorProvider extends ChangeNotifier{
   Future<void> searchTutorByName(
       String name, String speciality,String nationality,context) async{
     Object data = {};
-    if(nationality == nationalities[nationalityIndex]) return;
+    if(nationality == nationalities[nationalityIndex] && name =="") return;
     if(nationality == 'Vietnamese') {
       data = {"isVietNamese": true};
       nationalityIndex = 1;
@@ -61,6 +61,7 @@ class TutorProvider extends ChangeNotifier{
     if(response.data['statusCode'] == 401){
       logout(context);
     }
+    print(response.data);
     if (response.data['statusCode'] == 200) {
       final List<dynamic> data = response.data['rows'];
       var result = data.map((tutor) => Tutor.fromJson(tutor)).toList();
