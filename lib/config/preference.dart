@@ -21,4 +21,7 @@ class Preference {
   String? getString(String key){
     return _prefs.getString(key);
   }
+  Future<void> removeData(String key) async {
+    await _prefs.remove(key);
+  }
 }

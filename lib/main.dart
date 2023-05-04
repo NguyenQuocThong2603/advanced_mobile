@@ -5,7 +5,7 @@ import 'package:advanced_mobile/providers/course.provider.dart';
 import 'package:advanced_mobile/providers/tutor_provider.dart';
 import 'package:advanced_mobile/providers/upcoming_provider.dart';
 import 'package:advanced_mobile/providers/user_provider.dart';
-import 'package:advanced_mobile/screens/login/login.dart';
+import 'package:advanced_mobile/screens/initial.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -45,7 +45,7 @@ class MyApp extends StatelessWidget {
           // is not restarted.
           primarySwatch: Colors.blue,
         ),
-        home: const LoginScreen(),
+        home: const InitialScreen(),
       ),
     );
   }

@@ -9,6 +9,7 @@ import 'package:advanced_mobile/screens/tutors/upcoming_banner.dart';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:provider/provider.dart';
 
 class TutorsScreen extends StatefulWidget {
@@ -20,17 +21,23 @@ class TutorsScreen extends StatefulWidget {
   State<TutorsScreen> createState() => _TutorsScreenState();
 }
 
-class _TutorsScreenState extends State<TutorsScreen> {
+class _TutorsScreenState extends State<TutorsScreen>
+    with AutomaticKeepAliveClientMixin{
   int selectedIndex = 0;
   late TextEditingController searchInputController;
+  bool isLoading = true;
 
   @override
   void initState(){
     super.initState();
     searchInputController = TextEditingController();
     WidgetsBinding.instance.addPostFrameCallback((_) async{
-      await context.read<TutorProvider>().getListTutors(specialities[selectedIndex]['key']!, context);
+      await context.read<UpcomingProvider>().getUpcomingClasses(context);
       await context.read<UpcomingProvider>().getTotalLessonTime(context);
+      await context.read<TutorProvider>().getListTutors(specialities[selectedIndex]['key']!, context);
+      setState(() {
+        isLoading = false;
+      });
     });
   }
   @override
@@ -38,8 +45,12 @@ class _TutorsScreenState extends State<TutorsScreen> {
     searchInputController.dispose();
     super.dispose();
   }
+
+  @override
+  bool get wantKeepAlive => true;
   @override
   Widget build(BuildContext context) {
+    super.build(context);
     return Scaffold(
       appBar: AppBar(
         title: const Text(
@@ -50,17 +61,24 @@ class _TutorsScreenState extends State<TutorsScreen> {
         backgroundColor: Colors.white,
         elevation: 0,
       ),
-      body: Consumer<TutorProvider> (
+      body: isLoading ? SpinKitRing(
+        color: AppColors.primary,
+        size: 50,
+      ) : Consumer<TutorProvider> (
         builder: (context,tutorProvider,_) {
           return Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                UpcomingBanner(),
+                Consumer<UpcomingProvider>(
+                  builder: (context, upcomingProvider,_) {
+                    return UpcomingBanner(upcomingClasses: upcomingProvider.upcomingClasses,upcomingProvider: upcomingProvider,);
+                  }
+                ),
                 SearchField(
                     speciality: specialities[selectedIndex]['key']!,
                     tutorProvider: tutorProvider,),
                 Container(
-                  margin: const EdgeInsets.only(left: 20,top: 15,bottom: 8),
+                  margin: const EdgeInsets.only(left: 20,top: 4,bottom: 8),
                   child: const Text(
                     'Select tutor nationality',
                     style: TextStyle(

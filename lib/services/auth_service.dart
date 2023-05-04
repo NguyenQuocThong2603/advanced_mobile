@@ -22,8 +22,9 @@ class AuthService{
           return status! < 600;
         }
       ));
-    print(response.data);
+    print(response);
     if(response.data['statusCode'] != null){
+      print(response.data['message']);
       throw Exception(response.data['message']);
     }
   }

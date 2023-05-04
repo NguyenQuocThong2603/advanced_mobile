@@ -2,8 +2,8 @@ import 'package:advanced_mobile/models/schedule/schedule_model.dart';
 import 'package:advanced_mobile/models/tutor/tutor_model.dart';
 import 'package:advanced_mobile/models/user/feedback_model.dart';
 import 'package:advanced_mobile/models/user/user_model.dart';
-import 'package:advanced_mobile/screens/login/login.dart';
 import 'package:advanced_mobile/services/tutor_service.dart';
+import 'package:advanced_mobile/utils/authentication_utils.dart';
 import 'package:advanced_mobile/utils/tutor_utils.dart';
 import 'package:flutter/material.dart';
 import 'package:syncfusion_flutter_calendar/calendar.dart';
@@ -30,7 +30,7 @@ class TutorProvider extends ChangeNotifier{
   Future<void> getListTutors(String speciality, context) async{
       final response = await TutorService.getListTutors(speciality);
       if(response.data['statusCode'] == 401){
-        Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (context) => const LoginScreen()), (route) => false);
+        logout(context);
       }
       if (response.data['statusCode'] == 200) {
         final List<dynamic> data = response.data['rows'];
@@ -59,7 +59,7 @@ class TutorProvider extends ChangeNotifier{
     notifyListeners();
     final response = await TutorService.searchTutorByName(name,speciality,data);
     if(response.data['statusCode'] == 401){
-      Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (context) => const LoginScreen()), (route) => false);
+      logout(context);
     }
     if (response.data['statusCode'] == 200) {
       final List<dynamic> data = response.data['rows'];
@@ -74,7 +74,7 @@ class TutorProvider extends ChangeNotifier{
   Future<void> getTutorInformation(String tutorId,context) async{
     final response = await TutorService.getTutorInformation(tutorId);
     if(response.data['statusCode'] == 401){
-      Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (context) => const LoginScreen()), (route) => false);
+      logout(context);
     }
     if (response.data['statusCode'] == 200) {
       tutorInfo = Tutor.fromJson(response.data);
@@ -92,7 +92,7 @@ class TutorProvider extends ChangeNotifier{
   Future<void> manageFavoriteTutor(String tutorId,context) async {
     final response = await TutorService.manageFavoriteTutor(tutorId);
     if(response.data['statusCode'] == 401){
-      Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (context) => const LoginScreen()), (route) => false);
+      logout(context);
     }
     if (response.data['statusCode'] == 200) {
       if(response.data['result'] == 1){
@@ -119,7 +119,7 @@ class TutorProvider extends ChangeNotifier{
     }
     final response = await TutorService.getScheduleOfTutor(tutorId, startTimestamp, endTimestamp);
     if(response.data['statusCode'] == 401){
-      Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (context) => const LoginScreen()), (route) => false);
+      logout(context);
     }
     if (response.data['statusCode'] == 200) {
       regions = [];
@@ -127,7 +127,7 @@ class TutorProvider extends ChangeNotifier{
       schedules = data.map((schedule) => Schedule.fromJson(schedule)).toList();
       for(int i =0 ; i<schedules.length; i++){
         if(schedules[i].isBooked == true){
-          if(schedules[i].scheduleDetails[0].bookingInfo.last.userId == user.id){
+          if(schedules[i].scheduleDetails[0].bookingInfo[0].userId == user.id){
             regions.add(TimeRegion(
                 startTime: DateTime.fromMillisecondsSinceEpoch(schedules[i].startTimestamp),
                 endTime: DateTime.fromMillisecondsSinceEpoch(schedules[i].endTimestamp),
@@ -174,7 +174,7 @@ class TutorProvider extends ChangeNotifier{
   Future<void> getFeedbacks(String tutorId,context) async{
     final response = await TutorService.getFeedbacks(tutorId);
     if(response.data['statusCode'] == 401){
-      Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (context) => const LoginScreen()), (route) => false);
+      logout(context);
     }
     if (response.data['statusCode'] == 200) {
       final List<dynamic> data = response.data['data']['rows'];
@@ -202,7 +202,7 @@ class TutorProvider extends ChangeNotifier{
     if(index != null){
       final response = await TutorService.bookClass(bookingClass[0].scheduleDetails[0].id,note);
       if(response.data['statusCode'] == 401){
-        Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (context) => const LoginScreen()), (route) => false);
+        logout(context);
       }
       if (response.data['statusCode'] != 200) {
         throw Exception(response.data['message']);
@@ -213,7 +213,7 @@ class TutorProvider extends ChangeNotifier{
   Future<void> reportTutor(String tutorId,String content,context) async {
     final response = await TutorService.reportTutor(tutorId, content);
     if (response.data['statusCode'] == 401) {
-      Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (context) => const LoginScreen()), (route) => false);
+      logout(context);
     }
     if (response.data['statusCode'] != 200) {
       throw Exception(response.data['message']);

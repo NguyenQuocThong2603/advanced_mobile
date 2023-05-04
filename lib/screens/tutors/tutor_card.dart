@@ -30,7 +30,7 @@ class _TutorCardState extends State<TutorCard> {
   @override
   Widget build(BuildContext context) {
     return Container(
-        margin: const EdgeInsets.only(bottom: 16),
+        margin: const EdgeInsets.only(bottom: 12),
         padding: const EdgeInsets.symmetric(horizontal: 20),
         child: Container(
             decoration: BoxDecoration(
@@ -143,7 +143,7 @@ class _TutorCardState extends State<TutorCard> {
                         child: Text(
                           widget.tutor.bio!,
                           overflow: TextOverflow.ellipsis,
-                          maxLines: 4,
+                          maxLines: 3,
                         ),
                       )
                     ],

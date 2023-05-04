@@ -264,6 +264,31 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.0.0"
+  omni_jitsi_meet:
+    dependency: "direct main"
+    description:
+      path: omni_jitsi_meet
+      ref: master
+      resolved-ref: "700be6964adba34caeb4804b52ac08324a0fa6a8"
+      url: "https://github.com/coderof19clc7/jitsi_meet.git"
+    source: git
+    version: "1.0.10"
+  omni_jitsi_meet_platform_interface:
+    dependency: transitive
+    description:
+      name: omni_jitsi_meet_platform_interface
+      sha256: "31ce1efce4acff029bd7ca287139d77e3da36b3f27f4a1df81a75948ca844812"
+      url: "https://pub.dev"
+    source: hosted
+    version: "1.0.12"
+  omni_jitsi_meet_web_plugin:
+    dependency: transitive
+    description:
+      name: omni_jitsi_meet_web_plugin
+      sha256: "922c5d20ef149a191d30b2e8ac87b4464c347a529bcc55580d9bd82816ed783a"
+      url: "https://pub.dev"
+    source: hosted
+    version: "1.0.12"
   path:
     dependency: transitive
     description:

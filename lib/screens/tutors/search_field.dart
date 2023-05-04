@@ -32,6 +32,7 @@ class _SearchFieldState extends State<SearchField> {
   @override
   Widget build(BuildContext context) {
       return Container(
+        height: 35,
         padding: const EdgeInsets.symmetric(horizontal: 15),
         child: TextField(
             controller: searchInputController,

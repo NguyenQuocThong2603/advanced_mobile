@@ -1,10 +1,14 @@
+import 'dart:convert';
+
 import 'package:advanced_mobile/config/color.dart';
+import 'package:advanced_mobile/config/preference.dart';
 import 'package:advanced_mobile/models/chat/message_model.dart';
 import 'package:advanced_mobile/providers/chat_provider.dart';
 import 'package:advanced_mobile/screens/chat/loading.dart';
 import 'package:advanced_mobile/screens/chat/message_field.dart';
 import 'package:advanced_mobile/widgets/toast.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:provider/provider.dart';
 
 class ChatScreen extends StatefulWidget {
@@ -17,13 +21,27 @@ class ChatScreen extends StatefulWidget {
 class _ChatScreenState extends State<ChatScreen> {
   late TextEditingController inputController;
   late ScrollController scrollController;
-
+  final pref = Preference.getInstance();
+  late List<Message> history;
+  bool isLoading = true;
 
   @override
   void initState() {
     super.initState();
     inputController = TextEditingController();
     scrollController = ScrollController();
+    var data = pref.getString('history');
+    if(data !=null) {
+      history = List<Message>.from(jsonDecode(data).map((message) => Message.fromJson(message)));
+      setState(() {
+        isLoading = false;
+      });
+    }else{
+      history = [];
+      setState(() {
+        isLoading = false;
+      });
+    }
   }
 
   @override
@@ -38,7 +56,6 @@ class _ChatScreenState extends State<ChatScreen> {
   Widget build(BuildContext context) {
     return Consumer<ChatProvider>(
       builder: (context, chatProvider,_) {
-        List<Message> messages = chatProvider.messages;
         return Scaffold(
           appBar: AppBar(
             title: const Text(
@@ -54,19 +71,28 @@ class _ChatScreenState extends State<ChatScreen> {
               Expanded(
                   child: Container(
                       padding: const EdgeInsets.all(15),
-                      child: ListView.builder(
+                      child: !isLoading ? ListView.builder(
                         reverse: true,
                         controller: scrollController,
-                        itemCount: messages.length,
+                        itemCount: history.length,
                         itemBuilder: (context, index) {
                           return MessageField(
-                            isMyMessage: messages[messages.length - index - 1]
+                            isMyMessage: history[history.length - index - 1]
                                 .role == 'user',
-                            message: messages[messages.length - index - 1]
+                            message: history[history.length - index - 1]
                                 .message,
                           );
                         },
-                      )
+                      ) : SpinKitFadingCircle(
+                        size: 20,
+                        itemBuilder: (BuildContext context, int index) {
+                          return DecoratedBox(
+                            decoration: BoxDecoration(
+                              color: AppColors.primary,
+                            ),
+                          );
+                        },
+                      ),
                   )
               ),
               Loading(isResponse: chatProvider.isResponse,),
@@ -95,8 +121,11 @@ class _ChatScreenState extends State<ChatScreen> {
                     onPressed: () async {
                       try{
                         if(inputController.text !=""){
-                          await chatProvider.sendRequest(inputController.text, scrollController);
-                          inputController.text = "";
+                          await chatProvider.sendRequest(
+                              inputController.text,
+                              scrollController,
+                              inputController
+                          );
                         }
                       } catch(error){
                         inputController.text = "";

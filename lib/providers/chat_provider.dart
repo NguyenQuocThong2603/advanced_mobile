@@ -1,5 +1,7 @@
+import 'dart:convert';
 import 'dart:developer';
 
+import 'package:advanced_mobile/config/preference.dart';
 import 'package:advanced_mobile/models/chat/message_model.dart';
 import 'package:chat_gpt_sdk/chat_gpt_sdk.dart';
 import 'package:flutter/material.dart';
@@ -14,9 +16,14 @@ class ChatProvider extends ChangeNotifier{
   late OpenAI openAI;
   List<Message> messages = [];
   bool isResponse = false;
+  final pref = Preference.getInstance();
 
-  Future<void> sendRequest(String newMessage, ScrollController scrollController,) async{
+  Future<void> sendRequest(
+      String newMessage,
+      ScrollController scrollController,
+      TextEditingController inputController) async{
     try{
+      inputController.text = "";
       messages.add(Message(role: 'user', message: newMessage));
       isResponse = true;
       notifyListeners();
@@ -49,6 +56,7 @@ class ChatProvider extends ChangeNotifier{
           scrollController.jumpTo(0);
         }
       }
+      await pref.setString("history", jsonEncode(messages.map((e) => e.toJson()).toList()),);
     }catch(err){
       log(err.toString());
       throw Exception();

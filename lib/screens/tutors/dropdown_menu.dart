@@ -23,11 +23,12 @@ class _NationalitiesMenuState extends State<NationalitiesMenu> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: const EdgeInsets.only(left: 15, right: 15,bottom: 15),
+      padding: const EdgeInsets.only(left: 15, right: 15,bottom: 10),
       child: Row(
         children: [
           Expanded(
             child: Container(
+              height: 35,
               padding: const EdgeInsets.symmetric(horizontal: 15),
               decoration: BoxDecoration(
                 borderRadius: const BorderRadius.all(Radius.circular(20)),

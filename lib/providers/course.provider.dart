@@ -1,6 +1,6 @@
 import 'package:advanced_mobile/models/course/course_model.dart';
-import 'package:advanced_mobile/screens/login/login.dart';
 import 'package:advanced_mobile/services/course_service.dart';
+import 'package:advanced_mobile/utils/authentication_utils.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
@@ -12,7 +12,7 @@ class CourseProvider extends ChangeNotifier {
   Future<void> getListCourses(context) async{
     final response = await CourseService.getListCourses();
     if(response.data['statusCode'] == 401){
-      Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (context) => const LoginScreen()), (route) => false);
+      logout(context);
     }
     if (response.data['statusCode'] == 200) {
       final List<dynamic> data = response.data['data']['rows'];
@@ -27,7 +27,7 @@ class CourseProvider extends ChangeNotifier {
   Future<void> getCourseDetail(context, String courseId) async{
     final response = await CourseService.getCourseDetail(courseId);
     if(response.data['statusCode'] == 401){
-      Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (context) => const LoginScreen()), (route) => false);
+      logout(context);
     }
     if (response.data['statusCode'] == 200) {
       print(response.data);

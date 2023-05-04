@@ -37,7 +37,7 @@ class _TutorDetailScreenState extends State<TutorDetailScreen> {
       await context.read<TutorProvider>().getTutorInformation(widget.tutorId, context);
       await context.read<TutorProvider>().getScheduleOfTutor(
           widget.tutorId,null,null,
-          Provider.of<UserProvider>(context,listen: false).userInfo,
+          context.read<UserProvider>().userInfo,
           context);
       await context.read<TutorProvider>().getFeedbacks(widget.tutorId, context);
       initializePlayer();});
@@ -145,7 +145,7 @@ class _TutorDetailScreenState extends State<TutorDetailScreen> {
                           DateTime lastDate = viewChangedDetails.visibleDates.last;
                           await tutorProvider.getScheduleOfTutor(
                               widget.tutorId, firstDate,lastDate,
-                              Provider.of<UserProvider>(context).userInfo,
+                              context.read<UserProvider>().userInfo,
                               context);
                         });
                       },

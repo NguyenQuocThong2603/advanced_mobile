@@ -73,7 +73,7 @@ class _ContentScreenState extends State<ContentScreen> {
                 ),
                 BottomNavigationBarItem(
                   icon: Icon(Icons.settings),
-                  label: 'Setting',
+                  label: 'Settings',
                 ),
               ]),
           body: PageStorage(

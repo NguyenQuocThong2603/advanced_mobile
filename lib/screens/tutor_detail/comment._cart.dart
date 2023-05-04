@@ -33,23 +33,26 @@ class CommentCard extends StatelessWidget {
             children: [
               Container(
                   margin: const EdgeInsets.only(right: 8),
-                  child: Image(
-                    image: NetworkImage(
-                        feedback.firstInfo.avatar,
-                        scale: 6),
-                    width: 40,
-                    height: 40,
-                    fit: BoxFit.cover,
-                    errorBuilder: (BuildContext context, Object exception, StackTrace? stackTrace) {
-                      return ClipRRect(
-                          borderRadius: BorderRadius.circular(MediaQuery.of(context).size.width),
-                          child: SizedBox(
-                            width: 40,
-                            height: 40,
-                            child: SvgPicture.asset("asset/svg/default_avatar.svg"),
-                          )
-                      );
-                    },
+                  child: ClipRRect(
+                    borderRadius: BorderRadius.circular(MediaQuery.of(context).size.width),
+                    child: Image(
+                      image: NetworkImage(
+                          feedback.firstInfo.avatar,
+                          scale: 6),
+                      width: 40,
+                      height: 40,
+                      fit: BoxFit.cover,
+                      errorBuilder: (BuildContext context, Object exception, StackTrace? stackTrace) {
+                        return ClipRRect(
+                            borderRadius: BorderRadius.circular(MediaQuery.of(context).size.width),
+                            child: SizedBox(
+                              width: 40,
+                              height: 40,
+                              child: SvgPicture.asset("asset/svg/default_avatar.svg"),
+                            )
+                        );
+                      },
+                    ),
                   ),
               ),
               Expanded(
