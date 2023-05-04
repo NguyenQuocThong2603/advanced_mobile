@@ -33,15 +33,13 @@ class _ChatScreenState extends State<ChatScreen> {
     var data = pref.getString('history');
     if(data !=null) {
       history = List<Message>.from(jsonDecode(data).map((message) => Message.fromJson(message)));
-      setState(() {
-        isLoading = false;
-      });
     }else{
       history = [];
-      setState(() {
-        isLoading = false;
-      });
     }
+    setState(() {
+      isLoading = false;
+    });
+    context.read<ChatProvider>().messages;
   }
 
   @override
@@ -74,12 +72,12 @@ class _ChatScreenState extends State<ChatScreen> {
                       child: !isLoading ? ListView.builder(
                         reverse: true,
                         controller: scrollController,
-                        itemCount: history.length,
+                        itemCount: chatProvider.messages.length,
                         itemBuilder: (context, index) {
                           return MessageField(
-                            isMyMessage: history[history.length - index - 1]
+                            isMyMessage: chatProvider.messages[chatProvider.messages.length - index - 1]
                                 .role == 'user',
-                            message: history[history.length - index - 1]
+                            message: chatProvider.messages[chatProvider.messages.length - index - 1]
                                 .message,
                           );
                         },

@@ -18,6 +18,10 @@ class ChatProvider extends ChangeNotifier{
   bool isResponse = false;
   final pref = Preference.getInstance();
 
+  void setMessages(history){
+    messages = history;
+  }
+
   Future<void> sendRequest(
       String newMessage,
       ScrollController scrollController,

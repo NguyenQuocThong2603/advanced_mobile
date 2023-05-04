@@ -65,7 +65,6 @@ class _VideoCallScreenState extends State<VideoCallScreen> {
         int now = DateTime.now().millisecondsSinceEpoch;
         int startTimestamp = lastBooking!.scheduleDetailInfo!.startPeriodTimestamp;
         int differenceTimestamp = (startTimestamp - now);
-        differenceTimestamp = -1;
         if(differenceTimestamp > 0){
           final time = Duration(milliseconds: differenceTimestamp);
           final hours = time.inHours.remainder(60).toString().padLeft(2, '0');

@@ -139,7 +139,7 @@ class _HistoryScreenState extends State<HistoryScreen> {
                             }
                             if(upcomingProvider.history[index].classReview !=null){
                               final classReview = upcomingProvider.history[index].classReview;
-                              requestWidget = Column(
+                              reviewWidget = Column(
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
                                     const Text('Review from tutor',style: TextStyle(fontWeight: FontWeight.w500),),

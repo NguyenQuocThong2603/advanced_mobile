@@ -152,8 +152,8 @@ class _SettingScreenState extends State<SettingScreen> {
                       child: Container(
                         height: 40,
                         child: ElevatedButton(
-                            onPressed: (){
-                              logout(context);
+                            onPressed: () async{
+                              await logout(context);
                             },
                             style: ButtonStyle(
                               backgroundColor: MaterialStateColor.resolveWith((states) => AppColors.primary),
