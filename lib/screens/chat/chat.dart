@@ -39,7 +39,7 @@ class _ChatScreenState extends State<ChatScreen> {
     setState(() {
       isLoading = false;
     });
-    context.read<ChatProvider>().messages;
+    context.read<ChatProvider>().setMessages(history);
   }
 
   @override

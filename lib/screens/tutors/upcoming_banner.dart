@@ -44,11 +44,17 @@ class _UpcomingBannerState extends State<UpcomingBanner> {
         color: const Color.fromRGBO(12, 61,223, 1),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
-          children: const [
-            Text(
-              'Welcome to LetTutor!',
-              style: TextStyle(color: Colors.white, fontSize: 28),
+          children: [
+            const Text(
+              'You have no upcoming lesson.',
+              style: TextStyle(color: Colors.white, fontSize: 24),
             ),
+            SizedBox(height: 8,),
+            Text(
+              'Total lesson time is ${widget.upcomingProvider.totalHour} hours '
+                  '${widget.upcomingProvider.totalMinute} minutes',
+              style: const TextStyle(color:Colors.white,fontSize: 16),
+            )
           ],
         ),
       );

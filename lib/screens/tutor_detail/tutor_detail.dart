@@ -37,7 +37,7 @@ class _TutorDetailScreenState extends State<TutorDetailScreen> {
       await context.read<TutorProvider>().getTutorInformation(widget.tutorId, context);
       await context.read<TutorProvider>().getScheduleOfTutor(
           widget.tutorId,null,null,
-          context.read<UserProvider>().userInfo,
+          context.read<UserProvider>().userInfo!,
           context);
       await context.read<TutorProvider>().getFeedbacks(widget.tutorId, context);
       initializePlayer();});
@@ -88,7 +88,7 @@ class _TutorDetailScreenState extends State<TutorDetailScreen> {
                     onTap: () {
                       tutorProvider.removeTutorInfo(context);
                     },
-                    child: const Icon(Icons.arrow_back, color: Colors.black,size: 30,)
+                    child: const Icon(Icons.navigate_before, color: Colors.black,size: 30,)
                 ),
                 Container(
                     margin: const EdgeInsets.only(left: 8),
@@ -145,7 +145,7 @@ class _TutorDetailScreenState extends State<TutorDetailScreen> {
                           DateTime lastDate = viewChangedDetails.visibleDates.last;
                           await tutorProvider.getScheduleOfTutor(
                               widget.tutorId, firstDate,lastDate,
-                              context.read<UserProvider>().userInfo,
+                              context.read<UserProvider>().userInfo!,
                               context);
                         });
                       },

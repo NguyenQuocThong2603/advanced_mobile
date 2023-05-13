@@ -27,7 +27,47 @@ class UserService {
   }
 
   static Future<Response<dynamic>> getUserInfo() async {
-    final response = await dio.get('$url/user/info');
+    final response = await dio.get('$url/user/info', options: Options(
+            followRedirects: false,
+            validateStatus: (status) {
+              return status! < 600;
+            }
+        ));
+    return response;
+  }
+
+  static Future<Response<dynamic>> updateUserInfo(birthday, country, learnTopics,
+      level, name, phone, studySchedule, testPreparations) async {
+    final response = await dio.put('$url/user/info', data: {
+      "birthday": birthday,
+      "country": country,
+      "learnTopics": learnTopics,
+      "level": level,
+      "name": name,
+      "phone": phone,
+      "studySchedule": studySchedule,
+      "testPreparations": testPreparations
+    },options: Options(
+        followRedirects: false,
+        validateStatus: (status) {
+          return status! < 600;
+        }
+    ));
+    return response;
+  }
+
+  static Future<Response<dynamic>> uploadAvatar(path) async {
+    final response = await dio.post('$url/user/uploadAvatar', data: FormData.fromMap({
+      'avatar': MultipartFile.fromFileSync(
+        path, filename: path.split('/').last,
+      )
+    }),options: Options(
+      headers: {"content-type": "multipart/form-data"},
+      followRedirects: false,
+      validateStatus: (status) {
+        return status! < 600;
+      }
+    ));
     return response;
   }
 }

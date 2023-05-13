@@ -27,7 +27,6 @@ class _ContentScreenState extends State<ContentScreen> {
     TutorsScreen(),
     CoursesScreen(),
     UpcomingScreen(),
-    HistoryScreen(),
     ChatScreen(),
     SettingScreen(),
   ];
@@ -62,10 +61,6 @@ class _ContentScreenState extends State<ContentScreen> {
                 BottomNavigationBarItem(
                   icon: Icon(Icons.query_builder_rounded),
                   label: 'Upcoming',
-                ),
-                BottomNavigationBarItem(
-                  icon: Icon(Icons.history),
-                  label: 'History',
                 ),
                 BottomNavigationBarItem(
                   icon: Icon(Icons.assistant),

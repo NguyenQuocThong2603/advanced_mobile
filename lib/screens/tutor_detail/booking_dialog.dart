@@ -37,7 +37,7 @@ class _BookingDialogState extends State<BookingDialog> {
   }
   @override
   Widget build(BuildContext context) {
-    User user = Provider.of<UserProvider>(context).userInfo;
+    User user = Provider.of<UserProvider>(context).userInfo!;
     return Dialog(
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(20),

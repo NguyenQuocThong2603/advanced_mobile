@@ -13,6 +13,12 @@ class UpcomingProvider extends ChangeNotifier{
   List<BookingInfo> history = [];
 
 
+  void removeState(){
+    totalHour = 0;
+    totalMinute = 0;
+    upcomingClasses = [];
+    history = [];
+  }
   Future<void> getTotalLessonTime(context) async{
     final response = await UpcomingService.getTotalLessonTime();
     if(response.data['statusCode'] == 401){

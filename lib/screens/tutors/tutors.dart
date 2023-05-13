@@ -6,6 +6,7 @@ import 'package:advanced_mobile/screens/tutors/dropdown_menu.dart';
 import 'package:advanced_mobile/screens/tutors/search_field.dart';
 import 'package:advanced_mobile/screens/tutors/tutor_card.dart';
 import 'package:advanced_mobile/screens/tutors/upcoming_banner.dart';
+import 'package:advanced_mobile/widgets/toast.dart';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -26,15 +27,24 @@ class _TutorsScreenState extends State<TutorsScreen>
   int selectedIndex = 0;
   late TextEditingController searchInputController;
   bool isLoading = true;
+  int page = 1;
+  int perPage = 12;
+  late ScrollController scrollController;
+  bool isLoadMore = false;
+  String name = "";
+  String nationality = "None";
 
   @override
   void initState(){
     super.initState();
     searchInputController = TextEditingController();
+    scrollController = ScrollController()..addListener(loadMore);
     WidgetsBinding.instance.addPostFrameCallback((_) async{
+      context.read<TutorProvider>().removeState();
       await context.read<UpcomingProvider>().getUpcomingClasses(context);
       await context.read<UpcomingProvider>().getTotalLessonTime(context);
-      await context.read<TutorProvider>().getListTutors(specialities[selectedIndex]['key']!, context);
+      await context.read<TutorProvider>().searchTutorByName('',specialities[selectedIndex]['key']!,'None',1,
+          perPage,false,context);
       setState(() {
         isLoading = false;
       });
@@ -43,11 +53,46 @@ class _TutorsScreenState extends State<TutorsScreen>
   @override
   void dispose(){
     searchInputController.dispose();
+    scrollController.removeListener(loadMore);
+    scrollController.dispose();
     super.dispose();
+  }
+
+  void setFilter(nameInput, nationalityInput){
+    setState(() {
+      page = 1;
+      name = nameInput;
+      nationality = nationalityInput;
+    });
   }
 
   @override
   bool get wantKeepAlive => true;
+
+  void loadMore() async {
+    if(isLoadMore){
+      return;
+    }
+    if (!isLoadMore && scrollController.position.extentAfter < page * perPage) {
+      if(context.read<TutorProvider>().tutors.length < context.read<TutorProvider>().count){
+        setState(() {
+          isLoadMore = true;
+          page++;
+        });
+        try {
+          await context.read<TutorProvider>().searchTutorByName(name,specialities[selectedIndex]['key']!,nationality,
+              page,perPage,false,context);
+          if (mounted) {
+            setState(() {
+              isLoadMore = false;
+            });
+          }
+        } catch (e) {
+          showErrorToast("Can't load more");
+        }
+      }
+    }
+  }
   @override
   Widget build(BuildContext context) {
     super.build(context);
@@ -76,7 +121,9 @@ class _TutorsScreenState extends State<TutorsScreen>
                 ),
                 SearchField(
                     speciality: specialities[selectedIndex]['key']!,
-                    tutorProvider: tutorProvider,),
+                    tutorProvider: tutorProvider,
+                    setFilter: setFilter,
+                ),
                 Container(
                   margin: const EdgeInsets.only(left: 20,top: 4,bottom: 8),
                   child: const Text(
@@ -93,6 +140,7 @@ class _TutorsScreenState extends State<TutorsScreen>
                   name: searchInputController.text,
                   nationalities: tutorProvider.nationalities,
                   tutorProvider: tutorProvider,
+                  setFilter: setFilter,
                 ),
                 Container(
                     padding: const EdgeInsets.symmetric(horizontal: 20),
@@ -109,8 +157,14 @@ class _TutorsScreenState extends State<TutorsScreen>
                                 onSelected: (value) async {
                                   if(selectedIndex != index){
                                     selectedIndex = index;
-                                    await tutorProvider.getListTutors(specialities[selectedIndex]['key']!,context);
+                                    tutorProvider.removeState();
+                                    await tutorProvider.searchTutorByName(
+                                      name,
+                                      specialities[selectedIndex]['key']!,nationality,
+                                      1,perPage,true,context)
+                                    ;
                                     setState(() {
+                                      page = 1;
                                       selectedIndex;
                                     });
                                   }
@@ -128,22 +182,53 @@ class _TutorsScreenState extends State<TutorsScreen>
                         },
                       ),
                     )),
-                Expanded(
-                  child: ListView.builder(
-                    itemCount: tutorProvider.tutors.length,
-                    scrollDirection: Axis.vertical,
-                    itemBuilder: (context,index){
-                      var tutors = tutorProvider.tutors;
-                      var listSpeciality = tutors[index].specialties.split(',');
-                      return TutorCard(
-                      tutor: tutors[index],
-                      listSpeciality: listSpeciality,
-                      tutorProvider: tutorProvider,
-                      speciality: specialities[selectedIndex]['key']!,);
-                    },
+                if(tutorProvider.isLoading)
+                  Expanded(
+                    child: Center(
+                      child: SpinKitRing(
+                        color: AppColors.primary,
+                        size: 50,
+                      ),
+                    ),
+                  )
+                else
+                  tutorProvider.tutors.isNotEmpty ? Expanded(
+                    child: ListView.builder(
+                      controller: scrollController,
+                      itemCount: tutorProvider.tutors.length,
+                      scrollDirection: Axis.vertical,
+                      itemBuilder: (context,index){
+                        var tutors = tutorProvider.tutors;
+                        var listSpeciality = tutors[index].specialties.split(',');
+                        return TutorCard(
+                          tutor: tutors[index],
+                          listSpeciality: listSpeciality,
+                          tutorProvider: tutorProvider,
+                          speciality: specialities[selectedIndex]['key']!,
+                          setFilter: setFilter,
+                          name: name,
+                          nationality: nationality,
+                          page: page,
+                          perPage: perPage
+                        );
+                      },
+                    ),
+                  ) : const Expanded(
+                    child: Center(
+                      child: Image(
+                        height: 200,
+                        width: 300,
+                        image: AssetImage('asset/img/no-data-found.png'),
+                      ),
+                    ),
                   ),
-                )
-          ]);
+                if(isLoadMore)
+                  SpinKitRing(
+                    color: AppColors.primary,
+                    size: 50,
+                  )
+              ]
+          );
         },
       ),
     );

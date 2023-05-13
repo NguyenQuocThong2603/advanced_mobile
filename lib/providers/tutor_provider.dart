@@ -18,6 +18,8 @@ class TutorProvider extends ChangeNotifier{
   late List<Schedule> schedules;
   late List<FeedBack> feedbacks = [];
   List<TimeRegion> regions = [];
+  int count = 0;
+  bool isLoading = false;
 
 
   TutorProvider(){
@@ -27,15 +29,31 @@ class TutorProvider extends ChangeNotifier{
     endTimestamp = DateTime(lastDayOfWeek.year,lastDayOfWeek.month,lastDayOfWeek.day).millisecondsSinceEpoch -1;
   }
 
-  Future<void> getListTutors(String speciality, context) async{
-      final response = await TutorService.getListTutors(speciality);
+  void removeTutorsState(){
+    tutors = [];
+  }
+
+  void removeState(){
+    tutors = [];
+    feedbacks = [];
+    regions = [];
+    schedules = [];
+    tutorInfo = null;
+    nationalityIndex = 0;
+    count = 0;
+  }
+  Future<void> getListTutors(String name,String speciality, String nationality,
+      int page,int perPage,context) async{
+      print(perPage);
+      final response = await TutorService.searchTutorByName(name,speciality,nationality,page, perPage);
       if(response.data['statusCode'] == 401){
         logout(context);
       }
       if (response.data['statusCode'] == 200) {
         final List<dynamic> data = response.data['rows'];
         var result = data.map((tutor) => Tutor.fromJson(tutor)).toList();
-        tutors =  sortTutorByFavoriteAndRating(result);
+        tutors = sortTutorByFavoriteAndRating(result);
+        count = response.data['count'];
         notifyListeners();
       } else {
         throw Exception(response.data['message']);
@@ -43,7 +61,11 @@ class TutorProvider extends ChangeNotifier{
   }
 
   Future<void> searchTutorByName(
-      String name, String speciality,String nationality,context) async{
+      String name, String speciality,String nationality,
+      int page,int perPage,bool isLoad,context) async{
+    if(isLoad){
+      isLoading = true;
+    }
     Object data = {};
     if(nationality == 'Vietnamese') {
       data = {"isVietNamese": true};
@@ -56,14 +78,18 @@ class TutorProvider extends ChangeNotifier{
       nationalityIndex = 0;
     }
     notifyListeners();
-    final response = await TutorService.searchTutorByName(name,speciality,data);
+    final response = await TutorService.searchTutorByName(name,speciality,data,page,perPage);
     if(response.data['statusCode'] == 401){
       logout(context);
     }
     if (response.data['statusCode'] == 200) {
       final List<dynamic> data = response.data['rows'];
       var result = data.map((tutor) => Tutor.fromJson(tutor)).toList();
-      tutors =  sortTutorByFavoriteAndRating(result);
+      tutors = tutors.followedBy(sortTutorByFavoriteAndRating(result)).toList();
+      count = response.data['count'];
+      if(isLoad){
+        isLoading = false;
+      }
       notifyListeners();
     } else {
       throw Exception(response.data['message']);
@@ -101,6 +127,17 @@ class TutorProvider extends ChangeNotifier{
         tutorInfo!.isFavouriteTutor = true;
       }
       notifyListeners();
+    } else {
+      throw Exception(response.data['message']);
+    }
+  }
+
+  Future<void> likeTutor(String tutorId,context) async {
+    final response = await TutorService.manageFavoriteTutor(tutorId);
+    if(response.data['statusCode'] == 401){
+      logout(context);
+    }
+    if (response.data['statusCode'] == 200) {
     } else {
       throw Exception(response.data['message']);
     }

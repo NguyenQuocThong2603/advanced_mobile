@@ -9,6 +9,11 @@ class CourseProvider extends ChangeNotifier {
 
   Course? courseInfo;
 
+  void removeState(){
+    courseInfo = null;
+    courses = [];
+  }
+
   Future<void> getListCourses(context) async{
     final response = await CourseService.getListCourses();
     if(response.data['statusCode'] == 401){

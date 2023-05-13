@@ -17,7 +17,12 @@ class UpcomingService {
       "dateTimeGte": DateTime.now().subtract(const Duration(minutes: 30)).millisecondsSinceEpoch,
       "orderBy": "meeting",
       "sortBy": "asc"
-    });
+    }, options: Options(
+            followRedirects: false,
+            validateStatus: (status) {
+              return status! < 600;
+            }
+        ));
     return response;
   }
 
@@ -29,7 +34,12 @@ class UpcomingService {
       "dateTimeLte": DateTime.now().millisecondsSinceEpoch,
       "orderBy": "meeting",
       "sortBy": "desc"
-    });
+    }, options: Options(
+        followRedirects: false,
+        validateStatus: (status) {
+          return status! < 600;
+        }
+    ));
     return response;
   }
 }

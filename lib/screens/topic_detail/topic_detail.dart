@@ -2,7 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:syncfusion_flutter_pdfviewer/pdfviewer.dart';
 
 class TopicDetailScreen extends StatelessWidget {
-  const TopicDetailScreen({Key? key}) : super(key: key);
+  const TopicDetailScreen({
+    Key? key,
+    required this.pdfLink,
+    required this.topicName
+  }) : super(key: key);
+  final String pdfLink;
+  final String topicName;
 
   @override
   Widget build(BuildContext context) {
@@ -14,20 +20,18 @@ class TopicDetailScreen extends StatelessWidget {
                 onTap: () {
                   Navigator.pop(context);
                 },
-                child: const Icon(Icons.arrow_back, color: Colors.black,size: 30,)
+                child: const Icon(Icons.navigate_before, color: Colors.black,size: 30,)
             ),
             Container(
               margin: const EdgeInsets.only(left: 8),
-              child: const Text('The Internet',style: TextStyle(color: Colors.black),),
+              child: Text(topicName,style: const TextStyle(color: Colors.black),),
             ),
           ],
         ),
         automaticallyImplyLeading: false,
         backgroundColor: Colors.white,
       ),
-      body: Container(
-        child: SfPdfViewer.network('https://api.app.lettutor.com/file/be4c3df8-3b1b-4c8f-a5cc-75a8e2e6626afileThe Internet.pdf'),
-      ),
+      body: SfPdfViewer.network(pdfLink),
     );
   }
 }

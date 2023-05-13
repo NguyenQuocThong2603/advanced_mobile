@@ -48,6 +48,9 @@ dependencies:
   intl: ^0.18.1
   chat_gpt_sdk: ^2.1.2
   flutter_spinkit: ^5.1.0
+  dropdown_button2: ^2.1.0
+  image_picker: ^0.8.7+4
+  infinite_scroll_pagination: ^3.2.0
   omni_jitsi_meet:
     git:
       url: https://github.com/coderof19clc7/jitsi_meet.git

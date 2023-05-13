@@ -1,4 +1,6 @@
 import 'package:advanced_mobile/models/course/course_model.dart';
+import 'package:advanced_mobile/models/user/learn_topic.dart';
+import 'package:advanced_mobile/models/user/test_preparation_model.dart';
 import 'package:advanced_mobile/models/user/wallet_model.dart';
 
 class User{
@@ -21,6 +23,10 @@ class User{
   bool? isPhoneActivated;
   int? timezone;
   Wallet? walletInfo;
+  String? studySchedule;
+  List<LearnTopic>? learnTopics;
+  List<TestPreparation>? testPreparations;
+
 
   User({
     required this.id,
@@ -42,6 +48,9 @@ class User{
     this.isPhoneActivated,
     this.timezone,
     this.walletInfo,
+    this.studySchedule,
+    this.learnTopics,
+    this.testPreparations
   });
 
   User.fromJson(Map<String, dynamic> json) {
@@ -74,6 +83,20 @@ class User{
     if (json['walletInfo'] != null) {
       walletInfo = Wallet.fromJson(json['walletInfo']);
     }
+    studySchedule = json['studySchedule'];
+
+    if (json['learnTopics'] != null) {
+      learnTopics = [];
+      json['learnTopics'].forEach((v) {
+        learnTopics?.add(LearnTopic.fromJson(v));
+      });
+    }
+    if (json['testPreparations'] != null) {
+      testPreparations = [];
+      json['testPreparations'].forEach((v) {
+        testPreparations?.add(TestPreparation.fromJson(v));
+      });
+    }
   }
 
 
@@ -99,6 +122,9 @@ class User{
     data['timezone'] = timezone;
     data['courses'] = courses;
     data['walletInfo'] = walletInfo;
+    data['studySchedule'] = studySchedule;
+    data['learnTopics'] = learnTopics?.map((v) => v.toJson()).toList();
+    data['testPreparations'] = testPreparations?.map((v) => v.toJson()).toList();
     return data;
   }
 }

@@ -7,10 +7,12 @@ class SearchField extends StatefulWidget {
     Key? key,
     required this.speciality,
     required this.tutorProvider,
+    required this.setFilter
   }) : super(key: key);
 
   final String speciality;
   final TutorProvider tutorProvider;
+  final Function setFilter;
 
   @override
   State<SearchField> createState() => _SearchFieldState();
@@ -37,10 +39,18 @@ class _SearchFieldState extends State<SearchField> {
         child: TextField(
             controller: searchInputController,
             onSubmitted: (value) async{
+              widget.tutorProvider.removeTutorsState();
+              widget.setFilter(
+                searchInputController.text,
+                widget.tutorProvider.nationalities[widget.tutorProvider.nationalityIndex],
+              );
               await widget.tutorProvider.searchTutorByName(
                   searchInputController.text,
                   widget.speciality!,
                   widget.tutorProvider.nationalities[widget.tutorProvider.nationalityIndex],
+                  1,
+                  12,
+                  true,
                   context
               );
             },

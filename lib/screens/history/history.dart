@@ -30,9 +30,21 @@ class _HistoryScreenState extends State<HistoryScreen> {
       builder: (context,upcomingProvider,_) {
         return Scaffold(
             appBar: AppBar(
-              title: const Text(
-                'History',
-                style: TextStyle(color: Colors.black),
+              title: Row(
+                children: [
+                  GestureDetector(
+                      onTap: () {
+                        Navigator.pop(context);
+                      },
+                      child: const Icon(Icons.navigate_before, color: Colors.black,size: 30,)
+                  ),            Container(
+                    margin: const EdgeInsets.only(left: 8),
+                    child: const Text(
+                      'History',
+                      style: TextStyle(color: Colors.black),
+                    ),
+                  ),
+                ],
               ),
               backgroundColor: Colors.white,
               automaticallyImplyLeading: false,

@@ -2,7 +2,6 @@ import 'package:advanced_mobile/config/color.dart';
 import 'package:advanced_mobile/config/countries.dart';
 import 'package:advanced_mobile/config/specialities.dart';
 import 'package:advanced_mobile/models/tutor/tutor_model.dart';
-import 'package:advanced_mobile/models/user/user_model.dart';
 import 'package:advanced_mobile/providers/tutor_provider.dart';
 import 'package:advanced_mobile/screens/tutor_detail/tutor_detail.dart';
 import 'package:flutter/material.dart';
@@ -15,12 +14,22 @@ class TutorCard extends StatefulWidget {
     required this.listSpeciality,
     required this.tutorProvider,
     required this.speciality,
+    required this.setFilter,
+    required this.name,
+    required this.nationality,
+    required this.page,
+    required this.perPage
   }) : super(key: key);
 
   final Tutor tutor;
   final List<String> listSpeciality;
   final TutorProvider tutorProvider;
   final String speciality;
+  final Function setFilter;
+  final String name;
+  final String nationality;
+  final int page;
+  final int perPage;
 
   @override
   State<TutorCard> createState() => _TutorCardState();
@@ -41,9 +50,9 @@ class _TutorCardState extends State<TutorCard> {
             child: Material(
               child: InkWell(
                 onTap: (){
+                  widget.setFilter('','None');
                   Navigator.push(context,
-                      MaterialPageRoute(builder: (context) => TutorDetailScreen(tutorId: widget.tutor.userId)))
-                  .then((value) async => await widget.tutorProvider.getListTutors(widget.speciality, context));
+                      MaterialPageRoute(builder: (context) => TutorDetailScreen(tutorId: widget.tutor.userId)));
                 },
                 child: Container(
                   margin: const EdgeInsets.all(10),
@@ -102,8 +111,23 @@ class _TutorCardState extends State<TutorCard> {
                                       children: [
                                         countriesMapping[widget.tutor.country] !=null ? Text(countriesMapping[widget.tutor.country]!)
                                           : Text(widget.tutor.country!),
-                                        widget.tutor.isFavorite == true ? const Icon( Icons.favorite, color: Colors.red,size: 28,) :
-                                        const Icon( Icons.favorite_border,size: 28,),
+                                        GestureDetector(
+                                            onTap: () async{
+                                              int currentLength = widget.page * widget.perPage;
+                                              await widget.tutorProvider.likeTutor(widget.tutor.userId,context);
+                                              await widget.tutorProvider.getListTutors(
+                                                  widget.name,
+                                                  widget.speciality,
+                                                  widget.nationality,
+                                                  1,
+                                                  currentLength,
+                                                  context);
+                                            },
+                                          child: Container(
+                                              child: widget.tutor.isFavorite == true ? const Icon( Icons.favorite, color: Colors.red,size: 28,) :
+                                              const Icon( Icons.favorite_border,size: 28,)
+                                          )
+                                        ),
                                       ],
                                     ),
                                   ),

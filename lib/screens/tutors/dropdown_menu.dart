@@ -8,11 +8,13 @@ class NationalitiesMenu extends StatefulWidget {
     required this.tutorProvider,
     required this.name,
     required this.speciality,
+    required this.setFilter
   }) : super(key: key);
   final List<String> nationalities;
   final TutorProvider tutorProvider;
   final String name;
   final String speciality;
+  final Function setFilter;
 
 
   @override
@@ -40,10 +42,18 @@ class _NationalitiesMenuState extends State<NationalitiesMenu> {
                 icon: const Icon(Icons.expand_more),
                 style: const TextStyle(color: Colors.black),
                 onChanged: (String? value) async {
+                  widget.tutorProvider.removeTutorsState();
+                  widget.setFilter(
+                    widget.name,
+                    value
+                  );
                   await widget.tutorProvider.searchTutorByName(
                       widget.name,
                       widget.speciality,
                       value!,
+                      1,
+                      12,
+                      true,
                       context
                   );
                 },

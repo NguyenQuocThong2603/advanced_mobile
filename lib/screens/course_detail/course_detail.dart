@@ -52,7 +52,7 @@ class _CourseDetailScreenState extends State<CourseDetailScreen> {
                       onTap: () {
                         Navigator.pop(context);
                       },
-                      child: const Icon(Icons.arrow_back, color: Colors.black,size: 30,)
+                      child: const Icon(Icons.navigate_before, color: Colors.black,size: 30,)
                   ),            Container(
                     margin: const EdgeInsets.only(left: 8),
                     child: Text(
@@ -165,7 +165,8 @@ class _CourseDetailScreenState extends State<CourseDetailScreen> {
                                       ),
                                       child: GestureDetector(
                                         onTap: (){
-                                          Navigator.push(context, MaterialPageRoute(builder: (context) => const TopicDetailScreen()));
+                                          Navigator.push(context, MaterialPageRoute(builder: (context)
+                                          => TopicDetailScreen(pdfLink: course.topics[i].nameFile,topicName: course.topics[i].name,)));
                                         },
                                         child: Container(
                                           padding: const EdgeInsets.all(15),

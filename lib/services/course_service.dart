@@ -9,12 +9,22 @@ class CourseService {
     final response = await dio.get('$url/course',queryParameters: {
       "page": 1,
       "size": 100
-    });
+    }, options: Options(
+            followRedirects: false,
+            validateStatus: (status) {
+              return status! < 600;
+            }
+        ));
     return response;
   }
 
   static Future<Response<dynamic>> getCourseDetail(String courseId) async{
-    final response = await dio.get('$url/course/$courseId');
+    final response = await dio.get('$url/course/$courseId', options: Options(
+            followRedirects: false,
+            validateStatus: (status) {
+              return status! < 600;
+            }
+        ));
     return response;
   }
 }

@@ -49,7 +49,7 @@ class _VideoCallScreenState extends State<VideoCallScreen> {
     jsonRes = json.decode(urlObject);
     roomId = jsonRes['room'];
     tokenMeeting = lastBooking.studentMeetingLink.split("token=")[1];
-    userInfo = context.read<UserProvider>().userInfo;
+    userInfo = context.read<UserProvider>().userInfo!;
   }
 
   @override
@@ -89,7 +89,7 @@ class _VideoCallScreenState extends State<VideoCallScreen> {
                 onTap: () {
                   Navigator.pop(context);
                 },
-                child: const Icon(Icons.arrow_back, color: Colors.black,size: 30,)
+                child: const Icon(Icons.navigate_before, color: Colors.black,size: 30,)
             ),
             Container(
                 margin: const EdgeInsets.only(left: 8),
