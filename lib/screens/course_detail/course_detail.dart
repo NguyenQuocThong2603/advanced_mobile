@@ -50,7 +50,7 @@ class _CourseDetailScreenState extends State<CourseDetailScreen> {
                 children: [
                   GestureDetector(
                       onTap: () {
-                        Navigator.pop(context);
+                        courseProvider.removeCourseInfo(context);
                       },
                       child: const Icon(Icons.navigate_before, color: Colors.black,size: 30,)
                   ),            Container(

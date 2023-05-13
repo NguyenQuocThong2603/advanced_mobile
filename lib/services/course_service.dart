@@ -5,10 +5,24 @@ class CourseService {
   static const String url = 'https://sandbox.api.lettutor.com';
   static final dio = DioInstance.dio;
 
-  static Future<Response<dynamic>> getListCourses() async{
-    final response = await dio.get('$url/course',queryParameters: {
-      "page": 1,
-      "size": 100
+  static Future<Response<dynamic>> getListCourses(int page, int size, String name,
+      List<String> levels,List<String>categories) async{
+    String query = '';
+    if(levels.isNotEmpty){
+      for(int i = 0; i<levels.length;i++){
+        query += '&level[]=${levels[i]}';
+      }
+    }
+    if(categories.isNotEmpty){
+      for(int i = 0; i<categories.length;i++){
+        query += '&categoryId[]=${categories[i]}';
+      }
+    }
+    print(query);
+    final response = await dio.get('$url/course?$query',queryParameters: {
+      "page": page,
+      "size": size,
+      "q": name
     }, options: Options(
             followRedirects: false,
             validateStatus: (status) {

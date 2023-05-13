@@ -1,84 +1,301 @@
+import 'package:advanced_mobile/config/color.dart';
 import 'package:advanced_mobile/config/level.dart';
-import 'package:advanced_mobile/models/course/course_model.dart';
-import 'package:advanced_mobile/screens/course_detail/course_detail.dart';
+import 'package:advanced_mobile/config/specialities.dart';
+import 'package:advanced_mobile/providers/course.provider.dart';
+import 'package:advanced_mobile/screens/courses/course_card.dart';
+import 'package:advanced_mobile/widgets/toast.dart';
+import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
+import 'package:provider/provider.dart';
 
-class CourseList extends StatelessWidget {
+class CourseList extends StatefulWidget {
   const CourseList({
     Key? key,
-    required this.courses
   }) : super(key: key);
 
-  final List<Course> courses;
+  @override
+  State<CourseList> createState() => _CourseListState();
+}
+
+class _CourseListState extends State<CourseList> {
+  List<String> levelSelected = [];
+  List<String> categorySelected = [];
+  late TextEditingController searchInputController;
+  int page = 1;
+  int size = 10;
+  late ScrollController scrollController;
+  bool isLoadMore = false;
+  String name = '';
 
   @override
-  Widget build(BuildContext context) {
-    return ListView.builder(
-        scrollDirection: Axis.vertical,
-        itemCount: courses.length,
-        itemBuilder: (context,index){
-         return GestureDetector(
-           onTap: () {
-             Navigator.push(context, MaterialPageRoute(builder: (context)=>
-                 CourseDetailScreen(courseId: courses[index].id,)));
-           },
-           child: Container(
-             margin: const EdgeInsets.only(top: 6, bottom: 8),
-             decoration: BoxDecoration(
-               color: Colors.white,
-               border: Border.all(color: Colors.black12, width: 1),
-               borderRadius: BorderRadius.circular(20),
-               boxShadow: const [
-                 BoxShadow(
-                   color: Color.fromRGBO(0, 0, 0, 0.4),
-                   offset: Offset(0, 3),
-                 )
-               ],
-             ),
-             child: Column(
-               children: [
-                 SizedBox(
-                   width: double.infinity,
-                   child: AspectRatio(
-                     aspectRatio: 2,
-                     child: ClipRRect(
-                       borderRadius: const BorderRadius.vertical(
-                         top: Radius.circular(15),
-                       ),
-                       child: Image(
-                         fit: BoxFit.cover,
-                         image: NetworkImage(courses[index].imageUrl),),
-                     ),
-                   ),
-                 ),
-                 Container(
-                   padding: const EdgeInsets.all(15),
-                   child: Column(
-                     crossAxisAlignment: CrossAxisAlignment.start,
-                     children: [
-                       Text(courses[index].name, style: const TextStyle(fontSize: 18, fontWeight: FontWeight.w500)),
-                       Container(
-                         margin: const EdgeInsets.only(top: 16, bottom: 40),
-                         child: Text(courses[index].description,
-                           style: const TextStyle(color: Color(0xff808080)),
-                           overflow: TextOverflow.ellipsis,
-                           maxLines: 2,
-                         ),
-                       ),
-                       Row(
-                         children: [
-                           Text('${levelsMap[courses[index].level]} • ', style: const TextStyle(fontSize: 16),),
-                           Text('${courses[index].lessons} lessons',style: const TextStyle(fontSize: 16),)
-                         ],
-                       )
-                     ],
-                   ),
-                 )
-               ],
-             ),
-           ),
-         );
+  void initState() {
+    super.initState();
+    context.read<CourseProvider>().removeCourses();
+    searchInputController = TextEditingController();
+    scrollController = ScrollController()..addListener(loadMore);
+    WidgetsBinding.instance.addPostFrameCallback((_) async{
+      await context.read<CourseProvider>().getListCourses(1,10,'',[],[],context);
+    });
+  }
+  @override
+  void dispose() {
+    searchInputController.dispose();
+    scrollController.removeListener(loadMore);
+    scrollController.dispose();
+    super.dispose();
+  }
+
+  void loadMore() async {
+    if(isLoadMore){
+      return;
+    }
+    if (!isLoadMore && scrollController.position.extentAfter < page * size) {
+      if(context.read<CourseProvider>().courses.length < context.read<CourseProvider>().count){
+        setState(() {
+          isLoadMore = true;
+          page++;
+        });
+        try {
+          await context.read<CourseProvider>().getListCourses(page, size, name,levelSelected,categorySelected,context);
+          if (mounted) {
+            setState(() {
+              isLoadMore = false;
+            });
+          }
+        } catch (e) {
+          showErrorToast("Can't load more");
         }
+      }
+    }
+  }
+  @override
+  Widget build(BuildContext context) {
+    return Consumer<CourseProvider>(
+      builder: (context, courseProvider,_) {
+        return Column(
+          children: [
+            TextField(
+              controller: searchInputController,
+              style: TextStyle(fontSize: 16, color: Colors.grey.shade900),
+              decoration: InputDecoration(
+                  contentPadding: const EdgeInsets.symmetric(vertical: 5),
+                  prefixIcon: Icon(
+                    Icons.search,
+                    color: Colors.grey.shade500,
+                  ),
+                  fillColor: Colors.grey.shade200,
+                  filled: true,
+                  border: const OutlineInputBorder(
+                      borderSide: BorderSide.none,
+                      borderRadius: BorderRadius.all(Radius.circular(20))),
+                  hintText: "Search Courses"),
+              onSubmitted: (value) async {
+                setState(() {
+                  name = searchInputController.text;
+                });
+                await courseProvider.getListCourses(page, size, searchInputController.text,
+                    levelSelected,categorySelected,context);
+              },
+            ),
+            const SizedBox(height: 15,),
+            Container(
+              padding: const EdgeInsets.only(right: 16),
+              margin: const EdgeInsets.only(top: 4, bottom: 16),
+              decoration: BoxDecoration(
+                  borderRadius: const BorderRadius.all(Radius.circular(4)),
+                  border: Border.all(color: Colors.black26)
+              ),
+              child: DropdownButtonHideUnderline(
+                  child: DropdownButton2(
+                    dropdownStyleData: const DropdownStyleData(
+                      maxHeight: 200,
+                      offset: Offset(0, 0),
+                    ),
+                    onChanged: (value) async {
+                    },
+                    isExpanded: true,
+                    hint: Align(
+                      alignment: AlignmentDirectional.center,
+                      child: Text(
+                        'Select level',
+                        style: TextStyle(
+                          fontSize: 14,
+                          color: Theme.of(context).hintColor,
+                        ),
+                      ),
+                    ),
+                    value: levelSelected.isEmpty ? null : levelSelected.last,
+                    items: levelsMap.entries.map((e){
+                      return DropdownMenuItem(
+                        value: e.key,
+                        child: StatefulBuilder(
+                          builder: (context, menuSetState) {
+                            final isSelected = levelSelected.contains(e.key);
+                            return InkWell(
+                              onTap: () async {
+                                courseProvider.removeCourses();
+                                isSelected
+                                    ? levelSelected.remove(e.key)
+                                    : levelSelected.add(e.key);
+                                await courseProvider.getListCourses(page, size, searchInputController.text,
+                                    levelSelected,categorySelected,context);
+                                setState(() {});
+                                //This rebuilds the dropdownMenu Widget to update the check mark
+                                menuSetState(() {});
+                              },
+                              child: Container(
+                                height: double.infinity,
+                                padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                                child: Row(
+                                  children: [
+                                    isSelected
+                                        ? const Icon(Icons.check_box_outlined)
+                                        : const Icon(Icons.check_box_outline_blank),
+                                    const SizedBox(width: 16),
+                                    Text(
+                                      e.value,
+                                      style: const TextStyle(
+                                        fontSize: 14,
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            );
+                          },
+                        ),
+                      );
+                    }).toList(),
+                    selectedItemBuilder: (context) {
+                      return levelsMap.entries.map((item) {
+                          return Container(
+                            alignment: AlignmentDirectional.center,
+                            padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                            child: Text(
+                              levelSelected.map((value) => levelsMap[value]).toList().join(', '),
+                              style: const TextStyle(
+                                fontSize: 14,
+                                overflow: TextOverflow.ellipsis,
+                              ),
+                              maxLines: 1,
+                            ),
+                          );
+                        },
+                      ).toList();
+                    },                  )
+              ),
+            ),
+            const SizedBox(width: 15,),
+            Container(
+              padding: const EdgeInsets.only(right: 16),
+              margin: const EdgeInsets.only(top: 4, bottom: 16),
+              decoration: BoxDecoration(
+                  borderRadius: const BorderRadius.all(Radius.circular(4)),
+                  border: Border.all(color: Colors.black26)
+              ),
+              child: DropdownButtonHideUnderline(
+                  child: DropdownButton2(
+                    onChanged: (value){
+
+                    },
+                    isExpanded: true,
+                    hint: Align(
+                      alignment: AlignmentDirectional.center,
+                      child: Text(
+                        'Select category',
+                        style: TextStyle(
+                          fontSize: 14,
+                          color: Theme.of(context).hintColor,
+                        ),
+                      ),
+                    ),
+                    dropdownStyleData: const DropdownStyleData(
+                      maxHeight: 200,
+                      offset: Offset(0, 0),
+                    ),
+                    value: categorySelected.isEmpty ? null : categorySelected.last,
+                    items: categoryMapping.entries.map((e){
+                      return DropdownMenuItem(
+                        value: e.key,
+                        enabled: false,
+                        child: StatefulBuilder(
+                          builder: (context, menuSetState) {
+                            final isSelected = categorySelected.contains(e.key);
+                            return InkWell(
+                              onTap: () async {
+                                courseProvider.removeCourses();
+                                isSelected
+                                    ? categorySelected.remove(e.key)
+                                    : categorySelected.add(e.key);
+                                await courseProvider.getListCourses(page, size, name,
+                                    levelSelected, categorySelected, context);
+                                setState(() {});
+                                //This rebuilds the dropdownMenu Widget to update the check mark
+                                menuSetState(() {});
+                              },
+                              child: Container(
+                                height: double.infinity,
+                                padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                                child: Row(
+                                  children: [
+                                    isSelected
+                                        ? const Icon(Icons.check_box_outlined)
+                                        : const Icon(Icons.check_box_outline_blank),
+                                    const SizedBox(width: 16),
+                                    Text(
+                                      e.value,
+                                      style: const TextStyle(
+                                        fontSize: 14,
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            );
+                          },
+                        ),
+                      );
+                    }).toList(),
+                    selectedItemBuilder: (context) {
+                      return categoryMapping.entries.map((item) {
+                        return Container(
+                          alignment: AlignmentDirectional.center,
+                          padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                          child: Text(
+                            categorySelected.map((value) => categoryMapping[value]).toList().join(', '),
+                            style: const TextStyle(
+                              fontSize: 14,
+                              overflow: TextOverflow.ellipsis,
+                            ),
+                            maxLines: 1,
+                          ),
+                        );
+                      },
+                      ).toList();
+                    },
+                  )
+              ),
+            ),
+            const SizedBox(height: 15),
+            Expanded(
+              child: ListView.builder(
+                controller: scrollController,
+                scrollDirection: Axis.vertical,
+                itemCount: courseProvider.courses.length,
+                itemBuilder: (context,index){
+                  return CourseCard(course: courseProvider.courses[index]);
+                }
+              ),
+            ),
+            if(isLoadMore)
+              SpinKitRing(
+                color: AppColors.primary,
+                size: 50,
+              )
+          ],
+        );
+      }
     );
   }
 }

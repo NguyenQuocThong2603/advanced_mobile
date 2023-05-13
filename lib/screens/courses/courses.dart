@@ -1,9 +1,7 @@
-import 'package:advanced_mobile/providers/course.provider.dart';
 import 'package:advanced_mobile/screens/courses/books_list.dart';
 import 'package:advanced_mobile/screens/courses/course_list.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:provider/provider.dart';
 
 class CoursesScreen extends StatefulWidget {
   const CoursesScreen({Key? key}) : super(key: key);
@@ -11,14 +9,14 @@ class CoursesScreen extends StatefulWidget {
   @override
   State<CoursesScreen> createState() => _CoursesScreenState();
 }
-class _CoursesScreenState extends State<CoursesScreen> with TickerProviderStateMixin{
-
+class _CoursesScreenState extends State<CoursesScreen>{
   @override
   void initState(){
     super.initState();
-    WidgetsBinding.instance.addPostFrameCallback((_) async{
-      await context.read<CourseProvider>().getListCourses(context);
-    });
+  }
+  @override
+  void dispose() {
+    super.dispose();
   }
   @override
   Widget build(BuildContext context){
@@ -80,32 +78,12 @@ class _CoursesScreenState extends State<CoursesScreen> with TickerProviderStateM
           body: Padding(
             padding: const EdgeInsets.symmetric(horizontal: 15),
             child: Column(
-              children: [
-                const SizedBox(height: 15),
-                TextField(
-                      style: TextStyle(fontSize: 16, color: Colors.grey.shade900),
-                      keyboardType: TextInputType.emailAddress,
-                      decoration: InputDecoration(
-                          contentPadding: const EdgeInsets.symmetric(vertical: 5),
-                          prefixIcon: Icon(
-                            Icons.search,
-                            color: Colors.grey.shade500,
-                          ),
-                          fillColor: Colors.grey.shade200,
-                          filled: true,
-                          border: const OutlineInputBorder(
-                              borderSide: BorderSide.none,
-                              borderRadius: BorderRadius.all(Radius.circular(20))),
-                          hintText: "Search Courses")),
-                const SizedBox(height: 15),
+              children: const [
+                SizedBox(height: 15),
                 Expanded(
                   child: TabBarView(
                       children:[
-                        Consumer<CourseProvider>(
-                            builder: (context,courseProvider,_){
-                              return CourseList(courses: courseProvider.courses,);
-                            }
-                        ),
+                        CourseList(),
                         BookList(),
                       ]
                   ),

@@ -246,7 +246,8 @@ class _DetailInfoState extends State<DetailInfo> {
                   ),
                   const Text('My Level'),
                 ],
-              ),              Container(
+              ),
+              Container(
                 padding: const EdgeInsets.only(right: 16),
                 margin: const EdgeInsets.only(top: 4, bottom: 16),
                 decoration: BoxDecoration(
@@ -290,7 +291,8 @@ class _DetailInfoState extends State<DetailInfo> {
                   ),
                   const Text('Want to learn'),
                 ],
-              ),              Wrap(
+              ),
+              Wrap(
                 spacing: 8.0, // gap between adjacent chips
                 runSpacing: 4.0, // gap between lines
                 children: [

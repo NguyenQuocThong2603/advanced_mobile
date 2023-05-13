@@ -8,28 +8,36 @@ class CourseProvider extends ChangeNotifier {
   List<Course> courses = [];
 
   Course? courseInfo;
+  int count = 0;
 
   void removeState(){
     courseInfo = null;
     courses = [];
+    count = 0;
   }
 
-  Future<void> getListCourses(context) async{
-    final response = await CourseService.getListCourses();
+  void removeCourses(){
+    courses = [];
+    count = 0;
+  }
+
+  Future<void> getListCourses(int page, int size,String name,List<String>levels,List<String>categories,context) async{
+    final response = await CourseService.getListCourses(page,size,name,levels,categories);
     if(response.data['statusCode'] == 401){
       logout(context);
     }
     if (response.data['statusCode'] == 200) {
       final List<dynamic> data = response.data['data']['rows'];
       var result = data.map((tutor) => Course.fromJson(tutor)).toList();
-      courses =  result;
+      courses =  courses.followedBy(result).toList();
+      count = response.data['data']['count'];
       notifyListeners();
     } else {
       throw Exception(response.data['message']);
     }
   }
 
-  void removeTutorInfo(context){
+  void removeCourseInfo(context){
     courseInfo = null;
     Navigator.pop(context);
   }

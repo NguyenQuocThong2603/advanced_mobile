@@ -1,4 +1,4 @@
-const levelsMap = {
+const levelsMap = <String, String>{
   "0": 'Any Level',
   "1": 'Beginner',
   "2": 'Upper Beginner',
