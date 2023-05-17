@@ -1,3 +1,4 @@
+import 'package:advanced_mobile/generated/l10n.dart';
 import 'package:advanced_mobile/services/user_service.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -35,15 +36,15 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
       builder: (BuildContext context) {
         return AlertDialog(
           alignment: Alignment.center,
-          title: const Text('Check your mail',
-            style: TextStyle(color: Colors.black, fontSize: 20, fontWeight: FontWeight.w500),
+          title:  Text(S.of(context).checkYourMail,
+            style: const TextStyle(color: Colors.black, fontSize: 20, fontWeight: FontWeight.w500),
           ),
           content: SingleChildScrollView(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.center,
-              children:  const [
-                Text('We just send an email to you with a link to reset your password',
-              style: TextStyle(color: Colors.black, fontSize: 16),
+              children:  [
+                Text(S.of(context).sendEmail,
+              style: const TextStyle(color: Colors.black, fontSize: 16),
             )
             ]),
           ),
@@ -84,6 +85,7 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
           height: double.infinity,
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               Container(
                   margin: const EdgeInsets.only(bottom: 32),
@@ -91,18 +93,14 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
                     image: AssetImage("asset/img/logo.png"),
                     width: 250,
                   )),
-              const Text('Reset password', style: TextStyle(fontSize: 24, fontWeight: FontWeight.w500),),
+              Text(S.of(context).resetPassword, style: const TextStyle(fontSize: 24, fontWeight: FontWeight.w500),),
               Column(
+                crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
                   Container(
                     padding: const EdgeInsets.symmetric(horizontal: 30),
                     margin: const EdgeInsets.only(top: 8),
-                      child: Text('Please enter your email address to search for your',
-                        style: TextStyle(color: AppColors.textGrey),)
-                  ),
-                  Container(
-                      padding: const EdgeInsets.symmetric(horizontal: 30),
-                      child: Text('account.',
+                      child: Text(S.of(context).enterResetEmail,
                         style: TextStyle(color: AppColors.textGrey),)
                   ),
                 ],
@@ -151,9 +149,9 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
                         borderRadius: BorderRadius.all(Radius.circular(8)),
                       ),
                     ),
-                    child: const Text(
-                      'Send reset link',
-                      style: TextStyle(fontSize: 20, color: Colors.white),
+                    child: Text(
+                      S.of(context).sendResetLink,
+                      style: const TextStyle(fontSize: 20, color: Colors.white),
                     ),
                 )
               ),
@@ -161,7 +159,7 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
                 margin: const EdgeInsets.only(top: 16),
                 child: RichText(
                     text: TextSpan(
-                        text: 'Go back to Sign in',
+                        text: S.of(context).goBackSignIn,
                         recognizer: TapGestureRecognizer()..onTap = () {
                           Navigator.pop(context);
                         },

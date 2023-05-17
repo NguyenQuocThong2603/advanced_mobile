@@ -20,16 +20,15 @@ class TopicDetailScreen extends StatelessWidget {
                 onTap: () {
                   Navigator.pop(context);
                 },
-                child: const Icon(Icons.navigate_before, color: Colors.black,size: 30,)
+                child: const Icon(Icons.navigate_before,size: 30,)
             ),
             Container(
               margin: const EdgeInsets.only(left: 8),
-              child: Text(topicName,style: const TextStyle(color: Colors.black),),
+              child: Text(topicName,),
             ),
           ],
         ),
         automaticallyImplyLeading: false,
-        backgroundColor: Colors.white,
       ),
       body: SfPdfViewer.network(pdfLink),
     );

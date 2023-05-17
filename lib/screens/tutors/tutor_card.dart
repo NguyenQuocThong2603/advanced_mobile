@@ -1,6 +1,7 @@
 import 'package:advanced_mobile/config/color.dart';
 import 'package:advanced_mobile/config/countries.dart';
 import 'package:advanced_mobile/config/specialities.dart';
+import 'package:advanced_mobile/generated/l10n.dart';
 import 'package:advanced_mobile/models/tutor/tutor_model.dart';
 import 'package:advanced_mobile/providers/tutor_provider.dart';
 import 'package:advanced_mobile/screens/tutor_detail/tutor_detail.dart';
@@ -50,7 +51,6 @@ class _TutorCardState extends State<TutorCard> {
             child: Material(
               child: InkWell(
                 onTap: (){
-                  widget.setFilter('','None');
                   Navigator.push(context,
                       MaterialPageRoute(builder: (context) => TutorDetailScreen(tutorId: widget.tutor.userId)));
                 },
@@ -137,14 +137,14 @@ class _TutorCardState extends State<TutorCard> {
                                       itemCount: widget.listSpeciality.length,
                                       scrollDirection: Axis.horizontal,
                                       itemBuilder: (context,index){
-                                        return mappingSpecialities[widget.listSpeciality[index]] != null ?
+                                        return mappingSpecialities(context)[widget.listSpeciality[index]] != null ?
                                         Container(
                                             margin: const EdgeInsets.only(
                                                 right: 8),
                                             child: ChoiceChip(
                                               side: const BorderSide(color: Colors.blue, width: 0.2),
                                               label: Text(
-                                                mappingSpecialities[widget.listSpeciality[index]]!,
+                                                mappingSpecialities(context)[widget.listSpeciality[index]]!,
                                                 style: TextStyle(
                                                     color: AppColors.chipSelectedText,
                                                     fontWeight: FontWeight.w500),

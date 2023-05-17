@@ -1,6 +1,7 @@
 import 'package:advanced_mobile/config/color.dart';
 import 'package:advanced_mobile/config/level.dart';
 import 'package:advanced_mobile/config/specialities.dart';
+import 'package:advanced_mobile/generated/l10n.dart';
 import 'package:advanced_mobile/providers/course.provider.dart';
 import 'package:advanced_mobile/screens/courses/course_card.dart';
 import 'package:advanced_mobile/widgets/toast.dart';
@@ -64,7 +65,7 @@ class _CourseListState extends State<CourseList> {
             });
           }
         } catch (e) {
-          showErrorToast("Can't load more");
+          showErrorToast("Error: Can't load more");
         }
       }
     }
@@ -77,19 +78,18 @@ class _CourseListState extends State<CourseList> {
           children: [
             TextField(
               controller: searchInputController,
-              style: TextStyle(fontSize: 16, color: Colors.grey.shade900),
+              style: const TextStyle(fontSize: 16),
               decoration: InputDecoration(
                   contentPadding: const EdgeInsets.symmetric(vertical: 5),
                   prefixIcon: Icon(
                     Icons.search,
                     color: Colors.grey.shade500,
                   ),
-                  fillColor: Colors.grey.shade200,
                   filled: true,
                   border: const OutlineInputBorder(
                       borderSide: BorderSide.none,
                       borderRadius: BorderRadius.all(Radius.circular(20))),
-                  hintText: "Search Courses"),
+                  hintText: S.of(context).searchCourses),
               onSubmitted: (value) async {
                 setState(() {
                   name = searchInputController.text;
@@ -118,7 +118,7 @@ class _CourseListState extends State<CourseList> {
                     hint: Align(
                       alignment: AlignmentDirectional.center,
                       child: Text(
-                        'Select level',
+                        S.of(context).selectLevel,
                         style: TextStyle(
                           fontSize: 14,
                           color: Theme.of(context).hintColor,
@@ -203,7 +203,7 @@ class _CourseListState extends State<CourseList> {
                     hint: Align(
                       alignment: AlignmentDirectional.center,
                       child: Text(
-                        'Select category',
+                        S.of(context).selectCategory,
                         style: TextStyle(
                           fontSize: 14,
                           color: Theme.of(context).hintColor,
@@ -215,7 +215,7 @@ class _CourseListState extends State<CourseList> {
                       offset: Offset(0, 0),
                     ),
                     value: categorySelected.isEmpty ? null : categorySelected.last,
-                    items: categoryMapping.entries.map((e){
+                    items: categoryMapping(context).entries.map((e){
                       return DropdownMenuItem(
                         value: e.key,
                         enabled: false,
@@ -258,12 +258,12 @@ class _CourseListState extends State<CourseList> {
                       );
                     }).toList(),
                     selectedItemBuilder: (context) {
-                      return categoryMapping.entries.map((item) {
+                      return categoryMapping(context).entries.map((item) {
                         return Container(
                           alignment: AlignmentDirectional.center,
                           padding: const EdgeInsets.symmetric(horizontal: 16.0),
                           child: Text(
-                            categorySelected.map((value) => categoryMapping[value]).toList().join(', '),
+                            categorySelected.map((value) => categoryMapping(context)[value]).toList().join(', '),
                             style: const TextStyle(
                               fontSize: 14,
                               overflow: TextOverflow.ellipsis,

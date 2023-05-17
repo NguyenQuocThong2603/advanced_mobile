@@ -1,4 +1,5 @@
 import 'package:advanced_mobile/config/level.dart';
+import 'package:advanced_mobile/config/specialities.dart';
 import 'package:advanced_mobile/models/course/course_model.dart';
 import 'package:advanced_mobile/screens/course_detail/course_detail.dart';
 import 'package:flutter/material.dart';
@@ -20,7 +21,7 @@ class CourseCard extends StatelessWidget {
       child: Container(
         margin: const EdgeInsets.only(top: 6, bottom: 8),
         decoration: BoxDecoration(
-          color: Colors.white,
+          color: Theme.of(context).brightness == Brightness.light ? Colors.white : Colors.transparent,
           border: Border.all(color: Colors.black12, width: 1),
           borderRadius: BorderRadius.circular(20),
           boxShadow: const [
@@ -52,6 +53,23 @@ class CourseCard extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(course.name, style: const TextStyle(fontSize: 18, fontWeight: FontWeight.w500)),
+                  Container(
+                    margin: const EdgeInsets.only(top: 8),
+                    height: 30,
+                    child: ListView.builder(
+                      scrollDirection: Axis.horizontal,
+                      itemCount: course.categories.length,
+                      itemBuilder: (context,index){
+                          return Chip(
+                              label: Text(
+                                categoryMapping(context)[course.categories[index].id]!,
+                                style: const TextStyle(color: Colors.black),)
+                            ,
+                            backgroundColor: Colors.blue[100],
+                          );
+                      }
+                    ),
+                  ),
                   Container(
                     margin: const EdgeInsets.only(top: 16, bottom: 40),
                     child: Text(course.description,

@@ -1,5 +1,6 @@
 import 'package:advanced_mobile/config/color.dart';
 import 'package:advanced_mobile/config/specialities.dart';
+import 'package:advanced_mobile/generated/l10n.dart';
 import 'package:advanced_mobile/providers/tutor_provider.dart';
 import 'package:advanced_mobile/providers/upcoming_provider.dart';
 import 'package:advanced_mobile/screens/tutors/dropdown_menu.dart';
@@ -41,9 +42,9 @@ class _TutorsScreenState extends State<TutorsScreen>
     scrollController = ScrollController()..addListener(loadMore);
     WidgetsBinding.instance.addPostFrameCallback((_) async{
       context.read<TutorProvider>().removeState();
-      await context.read<UpcomingProvider>().getUpcomingClasses(context);
+      await context.read<UpcomingProvider>().getUpcomingClasses(1,10,context);
       await context.read<UpcomingProvider>().getTotalLessonTime(context);
-      await context.read<TutorProvider>().searchTutorByName('',specialities[selectedIndex]['key']!,'None',1,
+      await context.read<TutorProvider>().searchTutorByName('',specialities(context)[selectedIndex]['key']!,'None',1,
           perPage,false,context);
       setState(() {
         isLoading = false;
@@ -80,7 +81,7 @@ class _TutorsScreenState extends State<TutorsScreen>
           page++;
         });
         try {
-          await context.read<TutorProvider>().searchTutorByName(name,specialities[selectedIndex]['key']!,nationality,
+          await context.read<TutorProvider>().searchTutorByName(name,specialities(context)[selectedIndex]['key']!,nationality,
               page,perPage,false,context);
           if (mounted) {
             setState(() {
@@ -88,7 +89,7 @@ class _TutorsScreenState extends State<TutorsScreen>
             });
           }
         } catch (e) {
-          showErrorToast("Can't load more");
+          showErrorToast("Error: Can't load more");
         }
       }
     }
@@ -98,12 +99,10 @@ class _TutorsScreenState extends State<TutorsScreen>
     super.build(context);
     return Scaffold(
       appBar: AppBar(
-        title: const Text(
-          'Tutors',
-          style: TextStyle(color: Colors.black),
+        title: Text(
+          S.of(context).tutors,
         ),
         automaticallyImplyLeading: false,
-        backgroundColor: Colors.white,
         elevation: 0,
       ),
       body: isLoading ? SpinKitRing(
@@ -120,25 +119,24 @@ class _TutorsScreenState extends State<TutorsScreen>
                   }
                 ),
                 SearchField(
-                    speciality: specialities[selectedIndex]['key']!,
+                    speciality: specialities(context)[selectedIndex]['key']!,
                     tutorProvider: tutorProvider,
                     setFilter: setFilter,
                 ),
                 Container(
                   margin: const EdgeInsets.only(left: 20,top: 4,bottom: 8),
-                  child: const Text(
-                    'Select tutor nationality',
-                    style: TextStyle(
-                      color: Colors.black,
+                  child: Text(
+                    S.of(context).enterNationality,
+                    style: const TextStyle(
                       fontSize: 16,
                       fontWeight: FontWeight.w500
                     ),
                   ),
                 ),
                 NationalitiesMenu(
-                  speciality: specialities[selectedIndex]['key']!,
+                  speciality: specialities(context)[selectedIndex]['key']!,
                   name: searchInputController.text,
-                  nationalities: tutorProvider.nationalities,
+                  nationalities: tutorProvider.nationalities(context),
                   tutorProvider: tutorProvider,
                   setFilter: setFilter,
                 ),
@@ -148,7 +146,7 @@ class _TutorsScreenState extends State<TutorsScreen>
                     child: SizedBox(
                       height: 30,
                       child: ListView.builder(
-                        itemCount: specialities.length,
+                        itemCount: specialities(context).length,
                         scrollDirection: Axis.horizontal,
                         itemBuilder: (context, index){
                           return Container(
@@ -160,7 +158,7 @@ class _TutorsScreenState extends State<TutorsScreen>
                                     tutorProvider.removeState();
                                     await tutorProvider.searchTutorByName(
                                       name,
-                                      specialities[selectedIndex]['key']!,nationality,
+                                      specialities(context)[selectedIndex]['key']!,nationality,
                                       1,perPage,true,context)
                                     ;
                                     setState(() {
@@ -170,7 +168,7 @@ class _TutorsScreenState extends State<TutorsScreen>
                                   }
                                 },
                                 label: Text(
-                                  specialities[index]['name']!,
+                                  specialities(context)[index]['name']!,
                                   style: TextStyle(
                                       color: selectedIndex == index ? AppColors.chipSelectedText : AppColors.textGrey,
                                       fontWeight: FontWeight.w700),
@@ -204,7 +202,7 @@ class _TutorsScreenState extends State<TutorsScreen>
                           tutor: tutors[index],
                           listSpeciality: listSpeciality,
                           tutorProvider: tutorProvider,
-                          speciality: specialities[selectedIndex]['key']!,
+                          speciality: specialities(context)[selectedIndex]['key']!,
                           setFilter: setFilter,
                           name: name,
                           nationality: nationality,

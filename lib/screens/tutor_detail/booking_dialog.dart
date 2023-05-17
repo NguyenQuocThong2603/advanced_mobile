@@ -1,4 +1,5 @@
 import 'package:advanced_mobile/config/color.dart';
+import 'package:advanced_mobile/generated/l10n.dart';
 import 'package:advanced_mobile/models/user/user_model.dart';
 import 'package:advanced_mobile/providers/tutor_provider.dart';
 import 'package:advanced_mobile/providers/user_provider.dart';
@@ -45,10 +46,12 @@ class _BookingDialogState extends State<BookingDialog> {
         elevation: 0,
         backgroundColor: Colors.transparent,
         child: SizedBox(
-          height: 400,
+          height: 480,
           child: Scaffold(
             appBar: AppBar(
-              title: const Text('Booking details', style: TextStyle(color: Colors.black,fontSize: 20,fontWeight: FontWeight.w500),),
+              title: Text(
+                S.of(context).bookingDetail,
+                style: const TextStyle(fontSize: 20,fontWeight: FontWeight.w500),),
               actions: [
                 Container(
                   margin: const EdgeInsets.only(right: 12),
@@ -61,7 +64,6 @@ class _BookingDialogState extends State<BookingDialog> {
                 )
               ],
               automaticallyImplyLeading: false,
-              backgroundColor: Colors.white,
               elevation:0,
             ),
             body: isBooking == false ? Container(
@@ -71,7 +73,9 @@ class _BookingDialogState extends State<BookingDialog> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    const Text('Booking time', style: TextStyle(color: Colors.black,fontSize: 16,fontWeight: FontWeight.w500),),
+                    Text(
+                      S.of(context).bookingTime,
+                      style: const TextStyle(fontSize: 16,fontWeight: FontWeight.w500),),
                     Container(
                       height: 30,
                       alignment: Alignment.center,
@@ -84,13 +88,32 @@ class _BookingDialogState extends State<BookingDialog> {
                           DateFormat('HH:mm E, dd MM yyyy').format(widget.bookedDate),
                         style: const TextStyle(color: Color(0xff7766C7)),),
                     ),
-                    const Text('Notes', style: TextStyle(color: Colors.black,fontSize: 16,fontWeight: FontWeight.w500)),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text(S.of(context).balance),
+                        Text('${S.of(context).youHave} ${int.parse(user.walletInfo!.amount) ~/ 100000} '
+                            '${S.of(context).lessonLeft}', style: const TextStyle(color: Color(0xff7766C7)))
+                      ],
+                    ),
+                    const SizedBox(height: 16,),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text(S.of(context).price),
+                        Text('1 ${S.of(context).lesson}', style: const TextStyle(color: Color(0xff7766C7)),)
+                      ],
+                    ),
+                    const SizedBox(height: 16,),
+                    Text(
+                        S.of(context).note,
+                        style: const TextStyle(fontSize: 16,fontWeight: FontWeight.w500)),
                     Container(
                       margin: const EdgeInsets.only(top: 8,bottom: 16),
                       child: TextField(
                         controller: _noteController,
                         maxLines: 5,
-                        style: TextStyle(fontSize: 15, color: Colors.grey.shade900),
+                        style: TextStyle(fontSize: 15),
                         decoration: const InputDecoration(
                             fillColor: Colors.white,
                             border: OutlineInputBorder(
@@ -105,7 +128,7 @@ class _BookingDialogState extends State<BookingDialog> {
                             onPressed: (){
                               Navigator.pop(context);
                             },
-                            child: const Text('Cancel'),
+                            child: Text(S.of(context).cancel),
                         ),
                         const SizedBox(width: 16,),
                         ElevatedButton(
@@ -113,6 +136,7 @@ class _BookingDialogState extends State<BookingDialog> {
                               try{
                                 await widget.tutorProvider.bookClass(widget.bookedDate, _noteController.text,context);
                                 await widget.tutorProvider.getScheduleOfTutor(widget.tutorId, null, null,user, context);
+                                await context.read<UserProvider>().getUserInfo(context);
                                 setState(() {
                                   isBooking = true;
                                 });
@@ -120,7 +144,7 @@ class _BookingDialogState extends State<BookingDialog> {
                                 showErrorToast('Error: Something went wrong, please try later!');
                               }
                             },
-                            child: const Text('Book'))
+                            child: Text(S.of(context).book))
                       ],
                     )
                   ],
@@ -138,7 +162,7 @@ class _BookingDialogState extends State<BookingDialog> {
                     height: 100,
                   ),
                   const SizedBox(height: 32,),
-                  const Text('Booking success', style: TextStyle(fontSize: 20,fontWeight: FontWeight.w500),),
+                  Text(S.of(context).bookingSuccess, style: const TextStyle(fontSize: 20,fontWeight: FontWeight.w500),),
                   const SizedBox(height: 100),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.end,
@@ -147,7 +171,7 @@ class _BookingDialogState extends State<BookingDialog> {
                         onPressed: (){
                           Navigator.pop(context);
                         },
-                        child: const Text('Done')
+                        child: Text(S.of(context).done)
                       )
                     ],
                   )

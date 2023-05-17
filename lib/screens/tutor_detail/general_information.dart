@@ -1,4 +1,5 @@
 import 'package:advanced_mobile/config/countries.dart';
+import 'package:advanced_mobile/generated/l10n.dart';
 import 'package:advanced_mobile/models/tutor/tutor_model.dart';
 import 'package:advanced_mobile/providers/tutor_provider.dart';
 import 'package:advanced_mobile/utils/show_dialog.dart';
@@ -18,6 +19,7 @@ class GeneralInformation extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Row(
           children: [
@@ -97,7 +99,7 @@ class GeneralInformation extends StatelessWidget {
                       children: [
                         tutor.isFavouriteTutor != true ? const Icon(Icons.favorite_outline,color: Color.fromRGBO(0, 113, 240, 1),)
                             : const Icon(Icons.favorite,color: Colors.pink,),
-                        Text('Favourite',
+                        Text(S.of(context).favourite,
                           style: tutor.isFavouriteTutor != true ? const TextStyle(color: Color.fromRGBO(0, 113, 240, 1))
                                   : const TextStyle(color: Colors.pink),
                         )
@@ -109,9 +111,9 @@ class GeneralInformation extends StatelessWidget {
                       showReportDialog(context,tutor.user!.id,tutor.user!.name,tutorProvider);
                     },
                     child: Column(
-                      children: const[
-                        Icon(Icons.report, color: Color.fromRGBO(0, 113, 240, 1),),
-                        Text('Report', style: TextStyle(color: Color.fromRGBO(0, 113, 240, 1)),)
+                      children: [
+                        const Icon(Icons.report, color: Color.fromRGBO(0, 113, 240, 1),),
+                        Text(S.of(context).report, style: const TextStyle(color: Color.fromRGBO(0, 113, 240, 1)),)
                       ],
                     ),
                   ),

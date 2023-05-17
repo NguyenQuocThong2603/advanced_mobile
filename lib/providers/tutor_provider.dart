@@ -1,3 +1,4 @@
+import 'package:advanced_mobile/generated/l10n.dart';
 import 'package:advanced_mobile/models/schedule/schedule_model.dart';
 import 'package:advanced_mobile/models/tutor/tutor_model.dart';
 import 'package:advanced_mobile/models/user/feedback_model.dart';
@@ -11,7 +12,6 @@ import 'package:syncfusion_flutter_calendar/calendar.dart';
 class TutorProvider extends ChangeNotifier{
   List<Tutor> tutors = [];
   int nationalityIndex = 0;
-  final nationalities = ['None','Vietnamese','Native'];
   Tutor? tutorInfo;
   late int startTimestamp;
   late int endTimestamp;
@@ -22,12 +22,18 @@ class TutorProvider extends ChangeNotifier{
   bool isLoading = false;
 
 
+
   TutorProvider(){
     DateTime now = DateTime.now();
     startTimestamp = DateTime(now.year,now.month, now.day - now.weekday % 7).millisecondsSinceEpoch;
     DateTime lastDayOfWeek = now.add(const Duration(days: 6));
     endTimestamp = DateTime(lastDayOfWeek.year,lastDayOfWeek.month,lastDayOfWeek.day).millisecondsSinceEpoch -1;
   }
+
+  List<String> nationalities(context) => [
+    S.of(context).noneNationality,S.of(context).vietnamNationality,S.of(context).nativeNationality
+  ];
+
 
   void removeTutorsState(){
     tutors = [];
@@ -67,10 +73,10 @@ class TutorProvider extends ChangeNotifier{
       isLoading = true;
     }
     Object data = {};
-    if(nationality == 'Vietnamese') {
+    if(nationality == S.of(context).vietnamNationality) {
       data = {"isVietNamese": true};
       nationalityIndex = 1;
-    } else if(nationality == 'Native'){
+    } else if(nationality == S.of(context).nativeNationality){
       data = {"isNative": true};
       nationalityIndex = 2;
     }
@@ -163,7 +169,7 @@ class TutorProvider extends ChangeNotifier{
       schedules = data.map((schedule) => Schedule.fromJson(schedule)).toList();
       for(int i =0 ; i<schedules.length; i++){
         if(schedules[i].isBooked == true){
-          if(schedules[i].scheduleDetails[0].bookingInfo[0].userId == user.id){
+          if(schedules[i].scheduleDetails[0].bookingInfo.last.userId == user.id){
             regions.add(TimeRegion(
                 startTime: DateTime.fromMillisecondsSinceEpoch(schedules[i].startTimestamp),
                 endTime: DateTime.fromMillisecondsSinceEpoch(schedules[i].endTimestamp),

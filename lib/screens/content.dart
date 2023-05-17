@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:advanced_mobile/config/preference.dart';
+import 'package:advanced_mobile/generated/l10n.dart';
 import 'package:advanced_mobile/models/user/token_model.dart';
 import 'package:advanced_mobile/providers/user_provider.dart';
 import 'package:advanced_mobile/screens/chat/chat.dart';
@@ -49,26 +50,26 @@ class _ContentScreenState extends State<ContentScreen> {
             onTap: (index) => setState(() => curIndex = index),
               type: BottomNavigationBarType.fixed,
               currentIndex: curIndex,
-              items: const <BottomNavigationBarItem>[
+              items: <BottomNavigationBarItem>[
                 BottomNavigationBarItem(
-                  icon: Icon(Icons.groups),
-                  label: 'Tutors',
+                  icon: const Icon(Icons.groups),
+                  label: S.of(context).tutors,
                 ),
                 BottomNavigationBarItem(
-                  icon: Icon(Icons.menu_book),
-                  label: 'Courses',
+                  icon: const Icon(Icons.menu_book),
+                  label: S.of(context).courseTitle,
                 ),
                 BottomNavigationBarItem(
-                  icon: Icon(Icons.query_builder_rounded),
-                  label: 'Upcoming',
+                  icon: const Icon(Icons.query_builder_rounded),
+                  label: S.of(context).upcoming,
                 ),
-                BottomNavigationBarItem(
+                const BottomNavigationBarItem(
                   icon: Icon(Icons.assistant),
                   label: 'ChatGPT',
                 ),
                 BottomNavigationBarItem(
-                  icon: Icon(Icons.settings),
-                  label: 'Settings',
+                  icon: const Icon(Icons.settings),
+                  label: S.of(context).settings,
                 ),
               ]),
           body: PageStorage(

@@ -1,4 +1,5 @@
 import 'package:advanced_mobile/config/color.dart';
+import 'package:advanced_mobile/generated/l10n.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 
@@ -27,7 +28,7 @@ class Loading extends StatelessWidget {
         children: [
           Container(
             margin: const EdgeInsets.only(right: 4),
-            child: Text('Waiting for response',
+            child: Text(S.of(context).waitingForResponse,
               style: TextStyle(fontSize: 14, color: AppColors.primary),
             ),
           ),

@@ -52,17 +52,15 @@ class _CourseDetailScreenState extends State<CourseDetailScreen> {
                       onTap: () {
                         courseProvider.removeCourseInfo(context);
                       },
-                      child: const Icon(Icons.navigate_before, color: Colors.black,size: 30,)
+                      child: const Icon(Icons.navigate_before,size: 30,)
                   ),            Container(
                     margin: const EdgeInsets.only(left: 8),
                     child: Text(
                       course.name,
-                      style: const TextStyle(color: Colors.black),
                     ),
                   ),
                 ],
               ),
-              backgroundColor: Colors.white,
               automaticallyImplyLeading: false,
             ),
             body: SingleChildScrollView(
@@ -152,22 +150,22 @@ class _CourseDetailScreenState extends State<CourseDetailScreen> {
                             child: Row(
                               children: [
                                   Expanded(
-                                    child: Container(
-                                      decoration: BoxDecoration(
-                                        color: Colors.white,
-                                        border: Border.all(color: Colors.black12, width: 1),
-                                        boxShadow: const [
-                                          BoxShadow(
-                                            color: Color.fromRGBO(0, 0, 0, 0.4),
-                                            offset: Offset(0, 3),
-                                          )
-                                        ],
-                                      ),
-                                      child: GestureDetector(
-                                        onTap: (){
-                                          Navigator.push(context, MaterialPageRoute(builder: (context)
-                                          => TopicDetailScreen(pdfLink: course.topics[i].nameFile,topicName: course.topics[i].name,)));
-                                        },
+                                    child: GestureDetector(
+                                      onTap: (){
+                                        Navigator.push(context, MaterialPageRoute(builder: (context)
+                                        => TopicDetailScreen(pdfLink: course.topics[i].nameFile,topicName: course.topics[i].name,)));
+                                      },
+                                      child: Container(
+                                        decoration: BoxDecoration(
+                                          color: Theme.of(context).brightness == Brightness.light ? Colors.white : Colors.black26,
+                                          border: Border.all(color: Colors.black12, width: 1),
+                                          boxShadow: const [
+                                            BoxShadow(
+                                              color: Color.fromRGBO(0, 0, 0, 0.4),
+                                              offset: Offset(0, 3),
+                                            )
+                                          ],
+                                        ),
                                         child: Container(
                                           padding: const EdgeInsets.all(15),
                                           child: Column(

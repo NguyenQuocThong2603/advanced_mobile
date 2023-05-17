@@ -1,3 +1,4 @@
+import 'package:advanced_mobile/models/course/catergory_model.dart';
 import 'package:advanced_mobile/models/course/topic_model.dart';
 
 class Course {
@@ -16,6 +17,7 @@ class Course {
   late String updatedAt;
   late int lessons;
   List<Topic> topics = [];
+  List<CourseCategory> categories = [];
 
   Course({
     required this.id,
@@ -32,6 +34,7 @@ class Course {
     required this.createdAt,
     required this.updatedAt,
     required this.lessons,
+    required this.categories
   });
 
   Course.fromJson(Map<String, dynamic> json) {
@@ -52,6 +55,9 @@ class Course {
       lessons = json['topics'].length ?? 0;
       json['topics'].forEach((topic) => topics.add(Topic.fromJson(topic)));
     }
+    if(json['categories'] !=null ){
+       json['categories'].forEach((category) => categories.add(CourseCategory.fromJson(category)));
+    }
   }
 
   Map<String, dynamic> toJson() {
@@ -71,6 +77,7 @@ class Course {
     data['updatedAt'] = updatedAt;
     data['lessons'] = lessons;
     data['topics'] = topics;
+    data['categories'] = categories;
     return data;
   }
 }

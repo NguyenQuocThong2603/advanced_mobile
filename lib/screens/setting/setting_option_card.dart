@@ -39,7 +39,7 @@ class SettingOptionCard extends StatelessWidget {
                     children: [
                       Container(
                           margin: const EdgeInsets.only(left: 4, right: 8),
-                          child: Icon(icon, color: Colors.black,)),
+                          child: Icon(icon)),
                       Text(name, style: const TextStyle(fontSize: 16),)
                     ],
                   ),

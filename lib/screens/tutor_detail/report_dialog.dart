@@ -1,6 +1,8 @@
 import 'package:advanced_mobile/config/color.dart';
+import 'package:advanced_mobile/generated/l10n.dart';
 import 'package:advanced_mobile/providers/tutor_provider.dart';
 import 'package:advanced_mobile/widgets/toast.dart';
+import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:flutter/material.dart';
 
 class ReportDialog extends StatefulWidget {
@@ -21,6 +23,7 @@ class ReportDialog extends StatefulWidget {
 
 class _ReportDialogState extends State<ReportDialog> {
   late TextEditingController _reasonController;
+  bool isEmpty = true;
   @override
   void initState() {
     super.initState();
@@ -43,7 +46,9 @@ class _ReportDialogState extends State<ReportDialog> {
           height: 350,
           child: Scaffold(
             appBar: AppBar(
-              title: Text('Report ${widget.tutorName}', style: const TextStyle(color: Colors.black,fontSize: 20,fontWeight: FontWeight.w500),),
+              title: Text(
+                '${S.of(context).report} ${widget.tutorName}',
+                style: const TextStyle(fontSize: 20,fontWeight: FontWeight.w500),),
               actions: [
                 Container(
                   margin: const EdgeInsets.only(right: 12),
@@ -56,7 +61,6 @@ class _ReportDialogState extends State<ReportDialog> {
                 )
               ],
               automaticallyImplyLeading: false,
-              backgroundColor: Colors.white,
               elevation:0,
             ),
             body: Container(
@@ -66,20 +70,41 @@ class _ReportDialogState extends State<ReportDialog> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    const Text('Reasons', style: TextStyle(color: Colors.black,fontSize: 16,fontWeight: FontWeight.w500)),
+                    Row(
+                      children: [
+                        Icon(Icons.error,color: AppColors.primary,),
+                        const SizedBox(width: 4,),
+                        Text(
+                          S.of(context).helpUsUnderstand,
+                           style: const TextStyle(fontWeight: FontWeight.w500,fontSize: 14),
+                        ),
+                      ]
+                    ),
                     Container(
                       margin: const EdgeInsets.only(top: 8,bottom: 16),
                       child: TextField(
                         controller: _reasonController,
                         maxLines: 6,
-                        style: TextStyle(fontSize: 15, color: Colors.grey.shade900),
-                        decoration: const InputDecoration(
+                        style: TextStyle(fontSize: 15),
+                        decoration: InputDecoration(
                           fillColor: Colors.white,
-                          border: OutlineInputBorder(
+                          border: const OutlineInputBorder(
                             borderSide: BorderSide(color: Colors.black12),
                           ),
-                          hintText: "Please let us know details about your problem"
+                          hintText: S.of(context).reportReasonHint
                         ),
+                        onChanged: (value){
+                          if(_reasonController.text != ""){
+                            setState(() {
+                              isEmpty = false;
+                            });
+                          }
+                          else{
+                            setState(() {
+                              isEmpty = true;
+                            });
+                          }
+                        },
                       ),),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.end,
@@ -88,25 +113,20 @@ class _ReportDialogState extends State<ReportDialog> {
                           onPressed: (){
                             Navigator.pop(context);
                           },
-                          child: const Text('Cancel'),
+                          child: Text(S.of(context).cancel),
                         ),
                         const SizedBox(width: 16,),
                         ElevatedButton(
-                            onPressed: () async{
+                            onPressed: isEmpty ? null : () async{
                               try{
-                                if(_reasonController.text == ""){
-                                  showErrorToast('Error: Please input reason');
-                                } else{
-                                  await widget.tutorProvider.reportTutor(widget.tutorId, _reasonController.text, context);
-                                  showSuccessToast('Report successfully');
-                                  Navigator.pop(context);
-                                }
+                                await widget.tutorProvider.reportTutor(widget.tutorId, _reasonController.text, context);
+                                showSuccessToast(S.of(context).reportSuccess);
+                                Navigator.pop(context);
                               } catch(error){
-                                print(error);
-                                showErrorToast('Error: Something went wrong, please try later!');
+                                showErrorToast('Error: ${S.of(context).somethingWentWrong}');
                               }
                             },
-                            child: const Text('Submit'))
+                            child: Text(S.of(context).submit))
                       ],
                     )
                   ],

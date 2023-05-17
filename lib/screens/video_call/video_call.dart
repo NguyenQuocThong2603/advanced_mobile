@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:advanced_mobile/config/color.dart';
+import 'package:advanced_mobile/generated/l10n.dart';
 import 'package:advanced_mobile/models/schedule/booking_info_model.dart';
 import 'package:advanced_mobile/models/user/user_model.dart';
 import 'package:advanced_mobile/providers/upcoming_provider.dart';
@@ -93,7 +94,7 @@ class _VideoCallScreenState extends State<VideoCallScreen> {
             ),
             Container(
                 margin: const EdgeInsets.only(left: 8),
-                child: const Text("Waiting room",style: TextStyle(color: Colors.black),)
+                child: Text(S.of(context).waitingRoom,style: const TextStyle(color: Colors.black),)
             )
           ],
         ),
@@ -104,15 +105,19 @@ class _VideoCallScreenState extends State<VideoCallScreen> {
       body: isLoading ? SpinKitRing(
           color: AppColors.primary,
           size: 50,
-        ) : Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Text(durationText, style: const TextStyle(color: Colors.black, fontSize: 18)),
-            Text('until lesson start ($formatTimeStart)', style: const TextStyle(color: Colors.black, fontSize: 18)),
-          ],
-        ),
+        ) : Container(
+        padding: const EdgeInsets.all(15),
+          child: Center(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Text('$durationText${S.of(context).untilLessonStart}', style: const TextStyle(fontSize: 18,fontWeight: FontWeight.w500)),
+              Text('($formatTimeStart)', style: const TextStyle(fontSize: 18,fontWeight: FontWeight.w500)),
+            ],
+          ),
       ),
+        ),
     );
   }
   _joinMeeting() async {
@@ -209,9 +214,11 @@ class _VideoCallScreenState extends State<VideoCallScreen> {
       options,
       listener: JitsiMeetingListener(
           onOpened: () {
+            widget.upcomingProvider.setIsJoinedMeeting(true);
             debugPrint("JitsiMeetingListener - onOpened");
           },
           onClosed: () {
+            widget.upcomingProvider.setIsJoinedMeeting(false);
             debugPrint("JitsiMeetingListener - onClosed");
           },
           onError: (error) {

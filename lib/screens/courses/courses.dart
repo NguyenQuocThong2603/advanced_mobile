@@ -1,3 +1,4 @@
+import 'package:advanced_mobile/generated/l10n.dart';
 import 'package:advanced_mobile/screens/courses/books_list.dart';
 import 'package:advanced_mobile/screens/courses/course_list.dart';
 import 'package:flutter/material.dart';
@@ -25,11 +26,9 @@ class _CoursesScreenState extends State<CoursesScreen>{
         length: 2,
         child: Scaffold(
           appBar: AppBar(
-            title: const Text(
-              'Courses',
-              style: TextStyle(color: Colors.black),
+            title: Text(
+              S.of(context).courseTitle,
             ),
-            backgroundColor: Colors.white,
             automaticallyImplyLeading: false,
             elevation: 0,
             bottom: TabBar(
@@ -43,12 +42,13 @@ class _CoursesScreenState extends State<CoursesScreen>{
                           child: SvgPicture.asset(
                             "asset/svg/course.svg",
                             width: 20,
-                            color: Colors.grey[700],
+                            color: Theme.of(context).brightness == Brightness.light ? Colors.grey[700] : Colors.white,
                           ),
                         ),
                         Text(
-                          'Courses',
-                          style: TextStyle(color: Colors.grey[700]),
+                          S.of(context).courseTitle,
+                          style: TextStyle
+                            (color: Theme.of(context).brightness == Brightness.light ? Colors.grey[700] : Colors.white)
                         ),
                       ],
                     ),
@@ -62,12 +62,14 @@ class _CoursesScreenState extends State<CoursesScreen>{
                         child: SvgPicture.asset(
                           "asset/svg/book.svg",
                           width: 20,
-                          color: Colors.grey[700],
+                          color: Theme.of(context).brightness == Brightness.light ? Colors.grey[700] : Colors.white,
                         ),
                       ),
                       Text(
-                        'Books',
-                        style: TextStyle(color: Colors.grey[700]),
+                        S.of(context).books,
+                        style: TextStyle(
+                            color: Theme.of(context).brightness == Brightness.light ? Colors.grey[700] : Colors.white)
+                        ,
                       ),
                     ],
                   ),

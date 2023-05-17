@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:advanced_mobile/generated/l10n.dart';
 import 'package:advanced_mobile/models/schedule/booking_info_model.dart';
 import 'package:advanced_mobile/providers/upcoming_provider.dart';
 import 'package:advanced_mobile/screens/video_call/video_call.dart';
@@ -45,14 +46,14 @@ class _UpcomingBannerState extends State<UpcomingBanner> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            const Text(
-              'You have no upcoming lesson.',
-              style: TextStyle(color: Colors.white, fontSize: 24),
-            ),
-            SizedBox(height: 8,),
             Text(
-              'Total lesson time is ${widget.upcomingProvider.totalHour} hours '
-                  '${widget.upcomingProvider.totalMinute} minutes',
+              S.of(context).noUpcomingLesson,
+              style: const TextStyle(color: Colors.white, fontSize: 24),
+            ),
+            const SizedBox(height: 8,),
+            Text(
+              '${S.of(context).totalLessonTime} ${widget.upcomingProvider.totalHour} ${S.of(context).hours} '
+                  '${widget.upcomingProvider.totalMinute} ${S.of(context).minutes}',
               style: const TextStyle(color:Colors.white,fontSize: 16),
             )
           ],
@@ -68,7 +69,12 @@ class _UpcomingBannerState extends State<UpcomingBanner> {
         int startTimestamp = lastBooking!.scheduleDetailInfo!.startPeriodTimestamp;
         int endTimestamp = lastBooking!.scheduleDetailInfo!.endPeriodTimestamp;
         if(now > endTimestamp){
-          await widget.upcomingProvider.getUpcomingClasses(context);
+          widget.upcomingProvider.removeUpcomingClasses();
+          await widget.upcomingProvider.getUpcomingClasses(
+              1,
+              widget.upcomingProvider.upComingCurrentLength,
+              context
+          );
         }
         isCountdown = now < startTimestamp;
         int differenceTimestamp = isCountdown ? (startTimestamp - now) : (now-startTimestamp);
@@ -77,8 +83,8 @@ class _UpcomingBannerState extends State<UpcomingBanner> {
         final minutes = time.inMinutes.remainder(60).toString().padLeft(2, '0');
         final seconds = time.inSeconds.remainder(60).toString().padLeft(2, '0');
         setState(() {
-          durationText = isCountdown ? ' (starts in $hours:$minutes:$seconds)'
-              : ' (classes in $hours:$minutes:$seconds)';
+          durationText = isCountdown ? ' (${S.of(context).startsIn} $hours:$minutes:$seconds)'
+              : ' (${S.of(context).classesIn} $hours:$minutes:$seconds)';
           isCountdown;
         });
       }
@@ -91,9 +97,9 @@ class _UpcomingBannerState extends State<UpcomingBanner> {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                const Text(
-                  'Upcoming lesson',
-                  style: TextStyle(color: Colors.white, fontSize: 28),
+                Text(
+                  S.of(context).upcomingLesson,
+                  style: const TextStyle(color: Colors.white, fontSize: 28),
                 ),
                 Container(
                   margin: const EdgeInsets.symmetric(vertical: 4),
@@ -125,12 +131,12 @@ class _UpcomingBannerState extends State<UpcomingBanner> {
                               )
                           )
                       ),
-                      child: const Text('Enter lesson room', style: TextStyle(color: Color.fromRGBO(12, 61,223, 1)),)
+                      child: Text(S.of(context).enterLessonRoom, style: const TextStyle(color: Color.fromRGBO(12, 61,223, 1)),)
                   ),
                 ),
                 Text(
-                  'Total lesson time is ${widget.upcomingProvider.totalHour} hours '
-                      '${widget.upcomingProvider.totalMinute} minutes',
+                  '${S.of(context).totalLessonTime} ${widget.upcomingProvider.totalHour} ${S.of(context).hours} '
+                      '${widget.upcomingProvider.totalMinute} ${S.of(context).minutes}',
                   style: const TextStyle(color:Colors.white,fontSize: 14),
                 )
               ],

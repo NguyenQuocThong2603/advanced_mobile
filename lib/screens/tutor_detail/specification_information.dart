@@ -1,11 +1,12 @@
 import 'package:advanced_mobile/config/specialities.dart';
 import 'package:advanced_mobile/config/countries.dart';
+import 'package:advanced_mobile/generated/l10n.dart';
 import 'package:advanced_mobile/models/tutor/tutor_model.dart';
 import 'package:advanced_mobile/screens/course_detail/course_detail.dart';
 import 'package:flutter/material.dart';
 
 class SpecificationInformation extends StatelessWidget {
-  const   SpecificationInformation({
+  const SpecificationInformation({
     Key? key,
     required this.tutor
   }) : super(key: key);
@@ -18,7 +19,7 @@ class SpecificationInformation extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        const Text('Languages', style: TextStyle(
+        Text(S.of(context).languages, style: const TextStyle(
             color: Color.fromRGBO(0, 113, 240, 1),fontSize: 16,),
         ),
         Container(
@@ -43,21 +44,21 @@ class SpecificationInformation extends StatelessWidget {
             ),
           ),
         ),
-        const Text('Experience', style: TextStyle(color: Color.fromRGBO(0, 113, 240, 1),fontSize: 16),),
+        Text(S.of(context).experience, style: const TextStyle(color: Color.fromRGBO(0, 113, 240, 1),fontSize: 16),),
         Container(
           margin: const EdgeInsets.only(top: 8, bottom: 16, left: 8),
           child: Text(tutor.experience,
             style: const TextStyle(color: Color(0xff787878)),
           ),
         ),
-        const Text('Interests', style: TextStyle(color: Color.fromRGBO(0, 113, 240, 1),fontSize: 16),),
+        Text(S.of(context).interests, style: const TextStyle(color: Color.fromRGBO(0, 113, 240, 1),fontSize: 16),),
         Container(
           margin: const EdgeInsets.only(top: 8, bottom: 16, left: 8),
           child: Text(tutor.interests,
             style: const TextStyle(color: Color(0xff787878)),
           ),
         ),
-        const Text('Specialities', style: TextStyle(color: Color.fromRGBO(0, 113, 240, 1),fontSize: 16),),
+        Text(S.of(context).specialities, style: const TextStyle(color: Color.fromRGBO(0, 113, 240, 1),fontSize: 16),),
         Container(
           margin: const EdgeInsets.only(top: 8, bottom: 16, left: 8),
           child: SizedBox(
@@ -68,8 +69,8 @@ class SpecificationInformation extends StatelessWidget {
               itemBuilder: (context, index) {
                 return Container(
                   padding: const EdgeInsets.only(right: 6),
-                  child: mappingSpecialities[specialities[index]] !=null ? Chip(
-                    label: Text(mappingSpecialities[specialities[index]]!,
+                  child: mappingSpecialities(context)[specialities[index]] !=null ? Chip(
+                    label: Text(mappingSpecialities(context)[specialities[index]]!,
                       style: TextStyle(color: Colors.blue[400]),),
                     backgroundColor: Colors.blue[50],
                     side: const BorderSide(color: Colors.blue, width: 0.2),
@@ -79,7 +80,7 @@ class SpecificationInformation extends StatelessWidget {
             ),
           ),
         ),
-        const Text('Courses', style: TextStyle(color: Color.fromRGBO(0, 113, 240, 1),fontSize: 16),),
+        Text(S.of(context).courses, style: const TextStyle(color: Color.fromRGBO(0, 113, 240, 1),fontSize: 16),),
         Container(
           margin: const EdgeInsets.only(top: 8, bottom: 16, left: 8),
           child: SizedBox(
@@ -99,7 +100,7 @@ class SpecificationInformation extends StatelessWidget {
                       },
                       child: Container(
                         decoration: BoxDecoration(
-                          color: Colors.white,
+                          color: Theme.of(context).brightness == Brightness.light ? Colors.white : Colors.black26,
                           border: Border.all(color: Colors.black12, width: 1),
                           boxShadow: const [
                             BoxShadow(

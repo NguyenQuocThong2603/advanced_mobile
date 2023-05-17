@@ -11,6 +11,12 @@ class UpcomingProvider extends ChangeNotifier{
   int totalMinute = 0;
   List<BookingInfo> upcomingClasses = [];
   List<BookingInfo> history = [];
+  bool isJoinedMeeting = false;
+  int upComingCount = 0;
+  int upComingCurrentLength = 10;
+  int historyCount = 0;
+  int historyLength = 0;
+  int historyCurrentLength = 10;
 
 
   void removeState(){
@@ -18,6 +24,32 @@ class UpcomingProvider extends ChangeNotifier{
     totalMinute = 0;
     upcomingClasses = [];
     history = [];
+    upComingCount = 0;
+    upComingCurrentLength = 10;
+    historyLength = 0;
+    historyCurrentLength = 10;
+  }
+
+  void removeUpcomingClasses(){
+    upcomingClasses = [];
+    upComingCount = 0;
+  }
+
+  void refreshUpcomingClasses(){
+    upcomingClasses = [];
+    upComingCount = 0;
+    upComingCurrentLength = 10;
+  }
+
+  void removeHistory(){
+    history = [];
+    historyCount = 0;
+    historyCurrentLength = 10;
+  }
+
+  void setIsJoinedMeeting(bool isJoined){
+    isJoinedMeeting = isJoined;
+    notifyListeners();
   }
   Future<void> getTotalLessonTime(context) async{
     final response = await UpcomingService.getTotalLessonTime();
@@ -34,8 +66,8 @@ class UpcomingProvider extends ChangeNotifier{
     }
   }
 
-  Future<void> getUpcomingClasses(context) async{
-    final response = await UpcomingService.getUpcomingClasses();
+  Future<void> getUpcomingClasses(int page,int perPage,context) async{
+    final response = await UpcomingService.getUpcomingClasses(page,perPage);
     if(response.data['statusCode'] == 401){
       logout(context);
     }
@@ -65,15 +97,17 @@ class UpcomingProvider extends ChangeNotifier{
           result.add(bookings[i]);
         }
       }
-      upcomingClasses = result;
+      upComingCount = response.data['data']['count'];
+      upComingCurrentLength = page*perPage;
+      upcomingClasses = upcomingClasses.followedBy(result).toList();
       notifyListeners();
     } else {
       throw Exception(response.data['message']);
     }
   }
 
-  Future<void> getHistory(context) async{
-    final response = await UpcomingService.getHistory();
+  Future<void> getHistory(int page,int perPage,context) async{
+    final response = await UpcomingService.getHistory(page,perPage);
     if(response.data['statusCode'] == 401){
       logout(context);
     }
@@ -97,10 +131,25 @@ class UpcomingProvider extends ChangeNotifier{
           result.add(bookings[i]);
         }
       }
-      history = result;
+      history = history.followedBy(result).toList();
+      historyCount = response.data['data']['count'];
+      historyCurrentLength = page *perPage;
       notifyListeners();
     } else {
       throw Exception(response.data['message']);
     }
+  }
+
+  Future<void> cancelClass(int cancelReasonId, String note,
+      String scheduleDetailId,context) async{
+    final response = await UpcomingService.cancelClass(cancelReasonId, note, scheduleDetailId);
+    if(response.data['statusCode'] == 401){
+      logout(context);
+    }
+    if (response.data['statusCode'] != 200) {
+      throw Exception(response.data['message']);
+    }
+    upComingCurrentLength -=1;
+    notifyListeners();
   }
 }

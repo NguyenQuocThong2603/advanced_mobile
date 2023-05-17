@@ -1,3 +1,4 @@
+import 'package:advanced_mobile/generated/l10n.dart';
 import 'package:advanced_mobile/providers/user_provider.dart';
 import 'package:advanced_mobile/screens/profile/basic_info.dart';
 import 'package:advanced_mobile/screens/profile/detail_info.dart';
@@ -47,18 +48,16 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       onTap: () {
                         Navigator.pop(context);
                       },
-                      child: const Icon(Icons.navigate_before, color: Colors.black,size: 30,)
+                      child: const Icon(Icons.navigate_before,size: 30,)
                   ),
                   Container(
                     margin: const EdgeInsets.only(left: 8),
-                    child: const Text(
-                      'Profile',
-                      style: TextStyle(color: Colors.black),
+                    child: Text(
+                      S.of(context).profile,
                     ),
                   ),
                 ],
               ),
-              backgroundColor: Colors.white,
               automaticallyImplyLeading: false,
               elevation: 0,
             ),

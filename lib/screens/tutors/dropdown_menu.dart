@@ -1,4 +1,5 @@
 import 'package:advanced_mobile/providers/tutor_provider.dart';
+import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:flutter/material.dart';
 
 class NationalitiesMenu extends StatefulWidget {
@@ -34,36 +35,39 @@ class _NationalitiesMenuState extends State<NationalitiesMenu> {
               padding: const EdgeInsets.symmetric(horizontal: 15),
               decoration: BoxDecoration(
                 borderRadius: const BorderRadius.all(Radius.circular(20)),
-                color: Colors.grey.shade200
+                color: Theme.of(context).brightness == Brightness.light ? Colors.grey.shade200 : Colors.grey.shade800
               ),
-              child: DropdownButton(
-                value: widget.nationalities[widget.tutorProvider.nationalityIndex],
-                isExpanded: true,
-                icon: const Icon(Icons.expand_more),
-                style: const TextStyle(color: Colors.black),
-                onChanged: (String? value) async {
-                  widget.tutorProvider.removeTutorsState();
-                  widget.setFilter(
-                    widget.name,
-                    value
-                  );
-                  await widget.tutorProvider.searchTutorByName(
+              child: DropdownButtonHideUnderline(
+                child: DropdownButton2(
+                  dropdownStyleData: const DropdownStyleData(
+                    maxHeight: 200,
+                    offset: Offset(0, 0),
+                  ),
+                  value: widget.nationalities[widget.tutorProvider.nationalityIndex],
+                  isExpanded: true,
+                  onChanged: (String? value) async {
+                    widget.tutorProvider.removeTutorsState();
+                    widget.setFilter(
                       widget.name,
-                      widget.speciality,
-                      value!,
-                      1,
-                      12,
-                      true,
-                      context
-                  );
-                },
-                underline: Container(),
-                items: widget.nationalities.map<DropdownMenuItem<String>>((String value) {
-                  return DropdownMenuItem<String>(
-                    value: value,
-                    child: Text(value),
-                  );
-                }).toList(),
+                      value
+                    );
+                    await widget.tutorProvider.searchTutorByName(
+                        widget.name,
+                        widget.speciality,
+                        value!,
+                        1,
+                        12,
+                        true,
+                        context
+                    );
+                  },
+                  items: widget.nationalities.map<DropdownMenuItem<String>>((String value) {
+                    return DropdownMenuItem<String>(
+                      value: value,
+                      child: Text(value),
+                    );
+                  }).toList(),
+                ),
               ),
             ),
           ),

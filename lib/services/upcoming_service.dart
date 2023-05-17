@@ -10,10 +10,10 @@ class UpcomingService {
     return response;
   }
   
-  static Future<Response<dynamic>> getUpcomingClasses() async {
+  static Future<Response<dynamic>> getUpcomingClasses(int page, int perPage) async {
     final response = await dio.get('$url/booking/list/student',queryParameters: {
-      "page": 1,
-      "perPage": 20,
+      "page": page,
+      "perPage": perPage,
       "dateTimeGte": DateTime.now().subtract(const Duration(minutes: 30)).millisecondsSinceEpoch,
       "orderBy": "meeting",
       "sortBy": "asc"
@@ -27,13 +27,29 @@ class UpcomingService {
   }
 
 
-  static Future<Response<dynamic>> getHistory() async {
+  static Future<Response<dynamic>> getHistory(int page, int perPage) async {
     final response = await dio.get('$url/booking/list/student',queryParameters: {
-      "page": 1,
-      "perPage": 20,
+      "page": page,
+      "perPage": perPage,
       "dateTimeLte": DateTime.now().millisecondsSinceEpoch,
       "orderBy": "meeting",
       "sortBy": "desc"
+    }, options: Options(
+        followRedirects: false,
+        validateStatus: (status) {
+          return status! < 600;
+        }
+    ));
+    return response;
+  }
+
+  static Future<Response<dynamic>> cancelClass(int cancelReasonId, String note, String scheduleDetailId) async {
+    final response = await dio.delete('$url/booking/schedule-detail',data: {
+      "cancelInfo": {
+        "cancelReasonId": cancelReasonId,
+        "note": note
+      },
+      "scheduleDetailId": scheduleDetailId
     }, options: Options(
         followRedirects: false,
         validateStatus: (status) {

@@ -1,6 +1,7 @@
 import 'package:advanced_mobile/config/color.dart';
 import 'package:advanced_mobile/config/level.dart';
 import 'package:advanced_mobile/config/specialities.dart';
+import 'package:advanced_mobile/generated/l10n.dart';
 import 'package:advanced_mobile/models/user/learn_topic.dart';
 import 'package:advanced_mobile/models/user/test_preparation_model.dart';
 import 'package:advanced_mobile/models/user/user_model.dart';
@@ -91,7 +92,7 @@ class _DetailInfoState extends State<DetailInfo> {
                       size: 12,
                     ),
                   ),
-                  const Text('Name'),
+                  Text(S.of(context).name),
                 ],
               ),
               Container(
@@ -118,7 +119,7 @@ class _DetailInfoState extends State<DetailInfo> {
                       size: 12,
                     ),
                   ),
-                  const Text('Country'),
+                  Text(S.of(context).country),
                 ],
               ),
               Container(
@@ -137,7 +138,6 @@ class _DetailInfoState extends State<DetailInfo> {
                     value: countryCode,
                     isExpanded: true,
                     iconStyleData: const IconStyleData(icon: Icon(Icons.expand_more)),
-                    style: const TextStyle(color: Colors.black),
                     onChanged: (value)  {
                       countryCode = value;
                       setState(() {
@@ -163,10 +163,11 @@ class _DetailInfoState extends State<DetailInfo> {
                       size: 12,
                     ),
                   ),
-                  const Text('Phone Number'),
+                  Text(S.of(context).phoneNumber),
                 ],
-              ),              Container(
-                color: Colors.grey[200],
+              ),
+              Container(
+                color: Theme.of(context).brightness == Brightness.light ? Colors.grey[200] : Colors.grey[900],
                 margin: const EdgeInsets.only(top: 4),
                 child: TextField(
                   controller: phoneNumberInputController,
@@ -188,7 +189,7 @@ class _DetailInfoState extends State<DetailInfo> {
                   color: const Color(0xfff6ffed),
                   border: Border.all(color: Colors.green)
                 ),
-                child:const Text('Verified',style:  TextStyle(color: Colors.green),)
+                child: Text(S.of(context).verified,style: const TextStyle(color: Colors.green),)
               ): const SizedBox(height: 16,),
               Row(
                 children: [
@@ -200,9 +201,10 @@ class _DetailInfoState extends State<DetailInfo> {
                       size: 12,
                     ),
                   ),
-                  const Text('Birthday'),
+                  Text(S.of(context).birthday),
                 ],
-              ),              GestureDetector(
+              ),
+              GestureDetector(
                 onTap: () async{
                   DateTime? newBirthDay = await showDatePicker(
                       context: context,
@@ -244,7 +246,7 @@ class _DetailInfoState extends State<DetailInfo> {
                       size: 12,
                     ),
                   ),
-                  const Text('My Level'),
+                  Text(S.of(context).myLevel),
                 ],
               ),
               Container(
@@ -263,7 +265,6 @@ class _DetailInfoState extends State<DetailInfo> {
                     value: level,
                     isExpanded: true,
                     iconStyleData: const IconStyleData(icon: Icon(Icons.expand_more)),
-                    style: const TextStyle(color: Colors.black),
                     onChanged: (String? value) async {
                       level = value;
                       setState(() {
@@ -289,7 +290,7 @@ class _DetailInfoState extends State<DetailInfo> {
                       size: 12,
                     ),
                   ),
-                  const Text('Want to learn'),
+                  Text(S.of(context).wantToLearn),
                 ],
               ),
               Wrap(
@@ -298,9 +299,8 @@ class _DetailInfoState extends State<DetailInfo> {
                 children: [
                   for(int i= 0;i<listTestPreparation.length;i++)
                     FilterChip(
-                      label: Text(listTestPreparation[i].name),
+                      label: Text(listTestPreparation[i].name, style: const TextStyle(color: Colors.black),),
                       selectedColor: AppColors.chipSelectedBackground,
-                      backgroundColor: const Color(0xffe4e6eb),
                       onSelected: (value){
                         if(value == true){
                           testPreparations.add(listTestPreparation[i].id);
@@ -316,9 +316,9 @@ class _DetailInfoState extends State<DetailInfo> {
                     ),
                   for(int i= 0;i<listLearnTopic.length;i++)
                     FilterChip(
-                      label: Text(listLearnTopic[i].name),
+                      label: Text(listLearnTopic[i].name, style: const TextStyle(color: Colors.black),),
                       selectedColor: AppColors.chipSelectedBackground,
-                      backgroundColor:  const Color(0xffe4e6eb),
+                      iconTheme: const IconThemeData(color: Colors.black),
                       onSelected: (value){
                         if(value == true){
                           learnTopics.add(listLearnTopic[i].id);
@@ -334,7 +334,7 @@ class _DetailInfoState extends State<DetailInfo> {
                     ),
                 ],
               ),
-              const Text('Study schedule'),
+              Text(S.of(context).studySchedule),
               Container(
                 margin: const EdgeInsets.only(top: 4, bottom: 16),
                 decoration: BoxDecoration(
@@ -344,11 +344,10 @@ class _DetailInfoState extends State<DetailInfo> {
                 child: TextField(
                   controller: scheduleInputController,
                   maxLines: 4,
-                  style: TextStyle(fontSize: 15, color: Colors.grey.shade900),
-                  decoration: const InputDecoration(
-                      fillColor: Colors.white,
-                      border: OutlineInputBorder(),
-                      hintText: "Note the time of the week you want to study on LetTutor"
+                  style: const TextStyle(fontSize: 15),
+                  decoration: InputDecoration(
+                      border: const OutlineInputBorder(),
+                      hintText: S.of(context).studyScheduleHint
                   ),
                 ),
               ),
@@ -369,7 +368,7 @@ class _DetailInfoState extends State<DetailInfo> {
                         }
                         await Future.wait(futures);
                         await widget.userProvider.getUserInfo(context);
-                        showSuccessToast('Edit profile successful');
+                        showSuccessToast(S.of(context).editProfileSuccess);
                       } catch(err){
                         showErrorToast(err);
                       }
@@ -382,8 +381,8 @@ class _DetailInfoState extends State<DetailInfo> {
                           )
                       ),
                     ),
-                    child: const Text('Save',
-                      style: TextStyle(color: Colors.white, fontSize: 18),)
+                    child: Text(S.of(context).save,
+                      style: const TextStyle(color: Colors.white, fontSize: 18),)
                 ),
               ),
             ],

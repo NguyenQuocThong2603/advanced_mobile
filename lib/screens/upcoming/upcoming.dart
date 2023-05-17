@@ -1,9 +1,14 @@
 import 'package:advanced_mobile/config/color.dart';
+import 'package:advanced_mobile/generated/l10n.dart';
 import 'package:advanced_mobile/models/schedule/booking_info_model.dart';
 import 'package:advanced_mobile/providers/upcoming_provider.dart';
 import 'package:advanced_mobile/screens/video_call/video_call.dart';
+import 'package:advanced_mobile/utils/booking_info_utils.dart';
 import 'package:advanced_mobile/utils/formatDateFromTimestamp.dart';
+import 'package:advanced_mobile/utils/show_dialog.dart';
+import 'package:advanced_mobile/widgets/toast.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
@@ -16,12 +21,52 @@ class UpcomingScreen extends StatefulWidget {
 }
 
 class _UpcomingScreenState extends State<UpcomingScreen> {
+  int page = 1;
+  int perPage = 10;
+  late ScrollController scrollController;
+  bool isLoadMore = false;
   @override
   void initState() {
     super.initState();
+    scrollController = ScrollController()..addListener(loadMore);
     WidgetsBinding.instance.addPostFrameCallback((_) async {
-      await context.read<UpcomingProvider>().getUpcomingClasses(context);
+      context.read<UpcomingProvider>().refreshUpcomingClasses();
+      await context.read<UpcomingProvider>().getUpcomingClasses(1,10,context);
     });
+  }
+  @override
+  void dispose() {
+    scrollController.removeListener(loadMore);
+    scrollController.dispose();
+    super.dispose();
+  }
+  void loadMore() async {
+    if(isLoadMore){
+      return;
+    }
+    if (!isLoadMore && scrollController.position.extentAfter < context.read<UpcomingProvider>().upcomingClasses.length) {
+      if(context.read<UpcomingProvider>().upComingCurrentLength
+          < context.read<UpcomingProvider>().upComingCount){
+        setState(() {
+          isLoadMore = true;
+          page++;
+        });
+        try {
+          await context.read<UpcomingProvider>().getUpcomingClasses(
+              page,
+              perPage,
+              context
+          );
+          if (mounted) {
+            setState(() {
+              isLoadMore = false;
+            });
+          }
+        } catch (e) {
+          showErrorToast("Error: Can't load more");
+        }
+      }
+    }
   }
   @override
   Widget build(BuildContext context) {
@@ -31,9 +76,7 @@ class _UpcomingScreenState extends State<UpcomingScreen> {
           appBar: AppBar(
             title: const Text(
               'Upcoming',
-              style: TextStyle(color: Colors.black),
             ),
-            backgroundColor: Colors.white,
             automaticallyImplyLeading: false,
             elevation: 0,
           ),
@@ -44,14 +87,13 @@ class _UpcomingScreenState extends State<UpcomingScreen> {
                 Expanded(
                   child: ListView.builder(
                     itemCount: upcomingProvider.upcomingClasses.length,
+                    controller: scrollController,
                     scrollDirection: Axis.vertical,
                     itemBuilder:(context,index){
                       BookingInfo booking = upcomingProvider.upcomingClasses[index];
                       DateTime startDate = DateTime.fromMillisecondsSinceEpoch(booking.scheduleDetailInfo!.startPeriodTimestamp);
                       DateTime endDate = DateTime.fromMillisecondsSinceEpoch(booking.scheduleDetailInfo!.endPeriodTimestamp);
-                      Text requestWidget = Text(
-                          'Currently there are no requests for this class. '
-                              'Please write down any requests for the teacher.',
+                      Text requestWidget = Text(S.of(context).hintRequest,
                           style: TextStyle(color: AppColors.textGrey));
                       if(upcomingProvider.upcomingClasses[index].subBooking!.isNotEmpty){
                         List<String> requestList = upcomingProvider.upcomingClasses[index].subBooking!
@@ -70,7 +112,7 @@ class _UpcomingScreenState extends State<UpcomingScreen> {
                       return Container(
                         margin: const EdgeInsets.only(top: 16, bottom: 8),
                         decoration: BoxDecoration(
-                          color: Colors.white,
+                          color: Theme.of(context).brightness == Brightness.light ? Colors.white : Colors.transparent,
                           border: Border.all(color: Colors.black12, width: 1),
                           borderRadius: BorderRadius.circular(4),
                           boxShadow: const [
@@ -164,12 +206,15 @@ class _UpcomingScreenState extends State<UpcomingScreen> {
                                                 .scheduleDetailInfo!.endPeriodTimestamp)}'
                                         ),
                                       ),
+                                      checkHideCancelButton(booking.subBooking![i]) ? Container() :
                                       OutlinedButton(
-                                          onPressed: (){},
+                                          onPressed: (){
+                                            showCancelDialog(context, booking.subBooking![i], upcomingProvider);
+                                          },
                                           style: OutlinedButton.styleFrom(
                                             side: const BorderSide(color: Colors.red)
                                           ),
-                                          child: const Text('Cancel',style: TextStyle(color: Colors.red),)
+                                          child: Text(S.of(context).cancel,style: const TextStyle(color: Colors.red),)
                                       )
                                     ],
                                   ),
@@ -188,17 +233,17 @@ class _UpcomingScreenState extends State<UpcomingScreen> {
                                       child: Row(
                                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                         children: [
-                                          const Text('Request for lesson'),
+                                          Text(S.of(context).requestForLesson),
                                           TextButton(
                                               onPressed: (){},
-                                              child: const Text('Edit request',)
+                                              child: Text(S.of(context).editRequest,)
                                           )
                                         ],
                                       ),
                                     ),
-                                    const Divider(
+                                    Divider(
                                       height: 10,
-                                      color: Colors.black,
+                                      color: Theme.of(context).brightness == Brightness.light ? Colors.black : Colors.white,
                                     ),
                                     Container(
                                       padding: const EdgeInsets.only(right: 4,left: 4,bottom: 16,top: 16),
@@ -212,20 +257,22 @@ class _UpcomingScreenState extends State<UpcomingScreen> {
                                 child: Row(
                                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                   children: [
-                                    booking.subBooking!.isNotEmpty ? Container(): OutlinedButton(
-                                        onPressed: (){},
+                                    (booking.subBooking!.isNotEmpty || checkHideCancelButton(booking)) ? Container(): OutlinedButton(
+                                        onPressed: (){
+                                          showCancelDialog(context, booking, upcomingProvider);
+                                        },
                                         style: OutlinedButton.styleFrom(
                                             side: const BorderSide(color: Colors.red)
                                         ),
-                                        child: const Text('Cancel',style: TextStyle(color: Colors.red),)
+                                        child: Text(S.of(context).cancel,style: const TextStyle(color: Colors.red),)
                                     ),
                                     ElevatedButton(
-                                        onPressed: index == 0 ? (){
+                                        onPressed: !checkDisableGoToMeeting(booking,upcomingProvider) ? (){
                                           Navigator.push(context,
                                               MaterialPageRoute(builder: (context) =>
                                                   VideoCallScreen(upcomingProvider:upcomingProvider,upcomingClasses: upcomingProvider.upcomingClasses,)));
                                         } : null,
-                                        child: const Text('Go to meeting',style: TextStyle(color: Colors.white),)
+                                        child: Text(S.of(context).goToMeeting,style: const TextStyle(color: Colors.white),)
                                     ),
                                   ],
                                 ),
@@ -236,7 +283,12 @@ class _UpcomingScreenState extends State<UpcomingScreen> {
                       );
                     }
                   ),
-                )
+                ),
+                if(isLoadMore)
+                  SpinKitRing(
+                    color: AppColors.primary,
+                    size: 50,
+                  )
               ],
             ),
           )

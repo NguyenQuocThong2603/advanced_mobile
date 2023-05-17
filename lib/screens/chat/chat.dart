@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:advanced_mobile/config/color.dart';
 import 'package:advanced_mobile/config/preference.dart';
+import 'package:advanced_mobile/generated/l10n.dart';
 import 'package:advanced_mobile/models/chat/message_model.dart';
 import 'package:advanced_mobile/providers/chat_provider.dart';
 import 'package:advanced_mobile/screens/chat/loading.dart';
@@ -58,9 +59,7 @@ class _ChatScreenState extends State<ChatScreen> {
           appBar: AppBar(
             title: const Text(
               'ChatGPT',
-              style: TextStyle(color: Colors.black),
             ),
-            backgroundColor: Colors.white,
             automaticallyImplyLeading: false,
             elevation: 0,
           ),
@@ -101,16 +100,14 @@ class _ChatScreenState extends State<ChatScreen> {
                       padding: const EdgeInsets.symmetric(horizontal: 15),
                       child: TextField(
                         controller: inputController,
-                        style: TextStyle(fontSize: 16, color: Colors.grey
-                            .shade900),
+                        style: const TextStyle(fontSize: 16),
                         decoration: InputDecoration(
-                            fillColor: Colors.grey.shade200,
                             filled: true,
                             border: const OutlineInputBorder(
                                 borderSide: BorderSide.none,
                                 borderRadius: BorderRadius.all(
                                     Radius.circular(20))),
-                            hintText: 'Type a question'
+                            hintText: S.of(context).typeAQuestion
                         ),
                       ),
                     ),

@@ -1,6 +1,6 @@
 import 'package:advanced_mobile/config/color.dart';
+import 'package:advanced_mobile/generated/l10n.dart';
 import 'package:advanced_mobile/services/auth_service.dart';
-import 'package:dio/dio.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -43,13 +43,13 @@ class _RegisterScreenState extends State<RegisterScreen> {
           ),
           alignment: Alignment.center,
           title: RichText(
-              text: const TextSpan(
-                  text: "Your registration ",
-                  style: TextStyle(color: Colors.black, fontSize: 16),
+              text: TextSpan(
+                  text: "${S.of(context).yourRegistration} ",
+                  style: const TextStyle(color: Colors.black, fontSize: 16),
                   children: [
                     TextSpan(
-                        text: 'sucessfully.',
-                        style: TextStyle(
+                        text: '${S.of(context).successfully}.',
+                        style: const TextStyle(
                             color: Colors.green, fontSize: 16,fontWeight: FontWeight.w500))
                   ])),
           content: SingleChildScrollView(
@@ -58,7 +58,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
               children:  [
                 RichText(
                   text: TextSpan(
-                      text: "You will receive an activate account email to ",
+                      text: "${S.of(context).receivedEmail} ",
                       style: const TextStyle(color: Colors.black, fontSize: 16),
                       children: [
                         TextSpan(
@@ -110,7 +110,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
             children: [
               Container(
                   margin: const EdgeInsets.only(bottom: 32),
-                  child: Text('Sign up',
+                  child: Text(S.of(context).signup,
                     style: TextStyle(
                       color: AppColors.primary,
                       fontSize: 48,
@@ -125,12 +125,12 @@ class _RegisterScreenState extends State<RegisterScreen> {
                   controller: emailInputController,
                   style: TextStyle(fontSize: 15, color: Colors.grey.shade900),
                   keyboardType: TextInputType.emailAddress,
-                  decoration: const InputDecoration(
+                  decoration: InputDecoration(
                       fillColor: Colors.white,
-                      border: OutlineInputBorder(
+                      border: const OutlineInputBorder(
                           borderSide: BorderSide(color: Colors.black12),
                           borderRadius: BorderRadius.all(Radius.circular(20))),
-                      hintText: "Email"),
+                      hintText: S.of(context).email),
                 ),
               ),
               Container(
@@ -141,12 +141,12 @@ class _RegisterScreenState extends State<RegisterScreen> {
                   controller: passwordInputController,
                   style: TextStyle(fontSize: 15, color: Colors.grey.shade900),
                   obscureText: true,
-                  decoration: const InputDecoration(
+                  decoration: InputDecoration(
                       fillColor: Colors.white,
-                      border: OutlineInputBorder(
+                      border: const OutlineInputBorder(
                           borderSide: BorderSide(color: Colors.black12),
                           borderRadius: BorderRadius.all(Radius.circular(20))),
-                      hintText: "Password"),
+                      hintText: S.of(context).password),
                 ),
               ),
               Container(
@@ -156,12 +156,12 @@ class _RegisterScreenState extends State<RegisterScreen> {
                 child: TextField(
                   style: TextStyle(fontSize: 15, color: Colors.grey.shade900),
                   obscureText: true,
-                  decoration: const InputDecoration(
+                  decoration: InputDecoration(
                       fillColor: Colors.white,
-                      border: OutlineInputBorder(
+                      border: const OutlineInputBorder(
                           borderSide: BorderSide(color: Colors.black12),
                           borderRadius: BorderRadius.all(Radius.circular(20))),
-                      hintText: "Confirm Password"),
+                      hintText: S.of(context).confirmPassword),
                 ),
               ),
               Container(
@@ -192,14 +192,14 @@ class _RegisterScreenState extends State<RegisterScreen> {
                         borderRadius: BorderRadius.all(Radius.circular(20)),
                       ),
                     ),
-                    child: const Text(
-                      'Register',
-                      style: TextStyle(fontSize: 20, color: Colors.white),
+                    child: Text(
+                      S.of(context).signup,
+                      style: const TextStyle(fontSize: 20, color: Colors.white),
                     ),
                   )),
               Container(
                 margin: const EdgeInsets.only(bottom: 16),
-                child: Text('Or continue with',
+                child: Text(S.of(context).orContinueWith,
                     style: TextStyle(color: Colors.grey.shade600, fontSize: 15)),
               ),
               Row(
@@ -230,11 +230,11 @@ class _RegisterScreenState extends State<RegisterScreen> {
                 margin: const EdgeInsets.only(top: 16),
                 child: RichText(
                     text: TextSpan(
-                        text: "Already have an account? ",
+                        text: "${S.of(context).alreadyHaveAccount} ",
                         style: const TextStyle(color: Colors.black, fontSize: 16),
                         children: [
                           TextSpan(
-                              text: 'Login',
+                              text: S.of(context).login,
                               recognizer: TapGestureRecognizer()..onTap = () {
                                 Navigator.pop(context);
                               },

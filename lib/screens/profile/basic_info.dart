@@ -29,7 +29,7 @@ class _BasicInfoState extends State<BasicInfo> {
     if (pickedFile != null) {
       widget.setAvaPath(pickedFile.path);
     } else {
-      showErrorToast("Can't upload photo");
+      showErrorToast("Error: Can't upload photo");
     }
   }
   @override

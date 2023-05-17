@@ -1,8 +1,8 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.example.advanced_mobile" xmlns:tools="http://schemas.android.com/tools">
+    package="com.thongnguyenquoc.LetTutor" xmlns:tools="http://schemas.android.com/tools">
    <application
         tools:replace="android:label"
-        android:label="advanced_mobile"
+        android:label="LetStudy"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher">
         <activity

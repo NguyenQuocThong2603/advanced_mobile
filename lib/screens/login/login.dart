@@ -6,8 +6,7 @@ import 'package:advanced_mobile/services/auth_service.dart';
 import 'package:advanced_mobile/widgets/toast.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
-import 'package:fluttertoast/fluttertoast.dart';
-
+import 'package:advanced_mobile/generated/l10n.dart';
 class LoginScreen extends StatefulWidget {
   const LoginScreen({Key? key}) : super(key: key);
 
@@ -54,14 +53,14 @@ class _LoginScreenState extends State<LoginScreen> {
             padding: const EdgeInsets.only(left: 16, right: 16),
             child: TextField(
               controller: emailInputController,
-              style: TextStyle(fontSize: 15, color: Colors.grey.shade900),
+              style: TextStyle(fontSize: 15),
               keyboardType: TextInputType.emailAddress,
-              decoration: const InputDecoration(
+              decoration: InputDecoration(
                   fillColor: Colors.white,
-                  border: OutlineInputBorder(
+                  border: const OutlineInputBorder(
                       borderSide: BorderSide(color: Colors.black12),
                       borderRadius: BorderRadius.all(Radius.circular(20))),
-                  hintText: "Email"),
+                  hintText: S.of(context).email),
             ),
           ),
           Container(
@@ -70,14 +69,14 @@ class _LoginScreenState extends State<LoginScreen> {
             padding: const EdgeInsets.only(left: 16, right: 16),
             child: TextField(
               controller: passwordInputController,
-              style: TextStyle(fontSize: 15, color: Colors.grey.shade900),
+              style: TextStyle(fontSize: 15),
               obscureText: true,
-              decoration: const InputDecoration(
+              decoration: InputDecoration(
                   fillColor: Colors.white,
-                  border: OutlineInputBorder(
+                  border: const OutlineInputBorder(
                       borderSide: BorderSide(color: Colors.black12),
                       borderRadius: BorderRadius.all(Radius.circular(20))),
-                  hintText: "Password"),
+                  hintText: S.of(context).password),
             ),
           ),
           Container(
@@ -89,7 +88,7 @@ class _LoginScreenState extends State<LoginScreen> {
                   onTap: (){
                     Navigator.push(context, MaterialPageRoute(builder: (context)=> const ForgotPasswordScreen()));
                   },
-                  child: Text('Forgot Password?',
+                  child: Text(S.of(context).forgotPassword,
                       style: TextStyle(
                         fontSize: 16,
                         color: AppColors.primary,
@@ -116,14 +115,14 @@ class _LoginScreenState extends State<LoginScreen> {
                     borderRadius: BorderRadius.all(Radius.circular(20)),
                   ),
                 ),
-                child: const Text(
-                  'Log in',
-                  style: TextStyle(fontSize: 20, color: Colors.white),
+                child:  Text(
+                  S.of(context).login,
+                  style: const TextStyle(fontSize: 20, color: Colors.white),
                 ),
               )),
           Container(
             margin: const EdgeInsets.only(bottom: 16),
-            child: Text('Or continue with',
+            child: Text(S.of(context).orContinueWith,
                 style: TextStyle(color: Colors.grey.shade600, fontSize: 15)),
           ),
           Row(
@@ -154,11 +153,11 @@ class _LoginScreenState extends State<LoginScreen> {
             margin: const EdgeInsets.only(top: 16),
             child: RichText(
                 text: TextSpan(
-                    text: "Don't have an account? ",
+                    text: "${S.of(context).dontHaveAccount} ",
                     style: const TextStyle(color: Colors.black, fontSize: 16),
                     children: [
                   TextSpan(
-                      text: 'Sign up',
+                      text: S.of(context).signup,
                       recognizer: TapGestureRecognizer()..onTap = () {
                         Navigator.push(context, MaterialPageRoute(builder: (context)=> const RegisterScreen()));
                       },

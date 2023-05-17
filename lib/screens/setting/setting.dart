@@ -1,5 +1,7 @@
 import 'package:advanced_mobile/config/color.dart';
+import 'package:advanced_mobile/generated/l10n.dart';
 import 'package:advanced_mobile/providers/user_provider.dart';
+import 'package:advanced_mobile/screens/advanced_setting/advanced_setting.dart';
 import 'package:advanced_mobile/screens/history/history.dart';
 import 'package:advanced_mobile/screens/profile/profile.dart';
 import 'package:advanced_mobile/screens/setting/setting_option_card.dart';
@@ -23,11 +25,9 @@ class _SettingScreenState extends State<SettingScreen> {
       builder: (context,userProvider,_) {
         return Scaffold(
           appBar: AppBar(
-            title: const Text(
-              'Settings',
-              style: TextStyle(color: Colors.black),
+            title: Text(
+              S.of(context).settings,
             ),
-            backgroundColor: Colors.white,
             automaticallyImplyLeading: false,
             elevation: 0,
           ),
@@ -81,16 +81,16 @@ class _SettingScreenState extends State<SettingScreen> {
                 const SizedBox(height: 32,),
                 Expanded(
                   child: Column(
-                    children: const [
+                    children: [
                        SettingOptionCard(
-                          name: 'History',
+                          name: S.of(context).history,
                           icon: Icons.history,
-                          screen: HistoryScreen()),
-                       SizedBox(height: 24,),
+                          screen: const HistoryScreen()),
+                       const SizedBox(height: 24,),
                        SettingOptionCard(
-                          name: 'Advanced Settings', 
+                          name: S.of(context).advancedSettings,
                           icon: Icons.settings, 
-                          screen: Text("")
+                          screen: const AdvancedSetting()
                       ),
                     ],
                   )
@@ -98,7 +98,7 @@ class _SettingScreenState extends State<SettingScreen> {
                 Row(
                   children: [
                     Expanded(
-                      child: Container(
+                      child: SizedBox(
                         height: 40,
                         child: ElevatedButton(
                             onPressed: () async{
@@ -112,8 +112,8 @@ class _SettingScreenState extends State<SettingScreen> {
                                   )
                               ),
                             ),
-                            child: const Text('Log out',
-                              style: TextStyle(color: Colors.white, fontSize: 18),)
+                            child: Text(S.of(context).logout,
+                              style: const TextStyle(color: Colors.white, fontSize: 18),)
                         ),
                       ),
                     ),

@@ -1,3 +1,4 @@
+import 'package:advanced_mobile/generated/l10n.dart';
 import 'package:advanced_mobile/models/user/user_model.dart';
 import 'package:advanced_mobile/providers/tutor_provider.dart';
 import 'package:advanced_mobile/providers/user_provider.dart';
@@ -88,16 +89,15 @@ class _TutorDetailScreenState extends State<TutorDetailScreen> {
                     onTap: () {
                       tutorProvider.removeTutorInfo(context);
                     },
-                    child: const Icon(Icons.navigate_before, color: Colors.black,size: 30,)
+                    child: const Icon(Icons.navigate_before,size: 30,)
                 ),
                 Container(
                     margin: const EdgeInsets.only(left: 8),
-                    child: Text(tutorProvider.tutorInfo!.user!.name,style: const TextStyle(color: Colors.black),)
+                    child: Text(tutorProvider.tutorInfo!.user!.name,)
                 )
               ],
             ),
             automaticallyImplyLeading: false,
-            backgroundColor: Colors.white,
           ),
           body: Padding(
             padding: const EdgeInsets.all(15),
@@ -131,7 +131,7 @@ class _TutorDetailScreenState extends State<TutorDetailScreen> {
                       timeSlotViewSettings: const TimeSlotViewSettings(
                         timeInterval: Duration(minutes: 25),
                         timeFormat: 'hh:mm a',
-                        timeIntervalWidth: 60,
+                        timeIntervalWidth: 80,
                         timeIntervalHeight: 50
                       ),
                       showNavigationArrow: true,
@@ -152,7 +152,7 @@ class _TutorDetailScreenState extends State<TutorDetailScreen> {
                     ),
                   ),
                   Text(
-                    'Rating and Comment(${tutorProvider.tutorInfo!.totalFeedback})',
+                    '${S.of(context).ratingAndComment}(${tutorProvider.tutorInfo!.totalFeedback})',
                     style: const TextStyle(color: Color.fromRGBO(0, 113, 240, 1),fontSize: 16),),
                   for (int i =0;i<tutorProvider.feedbacks.length;i++)
                     CommentCard(feedback: tutorProvider.feedbacks[i]),

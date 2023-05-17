@@ -1,9 +1,11 @@
 import 'package:advanced_mobile/config/color.dart';
+import 'package:advanced_mobile/generated/l10n.dart';
 import 'package:advanced_mobile/models/schedule/booking_info_model.dart';
 import 'package:advanced_mobile/models/schedule/class_review_model.dart';
 import 'package:advanced_mobile/providers/upcoming_provider.dart';
-import 'package:advanced_mobile/utils/formatDateFromTimestamp.dart';
+import 'package:advanced_mobile/widgets/toast.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
@@ -16,12 +18,51 @@ class HistoryScreen extends StatefulWidget {
 }
 
 class _HistoryScreenState extends State<HistoryScreen> {
+  late ScrollController scrollController;
+  bool isLoadMore = false;
+  int page = 1;
+  int perPage = 10;
+  bool isLoading = true;
   @override
   void initState() {
     super.initState();
+    context.read<UpcomingProvider>().removeHistory();
+    scrollController = ScrollController()..addListener(loadMore);
     WidgetsBinding.instance.addPostFrameCallback((_) async {
-      await context.read<UpcomingProvider>().getHistory(context);
+      await context.read<UpcomingProvider>().getHistory(1,10,context);
+      setState(() {
+        isLoading = false;
+      });
     });
+  }
+
+  void loadMore() async {
+    if(isLoadMore){
+      return;
+    }
+    if (!isLoadMore && scrollController.position.extentAfter < context.read<UpcomingProvider>().history.length) {
+      if(context.read<UpcomingProvider>().historyCurrentLength
+          < context.read<UpcomingProvider>().historyCount){
+        setState(() {
+          isLoadMore = true;
+          page++;
+        });
+        try {
+          await context.read<UpcomingProvider>().getHistory(
+              page,
+              perPage,
+              context
+          );
+          if (mounted) {
+            setState(() {
+              isLoadMore = false;
+            });
+          }
+        } catch (e) {
+          showErrorToast("Error: Can't load more");
+        }
+      }
+    }
   }
 
   @override
@@ -36,26 +77,28 @@ class _HistoryScreenState extends State<HistoryScreen> {
                       onTap: () {
                         Navigator.pop(context);
                       },
-                      child: const Icon(Icons.navigate_before, color: Colors.black,size: 30,)
+                      child: const Icon(Icons.navigate_before,size: 30,)
                   ),            Container(
                     margin: const EdgeInsets.only(left: 8),
-                    child: const Text(
-                      'History',
-                      style: TextStyle(color: Colors.black),
+                    child: Text(
+                      S.of(context).history,
                     ),
                   ),
                 ],
               ),
-              backgroundColor: Colors.white,
               automaticallyImplyLeading: false,
               elevation: 0,
             ),
-            body: Padding(
+            body: isLoading ? SpinKitRing(
+              color: AppColors.primary,
+              size: 50,
+            ) : Padding(
               padding: const EdgeInsets.symmetric(horizontal: 15),
               child: Column(
                 children: [
                   Expanded(
                     child: ListView.builder(
+                        controller: scrollController,
                         itemCount: upcomingProvider.history.length,
                         scrollDirection: Axis.vertical,
                         itemBuilder:(context,index){
@@ -64,11 +107,11 @@ class _HistoryScreenState extends State<HistoryScreen> {
                           DateTime endDate = DateTime.fromMillisecondsSinceEpoch(booking.scheduleDetailInfo!.endPeriodTimestamp);
 
                           Widget requestWidget = Text(
-                              'No request for lesson',
+                              S.of(context).requestHint,
                               style: TextStyle(color: AppColors.textGrey));
 
                           Widget reviewWidget = Text(
-                              'Tutor have not reviewed yet',
+                              S.of(context).reviewHint,
                               style: TextStyle(color: AppColors.textGrey));
 
                           if(upcomingProvider.history[index].subBooking!.isNotEmpty){
@@ -80,7 +123,7 @@ class _HistoryScreenState extends State<HistoryScreen> {
                               requestWidget = Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
-                                  const Text('Request for lession',style: TextStyle(fontWeight: FontWeight.w500),),
+                                  Text(S.of(context).requestForLesson,style: const TextStyle(fontWeight: FontWeight.w500),),
                                   const SizedBox(height: 8,),
                                   Text(request,),
                                 ],
@@ -92,10 +135,10 @@ class _HistoryScreenState extends State<HistoryScreen> {
                               reviewWidget = Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
-                                  const Text('Review from tutor',style: TextStyle(fontWeight: FontWeight.w500),),
+                                  Text(S.of(context).reviewFromTutor,style: const TextStyle(fontWeight: FontWeight.w500),),
                                   for (int i = 0; i<classReview.length;i++)...[
                                     const SizedBox(height: 8,),
-                                    Text('Session ${i+1}',style: const TextStyle(fontWeight: FontWeight.w500),),
+                                    Text('${S.of(context).session} ${i+1}',style: const TextStyle(fontWeight: FontWeight.w500),),
                                     classReview[i]!.lessonStatus != null ? Row(
                                       children: [
                                         Text('Lesson status: ${classReview[i]!.lessonStatus!.status}'),
@@ -154,9 +197,9 @@ class _HistoryScreenState extends State<HistoryScreen> {
                               reviewWidget = Column(
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
-                                    const Text('Review from tutor',style: TextStyle(fontWeight: FontWeight.w500),),
+                                    Text(S.of(context).reviewFromTutor,style: const TextStyle(fontWeight: FontWeight.w500),),
                                       const SizedBox(height: 8,),
-                                      const Text('Session 1',style: TextStyle(fontWeight: FontWeight.w500),),
+                                    Text('${S.of(context).session} 1',style: const TextStyle(fontWeight: FontWeight.w500),),
                                       classReview!.lessonStatus != null ? Row(
                                         children: [
                                           Text('Lesson status: ${classReview.lessonStatus!.status}'),
@@ -208,7 +251,7 @@ class _HistoryScreenState extends State<HistoryScreen> {
                           return Container(
                             margin: const EdgeInsets.only(top: 16, bottom: 8),
                             decoration: BoxDecoration(
-                              color: Colors.white,
+                              color: Theme.of(context).brightness == Brightness.light ? Colors.white : Colors.transparent,
                               border: Border.all(color: Colors.black12, width: 1),
                               borderRadius: BorderRadius.circular(4),
                               boxShadow: const [
@@ -324,12 +367,12 @@ class _HistoryScreenState extends State<HistoryScreen> {
                                       children: [
                                         TextButton(
                                             onPressed: (){},
-                                            child: const Text('Add a rating',)
+                                            child: Text(S.of(context).addARating,)
                                         ),
                                         TextButton(
                                             onPressed: (){},
 
-                                            child: const Text('Report',)
+                                            child: Text(S.of(context).report,)
                                         ),
                                       ],
                                     ),
@@ -340,7 +383,12 @@ class _HistoryScreenState extends State<HistoryScreen> {
                           );
                         }
                     ),
-                  )
+                  ),
+                  if(isLoadMore)
+                    SpinKitRing(
+                      color: AppColors.primary,
+                      size: 50,
+                    )
                 ],
               ),
             )

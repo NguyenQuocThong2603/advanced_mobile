@@ -2,12 +2,15 @@ import 'package:advanced_mobile/config/preference.dart';
 import 'package:advanced_mobile/interceptors/interceptor.dart';
 import 'package:advanced_mobile/providers/chat_provider.dart';
 import 'package:advanced_mobile/providers/course.provider.dart';
+import 'package:advanced_mobile/providers/setting_provider.dart';
 import 'package:advanced_mobile/providers/tutor_provider.dart';
 import 'package:advanced_mobile/providers/upcoming_provider.dart';
 import 'package:advanced_mobile/providers/user_provider.dart';
 import 'package:advanced_mobile/screens/initial.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:provider/provider.dart';
+import 'generated/l10n.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -29,23 +32,49 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider(create: (_)=> UpcomingProvider()),
         ChangeNotifierProvider(create: (_)=> ChatProvider(),),
         ChangeNotifierProvider(create: (_)=> UserProvider(),),
+        ChangeNotifierProvider(create: (_)=> SettingProvider(),),
       ],
-      child: MaterialApp(
-        debugShowCheckedModeBanner: false,
-        title: 'Flutter Demo',
-        theme: ThemeData(
-          // This is the theme of your application.
-          //
-          // Try running your application with "flutter run". You'll see the
-          // application has a blue toolbar. Then, without quitting the app, try
-          // changing the primarySwatch below to Colors.green and then invoke
-          // "hot reload" (press "r" in the console where you ran "flutter run",
-          // or simply save your changes to "hot reload" in a Flutter IDE).
-          // Notice that the counter didn't reset back to zero; the application
-          // is not restarted.
-          primarySwatch: Colors.blue,
-        ),
-        home: const InitialScreen(),
+      child: Consumer<SettingProvider>(
+        builder: (context,settingProvider,_) {
+          return MaterialApp(
+            themeMode: settingProvider.theme == 'light' ? ThemeMode.light : ThemeMode.dark,
+            locale: settingProvider.language == 'english' ? const Locale('en','US') : const Locale('vi','VN'),
+            debugShowCheckedModeBanner: false,
+            title: 'Flutter Demo',
+            theme: ThemeData(
+              // This is the theme of your application.
+              //
+              // Try running your application with "flutter run". You'll see the
+              // application has a blue toolbar. Then, without quitting the app, try
+              // changing the primarySwatch below to Colors.green and then invoke
+              // "hot reload" (press "r" in the console where you ran "flutter run",
+              // or simply save your changes to "hot reload" in a Flutter IDE).
+              // Notice that the counter didn't reset back to zero; the application
+              // is not restarted.
+              appBarTheme: const AppBarTheme(
+                iconTheme: IconThemeData(color: Colors.black),
+                color: Colors.white,
+                titleTextStyle: TextStyle(color: Colors.black, fontWeight: FontWeight.w500, fontSize: 22)
+              ),
+            ),
+            darkTheme: ThemeData(
+              brightness: Brightness.dark,
+              appBarTheme: const AppBarTheme(
+                  iconTheme:  IconThemeData(color: Colors.white),
+                  color: Colors.black26,
+                  titleTextStyle: TextStyle(color: Colors.white, fontWeight: FontWeight.w500, fontSize: 22)
+              ),
+            ),
+            localizationsDelegates: const[
+              S.delegate,
+              GlobalMaterialLocalizations.delegate,
+              GlobalWidgetsLocalizations.delegate,
+              GlobalCupertinoLocalizations.delegate,
+            ],
+            supportedLocales: S.delegate.supportedLocales,
+            home: const InitialScreen(),
+          );
+        }
       ),
     );
   }

@@ -1,5 +1,5 @@
+import 'package:advanced_mobile/generated/l10n.dart';
 import 'package:advanced_mobile/providers/tutor_provider.dart';
-import 'package:advanced_mobile/services/tutor_service.dart';
 import 'package:flutter/material.dart';
 
 class SearchField extends StatefulWidget {
@@ -42,19 +42,19 @@ class _SearchFieldState extends State<SearchField> {
               widget.tutorProvider.removeTutorsState();
               widget.setFilter(
                 searchInputController.text,
-                widget.tutorProvider.nationalities[widget.tutorProvider.nationalityIndex],
+                widget.tutorProvider.nationalities(context)[widget.tutorProvider.nationalityIndex],
               );
               await widget.tutorProvider.searchTutorByName(
                   searchInputController.text,
                   widget.speciality!,
-                  widget.tutorProvider.nationalities[widget.tutorProvider.nationalityIndex],
+                  widget.tutorProvider.nationalities(context)[widget.tutorProvider.nationalityIndex],
                   1,
                   12,
                   true,
                   context
               );
             },
-            style: TextStyle(fontSize: 16, color: Colors.grey.shade900),
+            style: const TextStyle(fontSize: 16),
             keyboardType: TextInputType.emailAddress,
             decoration: InputDecoration(
                 contentPadding: const EdgeInsets.symmetric(vertical: 5),
@@ -62,12 +62,11 @@ class _SearchFieldState extends State<SearchField> {
                   Icons.search,
                   color: Colors.grey.shade500,
                 ),
-                fillColor: Colors.grey.shade200,
                 filled: true,
                 border: const OutlineInputBorder(
                     borderSide: BorderSide.none,
                     borderRadius: BorderRadius.all(Radius.circular(20))),
-                hintText: "Enter tutor name")),
+                hintText: S.of(context).enterTutorName)),
       );
   }
 }
