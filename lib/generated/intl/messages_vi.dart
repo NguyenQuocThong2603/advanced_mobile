@@ -53,6 +53,8 @@ class MessageLookup extends MessageLookupByLibrary {
         "classesIn": MessageLookupByLibrary.simpleMessage("diễn ra"),
         "confirmPassword":
             MessageLookupByLibrary.simpleMessage("Nhập lại mật khẩu"),
+        "confirmPasswordNotMatch": MessageLookupByLibrary.simpleMessage(
+            "Nhập lại mật khẩu không giống"),
         "conversationalEnglish":
             MessageLookupByLibrary.simpleMessage("Tiếng Anh giao tiếp"),
         "country": MessageLookupByLibrary.simpleMessage("Quốc gia"),
@@ -69,6 +71,8 @@ class MessageLookup extends MessageLookupByLibrary {
         "editRequest":
             MessageLookupByLibrary.simpleMessage("Chỉnh sửa yêu cầu"),
         "email": MessageLookupByLibrary.simpleMessage("Email"),
+        "emailNotEmpty":
+            MessageLookupByLibrary.simpleMessage("Vui lòng nhập email"),
         "english": MessageLookupByLibrary.simpleMessage("Tiếng Anh"),
         "englishForBeginner": MessageLookupByLibrary.simpleMessage(
             "Tiếng anh cho người mới bắt đầu"),
@@ -102,6 +106,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "history": MessageLookupByLibrary.simpleMessage("Lịch sử"),
         "hours": MessageLookupByLibrary.simpleMessage("giờ"),
         "ieltsSpeciality": MessageLookupByLibrary.simpleMessage("IELTS"),
+        "inputVoice": MessageLookupByLibrary.simpleMessage("Bắt đầu nói"),
         "interests": MessageLookupByLibrary.simpleMessage("Sở thích"),
         "ketSpeciality": MessageLookupByLibrary.simpleMessage("KET"),
         "language": MessageLookupByLibrary.simpleMessage("Ngôn ngữ"),
@@ -123,11 +128,17 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("Bạn không có buổi học nào"),
         "noneNationality":
             MessageLookupByLibrary.simpleMessage("Gia sư nước ngoài"),
+        "notValidEmail":
+            MessageLookupByLibrary.simpleMessage("Email không phù hợp"),
         "note": MessageLookupByLibrary.simpleMessage("Ghi chú"),
         "orContinueWith":
             MessageLookupByLibrary.simpleMessage("Hoặc tiếp tục với"),
         "other": MessageLookupByLibrary.simpleMessage("Khác"),
         "password": MessageLookupByLibrary.simpleMessage("Mật khẩu"),
+        "passwordNotEmpty":
+            MessageLookupByLibrary.simpleMessage("Vui lòng nhập mật khẩu"),
+        "passwordNotEnoughLength": MessageLookupByLibrary.simpleMessage(
+            "Mật khẩu có độ dài ít nhất 6 ký tự"),
         "petSpeciality": MessageLookupByLibrary.simpleMessage("PET"),
         "phoneNumber": MessageLookupByLibrary.simpleMessage("Số điện thoại"),
         "price": MessageLookupByLibrary.simpleMessage("Giá"),
@@ -175,6 +186,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "specialities": MessageLookupByLibrary.simpleMessage("Chuyên ngành"),
         "startersSpeciality": MessageLookupByLibrary.simpleMessage("STARTERS"),
         "startsIn": MessageLookupByLibrary.simpleMessage("còn"),
+        "stopVoice": MessageLookupByLibrary.simpleMessage("Dừng nói"),
         "studySchedule": MessageLookupByLibrary.simpleMessage("Lịch học"),
         "studyScheduleHint": MessageLookupByLibrary.simpleMessage(
             "Ghi chú thời gian trong tuần mà bạn muốn học"),

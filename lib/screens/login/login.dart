@@ -3,6 +3,7 @@ import 'package:advanced_mobile/screens/content.dart';
 import 'package:advanced_mobile/screens/login/forgot_password.dart';
 import 'package:advanced_mobile/screens/login/register.dart';
 import 'package:advanced_mobile/services/auth_service.dart';
+import 'package:advanced_mobile/utils/validate_utils.dart';
 import 'package:advanced_mobile/widgets/toast.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
@@ -17,6 +18,8 @@ class LoginScreen extends StatefulWidget {
 class _LoginScreenState extends State<LoginScreen> {
   late TextEditingController emailInputController;
   late TextEditingController passwordInputController;
+  String? errorTextEmail;
+  String? errorTextPassword;
 
   @override
   void initState(){
@@ -30,6 +33,21 @@ class _LoginScreenState extends State<LoginScreen> {
     emailInputController.dispose();
     passwordInputController.dispose();
     super.dispose();
+  }
+  bool validateEmailInput(value){
+    final errorText = validateEmail(context, value);
+    setState(() {
+      errorTextEmail = errorText;
+    });
+    return errorText == null ? true : false;
+  }
+
+  bool validatePasswordInput(value){
+    final errorText = validateEmptyString(context, value,S.of(context).passwordNotEmpty);
+    setState(() {
+      errorTextPassword = errorText;
+    });
+    return errorText == null ? true : false;
   }
 
   @override
@@ -53,14 +71,17 @@ class _LoginScreenState extends State<LoginScreen> {
             padding: const EdgeInsets.only(left: 16, right: 16),
             child: TextField(
               controller: emailInputController,
-              style: TextStyle(fontSize: 15),
+              style: const TextStyle(fontSize: 15),
               keyboardType: TextInputType.emailAddress,
+              onChanged: validateEmailInput,
               decoration: InputDecoration(
                   fillColor: Colors.white,
                   border: const OutlineInputBorder(
                       borderSide: BorderSide(color: Colors.black12),
                       borderRadius: BorderRadius.all(Radius.circular(20))),
-                  hintText: S.of(context).email),
+                  hintText: S.of(context).email,
+                  errorText: errorTextEmail
+              ),
             ),
           ),
           Container(
@@ -69,14 +90,17 @@ class _LoginScreenState extends State<LoginScreen> {
             padding: const EdgeInsets.only(left: 16, right: 16),
             child: TextField(
               controller: passwordInputController,
-              style: TextStyle(fontSize: 15),
+              style: const TextStyle(fontSize: 15),
               obscureText: true,
+              onChanged: validatePasswordInput,
               decoration: InputDecoration(
                   fillColor: Colors.white,
                   border: const OutlineInputBorder(
                       borderSide: BorderSide(color: Colors.black12),
                       borderRadius: BorderRadius.all(Radius.circular(20))),
-                  hintText: S.of(context).password),
+                  hintText: S.of(context).password,
+                  errorText: errorTextPassword
+              ),
             ),
           ),
           Container(
@@ -102,8 +126,12 @@ class _LoginScreenState extends State<LoginScreen> {
               child: FilledButton.tonal(
                 onPressed: () async {
                   try{
-                    await AuthService.login(emailInputController.text, passwordInputController.text);
-                    Navigator.pushReplacement(context, MaterialPageRoute(builder: (context)=> const ContentScreen()));
+                    bool isValidEmail = validateEmailInput(emailInputController.text);
+                    bool isValidPassword = validatePasswordInput(passwordInputController.text);
+                    if(isValidEmail && isValidPassword) {
+                      await AuthService.login(emailInputController.text, passwordInputController.text);
+                      Navigator.pushReplacement(context, MaterialPageRoute(builder: (context)=> const ContentScreen()));
+                    }
                   } catch(error){
                     showErrorToast(error);
                   }
@@ -154,7 +182,10 @@ class _LoginScreenState extends State<LoginScreen> {
             child: RichText(
                 text: TextSpan(
                     text: "${S.of(context).dontHaveAccount} ",
-                    style: const TextStyle(color: Colors.black, fontSize: 16),
+                    style: TextStyle(
+                        color: Theme.of(context).brightness == Brightness.light ?
+                        Colors.black : Colors.white,
+                        fontSize: 16),
                     children: [
                   TextSpan(
                       text: S.of(context).signup,

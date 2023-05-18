@@ -53,6 +53,9 @@ dependencies:
   dropdown_button2: ^2.1.0
   image_picker: ^0.8.7+4
   infinite_scroll_pagination: ^3.2.0
+  avatar_glow: ^2.0.2
+  speech_to_text: ^6.1.1
+  flutter_tts: ^3.6.3
   omni_jitsi_meet:
     git:
       url: https://github.com/coderof19clc7/jitsi_meet.git

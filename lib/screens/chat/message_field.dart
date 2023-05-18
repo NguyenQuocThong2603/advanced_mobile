@@ -1,4 +1,5 @@
 import 'package:advanced_mobile/config/color.dart';
+import 'package:advanced_mobile/providers/chat_provider.dart';
 import 'package:flutter/material.dart';
 
 class MessageField extends StatefulWidget {
@@ -6,10 +7,16 @@ class MessageField extends StatefulWidget {
     super.key,
     this.isMyMessage = true,
     this.message = '',
+    required this.chatProvider,
+    required this.index,
+    required this.indexOfPlayingMessage
   });
 
   final bool isMyMessage;
   final String message;
+  final int index;
+  final int indexOfPlayingMessage;
+  final ChatProvider chatProvider;
 
   @override
   State<MessageField> createState() => _MessageFieldState();
@@ -56,6 +63,19 @@ class _MessageFieldState extends State<MessageField> {
               )
           ),
         ),
+        Container(
+          margin: const EdgeInsets.only(bottom: 12, left: 4),
+          child: GestureDetector(
+            onTap: () async{
+              await widget.chatProvider.playMessage(widget.index,widget.message);
+            },
+            child: Icon(widget.indexOfPlayingMessage == widget.index ?
+            Icons.pause_circle :
+            Icons.play_circle,
+              color: AppColors.primary,
+              size: 28,),
+          ),
+        )
       ],
     );
   }

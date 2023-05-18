@@ -7,6 +7,7 @@ import 'package:advanced_mobile/models/chat/message_model.dart';
 import 'package:advanced_mobile/providers/chat_provider.dart';
 import 'package:advanced_mobile/screens/chat/loading.dart';
 import 'package:advanced_mobile/screens/chat/message_field.dart';
+import 'package:advanced_mobile/screens/chat/voice_input.dart';
 import 'package:advanced_mobile/widgets/toast.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
@@ -78,6 +79,9 @@ class _ChatScreenState extends State<ChatScreen> {
                                 .role == 'user',
                             message: chatProvider.messages[chatProvider.messages.length - index - 1]
                                 .message,
+                            chatProvider: chatProvider,
+                            index: index,
+                            indexOfPlayingMessage: chatProvider.indexOfPlayingMessage,
                           );
                         },
                       ) : SpinKitFadingCircle(
@@ -134,7 +138,7 @@ class _ChatScreenState extends State<ChatScreen> {
                   )
                 ],
               ),
-              const SizedBox(height: 16,)
+              VoiceInput(inputController: inputController,chatProvider: chatProvider,),
             ],
           ),
         );

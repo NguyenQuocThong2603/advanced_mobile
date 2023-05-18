@@ -6,6 +6,12 @@
   "dontHaveAccount": "Don't have an account?",
   "login": "Login",
   "signup": "Sign up",
+  "emailNotEmpty": "Email can't be empty",
+  "notValidEmail": "Email is not valid",
+  "passwordNotEmpty": "Password can't be empty",
+  "confirmPasswordNotMatch": "Your confirm password don't match",
+  "passwordNotEnoughLength": "Password's length must be at least 6 characters long",
+
 
   "confirmPassword": "Confirm Password",
   "alreadyHaveAccount": "Already have an account?",
@@ -104,6 +110,8 @@
 
   "typeAQuestion": "Type a question",
   "waitingForResponse": "Waiting for response",
+  "inputVoice": "Start talking",
+  "stopVoice": "Stop talking",
 
 
   "settings": "Settings",

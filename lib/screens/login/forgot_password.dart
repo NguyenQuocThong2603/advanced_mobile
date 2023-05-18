@@ -1,5 +1,6 @@
 import 'package:advanced_mobile/generated/l10n.dart';
 import 'package:advanced_mobile/services/user_service.dart';
+import 'package:advanced_mobile/utils/validate_utils.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/gestures.dart';
@@ -17,6 +18,7 @@ class ForgotPasswordScreen extends StatefulWidget {
 
 class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
   late TextEditingController emailInputController;
+  String? errorEmailText;
 
   @override
   void initState(){
@@ -29,6 +31,15 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
     emailInputController.dispose();
     super.dispose();
   }
+
+  bool validateEmailInput(value){
+    final errorText = validateEmail(context, value);
+    setState(() {
+      errorEmailText = errorText;
+    });
+    return errorText == null ? true : false;
+  }
+
   Future<void> _showMyDialog() async {
     return showDialog<void>(
       context: context,
@@ -37,14 +48,14 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
         return AlertDialog(
           alignment: Alignment.center,
           title:  Text(S.of(context).checkYourMail,
-            style: const TextStyle(color: Colors.black, fontSize: 20, fontWeight: FontWeight.w500),
+            style: const TextStyle(fontSize: 20, fontWeight: FontWeight.w500),
           ),
           content: SingleChildScrollView(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.center,
               children:  [
                 Text(S.of(context).sendEmail,
-              style: const TextStyle(color: Colors.black, fontSize: 16),
+              style: const TextStyle(fontSize: 16),
             )
             ]),
           ),
@@ -111,14 +122,17 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
                 padding: const EdgeInsets.only(left: 16, right: 16),
                 child: TextField(
                   controller: emailInputController,
-                  style: TextStyle(fontSize: 15, color: Colors.grey.shade900),
+                  style: TextStyle(fontSize: 15),
                   keyboardType: TextInputType.emailAddress,
-                  decoration: const InputDecoration(
+                  onChanged: validateEmailInput,
+                  decoration: InputDecoration(
                       fillColor: Colors.white,
-                      border: OutlineInputBorder(
+                      border: const OutlineInputBorder(
                           borderSide: BorderSide(color: Colors.black12),
                           borderRadius: BorderRadius.all(Radius.circular(20))),
-                      hintText: "Email"),
+                      hintText: "Email",
+                      errorText: errorEmailText
+                  ),
                 ),
               ),
               Container(
@@ -128,8 +142,10 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
                   child: TextButton(
                     onPressed: () async {
                       try{
-                        await UserService.forgotPassword(emailInputController.text);
-                        _showMyDialog();
+                        if(validateEmailInput(emailInputController.text)){
+                          await UserService.forgotPassword(emailInputController.text);
+                          _showMyDialog();
+                        }
                       } catch(error){
                         Fluttertoast.showToast(
                             msg: error.toString().split(':')[1],

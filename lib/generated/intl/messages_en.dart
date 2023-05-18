@@ -53,6 +53,8 @@ class MessageLookup extends MessageLookupByLibrary {
         "classesIn": MessageLookupByLibrary.simpleMessage("classes in"),
         "confirmPassword":
             MessageLookupByLibrary.simpleMessage("Confirm Password"),
+        "confirmPasswordNotMatch": MessageLookupByLibrary.simpleMessage(
+            "Your confirm password don\'t match"),
         "conversationalEnglish":
             MessageLookupByLibrary.simpleMessage("Conversational English"),
         "country": MessageLookupByLibrary.simpleMessage("Country"),
@@ -68,6 +70,8 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("Edit profile successfully"),
         "editRequest": MessageLookupByLibrary.simpleMessage("Edit request"),
         "email": MessageLookupByLibrary.simpleMessage("Email"),
+        "emailNotEmpty":
+            MessageLookupByLibrary.simpleMessage("Email can\'t be empty"),
         "english": MessageLookupByLibrary.simpleMessage("English"),
         "englishForBeginner":
             MessageLookupByLibrary.simpleMessage("English For Beginner"),
@@ -100,6 +104,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "history": MessageLookupByLibrary.simpleMessage("History"),
         "hours": MessageLookupByLibrary.simpleMessage("hours"),
         "ieltsSpeciality": MessageLookupByLibrary.simpleMessage("IELTS"),
+        "inputVoice": MessageLookupByLibrary.simpleMessage("Start talking"),
         "interests": MessageLookupByLibrary.simpleMessage("Interests"),
         "ketSpeciality": MessageLookupByLibrary.simpleMessage("KET"),
         "language": MessageLookupByLibrary.simpleMessage("Language"),
@@ -118,11 +123,17 @@ class MessageLookup extends MessageLookupByLibrary {
         "noUpcomingLesson": MessageLookupByLibrary.simpleMessage(
             "You have no upcoming lesson."),
         "noneNationality": MessageLookupByLibrary.simpleMessage("None"),
+        "notValidEmail":
+            MessageLookupByLibrary.simpleMessage("Email is not valid"),
         "note": MessageLookupByLibrary.simpleMessage("Notes"),
         "orContinueWith":
             MessageLookupByLibrary.simpleMessage("Or continue with"),
         "other": MessageLookupByLibrary.simpleMessage("Other"),
         "password": MessageLookupByLibrary.simpleMessage("Password"),
+        "passwordNotEmpty":
+            MessageLookupByLibrary.simpleMessage("Password can\'t be empty"),
+        "passwordNotEnoughLength": MessageLookupByLibrary.simpleMessage(
+            "Password\'s length must be at least 6 characters long"),
         "petSpeciality": MessageLookupByLibrary.simpleMessage("PET"),
         "phoneNumber": MessageLookupByLibrary.simpleMessage("Phone Number"),
         "price": MessageLookupByLibrary.simpleMessage("Price"),
@@ -169,6 +180,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "specialities": MessageLookupByLibrary.simpleMessage("Specialities"),
         "startersSpeciality": MessageLookupByLibrary.simpleMessage("STARTERS"),
         "startsIn": MessageLookupByLibrary.simpleMessage("starts in"),
+        "stopVoice": MessageLookupByLibrary.simpleMessage("Stop talking"),
         "studySchedule": MessageLookupByLibrary.simpleMessage("Study schedule"),
         "studyScheduleHint": MessageLookupByLibrary.simpleMessage(
             "Note the time of the week you want to study on LetTutor"),

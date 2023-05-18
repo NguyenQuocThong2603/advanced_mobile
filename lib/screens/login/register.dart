@@ -1,6 +1,7 @@
 import 'package:advanced_mobile/config/color.dart';
 import 'package:advanced_mobile/generated/l10n.dart';
 import 'package:advanced_mobile/services/auth_service.dart';
+import 'package:advanced_mobile/utils/validate_utils.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -15,19 +16,54 @@ class RegisterScreen extends StatefulWidget {
 class _RegisterScreenState extends State<RegisterScreen> {
   late TextEditingController emailInputController;
   late TextEditingController passwordInputController;
+  late TextEditingController confirmPasswordInputController;
+  String? errorTextEmail;
+  String? errorTextPassword;
+  String? errorTextConfirmPassword;
 
   @override
   void initState(){
     super.initState();
     emailInputController = TextEditingController();
     passwordInputController = TextEditingController();
+    confirmPasswordInputController = TextEditingController();
   }
 
   @override
   void dispose(){
     emailInputController.dispose();
     passwordInputController.dispose();
+    confirmPasswordInputController.dispose();
     super.dispose();
+  }
+
+  bool validateEmailInput(value){
+    final errorText = validateEmail(context, value);
+    setState(() {
+      errorTextEmail = errorText;
+    });
+    return errorText == null ? true : false;
+  }
+
+  bool validatePasswordInput(value){
+    final errorText = validatePassword(context, value);
+    setState(() {
+      errorTextPassword = errorText;
+    });
+    return errorText == null ? true : false;
+  }
+
+  bool validateConfirmPasswordInput(value){
+    if(confirmPasswordInputController.text == passwordInputController.text && confirmPasswordInputController.text != ''){
+      setState(() {
+        errorTextConfirmPassword = null;
+      });
+      return true;
+    }
+    setState(() {
+      errorTextConfirmPassword = S.of(context).confirmPasswordNotMatch;
+    });
+    return false;
   }
 
   Future<void> _showMyDialog(String email) async {
@@ -45,7 +81,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
           title: RichText(
               text: TextSpan(
                   text: "${S.of(context).yourRegistration} ",
-                  style: const TextStyle(color: Colors.black, fontSize: 16),
+                  style: const TextStyle(fontSize: 16),
                   children: [
                     TextSpan(
                         text: '${S.of(context).successfully}.',
@@ -59,12 +95,11 @@ class _RegisterScreenState extends State<RegisterScreen> {
                 RichText(
                   text: TextSpan(
                       text: "${S.of(context).receivedEmail} ",
-                      style: const TextStyle(color: Colors.black, fontSize: 16),
+                      style: const TextStyle(fontSize: 16),
                       children: [
                         TextSpan(
                             text: email,
-                            style: const TextStyle(
-                              color: Colors.black, fontSize: 16,fontWeight: FontWeight.w500))
+                            style: const TextStyle(fontSize: 16,fontWeight: FontWeight.w500))
                 ])),
               ],
             ),
@@ -123,14 +158,17 @@ class _RegisterScreenState extends State<RegisterScreen> {
                 padding: const EdgeInsets.only(left: 16, right: 16),
                 child: TextField(
                   controller: emailInputController,
-                  style: TextStyle(fontSize: 15, color: Colors.grey.shade900),
+                  style: const TextStyle(fontSize: 15),
                   keyboardType: TextInputType.emailAddress,
+                  onChanged: validateEmailInput,
                   decoration: InputDecoration(
                       fillColor: Colors.white,
                       border: const OutlineInputBorder(
                           borderSide: BorderSide(color: Colors.black12),
                           borderRadius: BorderRadius.all(Radius.circular(20))),
-                      hintText: S.of(context).email),
+                      hintText: S.of(context).email,
+                      errorText: errorTextEmail
+                  ),
                 ),
               ),
               Container(
@@ -139,14 +177,17 @@ class _RegisterScreenState extends State<RegisterScreen> {
                 padding: const EdgeInsets.only(left: 16, right: 16),
                 child: TextField(
                   controller: passwordInputController,
-                  style: TextStyle(fontSize: 15, color: Colors.grey.shade900),
+                  style: const TextStyle(fontSize: 15),
+                  onChanged: validatePasswordInput,
                   obscureText: true,
                   decoration: InputDecoration(
                       fillColor: Colors.white,
                       border: const OutlineInputBorder(
                           borderSide: BorderSide(color: Colors.black12),
                           borderRadius: BorderRadius.all(Radius.circular(20))),
-                      hintText: S.of(context).password),
+                      hintText: S.of(context).password,
+                      errorText: errorTextPassword
+                  ),
                 ),
               ),
               Container(
@@ -154,14 +195,18 @@ class _RegisterScreenState extends State<RegisterScreen> {
                 margin: const EdgeInsets.only(top: 32, bottom: 16),
                 padding: const EdgeInsets.only(left: 16, right: 16),
                 child: TextField(
-                  style: TextStyle(fontSize: 15, color: Colors.grey.shade900),
+                  style: const TextStyle(fontSize: 15),
                   obscureText: true,
+                  controller: confirmPasswordInputController,
+                  onChanged: validateConfirmPasswordInput,
                   decoration: InputDecoration(
                       fillColor: Colors.white,
                       border: const OutlineInputBorder(
                           borderSide: BorderSide(color: Colors.black12),
                           borderRadius: BorderRadius.all(Radius.circular(20))),
-                      hintText: S.of(context).confirmPassword),
+                      hintText: S.of(context).confirmPassword,
+                      errorText: errorTextConfirmPassword
+                  ),
                 ),
               ),
               Container(
@@ -171,8 +216,14 @@ class _RegisterScreenState extends State<RegisterScreen> {
                   child: FilledButton.tonal(
                     onPressed: () async {
                       try{
-                        await AuthService.register(emailInputController.text, passwordInputController.text);
-                        _showMyDialog(emailInputController.text);
+                        final isValid = [validateEmailInput(emailInputController.text),
+                          validatePasswordInput(passwordInputController.text),
+                          validateConfirmPasswordInput(confirmPasswordInputController.text)
+                        ].every((element) => element == true);
+                        if(isValid){
+                          await AuthService.register(emailInputController.text, passwordInputController.text);
+                          _showMyDialog(emailInputController.text);
+                        }
                       } catch(error){
                         Fluttertoast.showToast(
                           msg: error.toString().split(':')[1],
@@ -231,7 +282,10 @@ class _RegisterScreenState extends State<RegisterScreen> {
                 child: RichText(
                     text: TextSpan(
                         text: "${S.of(context).alreadyHaveAccount} ",
-                        style: const TextStyle(color: Colors.black, fontSize: 16),
+                        style: TextStyle(
+                            color: Theme.of(context).brightness == Brightness.light ?
+                            Colors.black : Colors.white,
+                            fontSize: 16),
                         children: [
                           TextSpan(
                               text: S.of(context).login,

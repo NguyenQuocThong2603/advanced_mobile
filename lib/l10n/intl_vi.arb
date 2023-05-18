@@ -6,6 +6,11 @@
   "dontHaveAccount": "Chưa có tài khoản?",
   "login": "Đăng nhập",
   "signup": "Đăng ký",
+  "emailNotEmpty": "Vui lòng nhập email",
+  "notValidEmail": "Email không phù hợp",
+  "passwordNotEmpty": "Vui lòng nhập mật khẩu",
+  "confirmPasswordNotMatch": "Nhập lại mật khẩu không giống",
+  "passwordNotEnoughLength": "Mật khẩu có độ dài ít nhất 6 ký tự",
 
   "confirmPassword": "Nhập lại mật khẩu",
   "alreadyHaveAccount": "Đã có tài khoản?",
@@ -104,6 +109,8 @@
 
   "typeAQuestion": "Nhập câu hỏi",
   "waitingForResponse": "Chờ phản hồi",
+  "inputVoice": "Bắt đầu nói",
+  "stopVoice": "Dừng nói",
 
   "settings": "Cài đặt",
   "history": "Lịch sử",

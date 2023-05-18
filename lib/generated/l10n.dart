@@ -120,6 +120,56 @@ class S {
     );
   }
 
+  /// `Email can't be empty`
+  String get emailNotEmpty {
+    return Intl.message(
+      'Email can\'t be empty',
+      name: 'emailNotEmpty',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Email is not valid`
+  String get notValidEmail {
+    return Intl.message(
+      'Email is not valid',
+      name: 'notValidEmail',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Password can't be empty`
+  String get passwordNotEmpty {
+    return Intl.message(
+      'Password can\'t be empty',
+      name: 'passwordNotEmpty',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Your confirm password don't match`
+  String get confirmPasswordNotMatch {
+    return Intl.message(
+      'Your confirm password don\'t match',
+      name: 'confirmPasswordNotMatch',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Password's length must be at least 6 characters long`
+  String get passwordNotEnoughLength {
+    return Intl.message(
+      'Password\'s length must be at least 6 characters long',
+      name: 'passwordNotEnoughLength',
+      desc: '',
+      args: [],
+    );
+  }
+
   /// `Confirm Password`
   String get confirmPassword {
     return Intl.message(
@@ -1015,6 +1065,26 @@ class S {
     return Intl.message(
       'Waiting for response',
       name: 'waitingForResponse',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Start talking`
+  String get inputVoice {
+    return Intl.message(
+      'Start talking',
+      name: 'inputVoice',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Stop talking`
+  String get stopVoice {
+    return Intl.message(
+      'Stop talking',
+      name: 'stopVoice',
       desc: '',
       args: [],
     );
