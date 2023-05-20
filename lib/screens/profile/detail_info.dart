@@ -6,6 +6,7 @@ import 'package:advanced_mobile/models/user/learn_topic.dart';
 import 'package:advanced_mobile/models/user/test_preparation_model.dart';
 import 'package:advanced_mobile/models/user/user_model.dart';
 import 'package:advanced_mobile/providers/user_provider.dart';
+import 'package:advanced_mobile/utils/validate_utils.dart';
 import 'package:advanced_mobile/widgets/toast.dart';
 import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:flutter/material.dart';
@@ -36,6 +37,63 @@ class _DetailInfoState extends State<DetailInfo> {
   late String birthday;
   late String? countryCode;
   late String? level;
+  String? errorTextName;
+  String? errorTextCountry;
+  String? errorTextBirthday;
+  String? errorTextLevel;
+  String? errorTextWantToLearn;
+  bool isWantToLearnEmpty = false;
+
+  bool validateNameInput(value){
+    final errorText = validateEmptyString(context, value,S.of(context).nameNotEmpty);
+    setState(() {
+      errorTextName = errorText;
+    });
+    return errorText == null ? true : false;
+  }
+
+  bool validateCountryInput(){
+    String? errorText;
+    if(countryCode == null){
+      errorText = S.of(context).countryNotEmpty;
+    }
+    setState(() {
+      errorTextCountry = errorText;
+    });
+    return errorText == null ? true : false;
+  }
+
+  bool validateBirthdayInput(){
+    String? errorText;
+    if(birthday == ''){
+      errorText = S.of(context).birthdayNotEmpty;
+    }
+    setState(() {
+      errorTextBirthday = errorText;
+    });
+    return errorText == null ? true : false;
+  }
+  bool validateLevelInput(){
+    String? errorText;
+    if(level == null){
+      errorText = S.of(context).levelNotEmpty;
+    }
+    setState(() {
+      errorTextLevel = errorText;
+    });
+    return errorText == null ? true : false;
+  }
+  bool validateWantToLearnInput(){
+    if(learnTopics.isEmpty && testPreparations.isEmpty){
+      isWantToLearnEmpty = true;
+    }else{
+      isWantToLearnEmpty = false;
+    }
+    setState(() {
+      isWantToLearnEmpty;
+    });
+    return isWantToLearnEmpty;
+  }
 
   @override
   void initState() {
@@ -99,13 +157,16 @@ class _DetailInfoState extends State<DetailInfo> {
                 margin: const EdgeInsets.only(top: 4, bottom: 16),
                 child: TextField(
                   controller: nameInputController,
-                  decoration: const InputDecoration(
-                    contentPadding: EdgeInsets.symmetric(horizontal: 16, vertical: 10),
-                    border: OutlineInputBorder(
+                  onChanged: validateNameInput,
+                  decoration: InputDecoration(
+                    prefix: const Padding(padding: EdgeInsets.only(left: 16),),
+                    contentPadding: const EdgeInsets.only(top: 10,bottom: 10, right: 16),
+                    border: const OutlineInputBorder(
                         borderRadius: BorderRadius.all(Radius.circular(4)),
                         borderSide: BorderSide(color: Colors.black12)
                     ),
                     isDense: true,
+                    errorText: errorTextName
                   )
                 ),
               ),
@@ -123,14 +184,9 @@ class _DetailInfoState extends State<DetailInfo> {
                 ],
               ),
               Container(
-                padding: const EdgeInsets.only(right: 16),
                 margin: const EdgeInsets.only(top: 4, bottom: 16),
-                decoration: BoxDecoration(
-                    borderRadius: const BorderRadius.all(Radius.circular(4)),
-                    border: Border.all(color: Colors.black26)
-                ),
                 child: DropdownButtonHideUnderline(
-                  child: DropdownButton2(
+                  child: DropdownButtonFormField2(
                     dropdownStyleData: const DropdownStyleData(
                       maxHeight: 200,
                       offset: Offset(0, 0)
@@ -140,10 +196,21 @@ class _DetailInfoState extends State<DetailInfo> {
                     iconStyleData: const IconStyleData(icon: Icon(Icons.expand_more)),
                     onChanged: (value)  {
                       countryCode = value;
+                      errorTextCountry = null;
                       setState(() {
                         countryCode;
+                        errorTextCountry;
                       });
                     },
+                    decoration: InputDecoration(
+                      isDense: true,
+                      contentPadding: const EdgeInsets.only(top: 10,bottom: 10,right: 10),
+                      errorText: errorTextCountry,
+                      border: const OutlineInputBorder(
+                          borderRadius: BorderRadius.all(Radius.circular(4)),
+                          borderSide: BorderSide(color: Colors.black26)
+                      )
+                    ),
                     items: countriesMapping.entries.map((e){
                       return DropdownMenuItem(
                         value: e.key,
@@ -205,34 +272,38 @@ class _DetailInfoState extends State<DetailInfo> {
                 ],
               ),
               GestureDetector(
-                onTap: () async{
-                  DateTime? newBirthDay = await showDatePicker(
-                      context: context,
-                      initialDate: userInfo.birthday != null ?
-                      DateTime.parse(userInfo.birthday!) : DateTime.now(),
-                      firstDate: DateTime(1900),
-                      lastDate: DateTime.now());
-                  if(newBirthDay != null) {
-                    birthday = DateFormat('yyyy-MM-dd').format(newBirthDay);
-                    setState(() {
-                      birthday;
-                    });
-                  }
-                },
                 child: Container(
-                  width: double.infinity,
-                  padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
                   margin: const EdgeInsets.only(top: 4, bottom: 16),
-                  decoration: BoxDecoration(
-                      borderRadius: const BorderRadius.all(Radius.circular(4)),
-                      border: Border.all(color: Colors.black26)
-                  ),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Text(birthday),
-                      const Icon(Icons.date_range,color: Colors.grey,)
-                    ],
+                  child: TextField(
+                    onTap: () async{
+                      DateTime? newBirthDay = await showDatePicker(
+                          context: context,
+                          initialDate: userInfo.birthday != null ?
+                          DateTime.parse(userInfo.birthday!) : DateTime.now(),
+                          firstDate: DateTime(1900),
+                          lastDate: DateTime.now());
+                      if(newBirthDay != null) {
+                        birthday = DateFormat('yyyy-MM-dd').format(newBirthDay);
+                        birthDayInputController.text = birthday;
+                        errorTextBirthday = null;
+                        setState(() {
+                          birthday;
+                          errorTextBirthday;
+                        });
+                      }
+                    },
+                    controller: birthDayInputController,
+                      readOnly: true,
+                      decoration: InputDecoration(
+                        errorText: errorTextBirthday,
+                        suffixIcon: const Icon(Icons.date_range,color: Colors.grey,),
+                        border: const OutlineInputBorder(
+                            borderRadius: BorderRadius.all(Radius.circular(4)),
+                            borderSide: BorderSide(color: Colors.black38)
+                        ),
+                        contentPadding: birthday != '' ? const EdgeInsets.symmetric(vertical: 10, horizontal: 16) :
+                        const EdgeInsets.symmetric(vertical: 10),
+                      )
                   ),
                 ),
               ),
@@ -250,25 +321,31 @@ class _DetailInfoState extends State<DetailInfo> {
                 ],
               ),
               Container(
-                padding: const EdgeInsets.only(right: 16),
                 margin: const EdgeInsets.only(top: 4, bottom: 16),
-                decoration: BoxDecoration(
-                    borderRadius: const BorderRadius.all(Radius.circular(4)),
-                    border: Border.all(color: Colors.black26)
-                ),
                 child: DropdownButtonHideUnderline(
-                  child: DropdownButton2(
+                  child: DropdownButtonFormField2(
                     dropdownStyleData: const DropdownStyleData(
                         maxHeight: 200,
                         offset: Offset(0, 0),
+                    ),
+                    decoration: InputDecoration(
+                        isDense: true,
+                        contentPadding: const EdgeInsets.only(top: 10,bottom: 10,right: 10),
+                        errorText: errorTextLevel,
+                        border: const OutlineInputBorder(
+                            borderRadius: BorderRadius.all(Radius.circular(4)),
+                            borderSide: BorderSide(color: Colors.black26)
+                        )
                     ),
                     value: level,
                     isExpanded: true,
                     iconStyleData: const IconStyleData(icon: Icon(Icons.expand_more)),
                     onChanged: (String? value) async {
                       level = value;
+                      errorTextLevel = null;
                       setState(() {
                         level;
+                        errorTextLevel;
                       });
                     },
                     items: userLevelsMap.entries.map((e){
@@ -308,6 +385,7 @@ class _DetailInfoState extends State<DetailInfo> {
                         else{
                           testPreparations.remove(listTestPreparation[i].id);
                         }
+                        validateWantToLearnInput();
                         setState(() {
                           testPreparations;
                         });
@@ -326,6 +404,7 @@ class _DetailInfoState extends State<DetailInfo> {
                         else{
                           learnTopics.remove(listLearnTopic[i].id);
                         }
+                        validateWantToLearnInput();
                         setState(() {
                           learnTopics;
                         });
@@ -334,6 +413,9 @@ class _DetailInfoState extends State<DetailInfo> {
                     ),
                 ],
               ),
+              !isWantToLearnEmpty ? Container() :
+                Text(S.of(context).wantToLearnNotEmpty,style: const TextStyle(color: Colors.red),),
+              const SizedBox(height: 16,),
               Text(S.of(context).studySchedule),
               Container(
                 margin: const EdgeInsets.only(top: 4, bottom: 16),
@@ -358,17 +440,23 @@ class _DetailInfoState extends State<DetailInfo> {
                 child: ElevatedButton(
                     onPressed: () async{
                       try{
-                        final futures = <Future<void>>[];
-                        futures.add(widget.userProvider.updateUserInfo(birthday,
-                            countryCode, learnTopics, level,
-                            nameInputController.text, phoneNumberInputController.text,
-                            scheduleInputController.text, testPreparations, context));
-                        if(widget.avaPath !=null ){
-                          futures.add(widget.userProvider.uploadAvatar(widget.avaPath, context));
+                        final isValid = [validateNameInput(nameInputController.text),
+                          validateCountryInput(),
+                          validateLevelInput(),validateBirthdayInput(),
+                        validateWantToLearnInput()].every((element) => element == true);
+                        if(isValid){
+                          final futures = <Future<void>>[];
+                          futures.add(widget.userProvider.updateUserInfo(birthday,
+                              countryCode, learnTopics, level,
+                              nameInputController.text, phoneNumberInputController.text,
+                              scheduleInputController.text, testPreparations, context));
+                          if(widget.avaPath !=null ){
+                            futures.add(widget.userProvider.uploadAvatar(widget.avaPath, context));
+                          }
+                          await Future.wait(futures);
+                          await widget.userProvider.getUserInfo(context);
+                          showSuccessToast(S.of(context).editProfileSuccess);
                         }
-                        await Future.wait(futures);
-                        await widget.userProvider.getUserInfo(context);
-                        showSuccessToast(S.of(context).editProfileSuccess);
                       } catch(err){
                         showErrorToast(err);
                       }

@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:advanced_mobile/config/color.dart';
 import 'package:advanced_mobile/generated/l10n.dart';
 import 'package:advanced_mobile/models/user/user_model.dart';
@@ -141,6 +143,7 @@ class _BookingDialogState extends State<BookingDialog> {
                                   isBooking = true;
                                 });
                               } catch(error){
+                                log('booking ${error}');
                                 showErrorToast('Error: Something went wrong, please try later!');
                               }
                             },

@@ -8,6 +8,7 @@ import 'package:advanced_mobile/widgets/toast.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:advanced_mobile/generated/l10n.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 class LoginScreen extends StatefulWidget {
   const LoginScreen({Key? key}) : super(key: key);
 
@@ -20,6 +21,7 @@ class _LoginScreenState extends State<LoginScreen> {
   late TextEditingController passwordInputController;
   String? errorTextEmail;
   String? errorTextPassword;
+  GoogleSignIn googleSignIn = GoogleSignIn();
 
   @override
   void initState(){
@@ -131,6 +133,7 @@ class _LoginScreenState extends State<LoginScreen> {
                     if(isValidEmail && isValidPassword) {
                       await AuthService.login(emailInputController.text, passwordInputController.text);
                       Navigator.pushReplacement(context, MaterialPageRoute(builder: (context)=> const ContentScreen()));
+                      showSuccessToast('Login successfully');
                     }
                   } catch(error){
                     showErrorToast(error);
@@ -157,6 +160,19 @@ class _LoginScreenState extends State<LoginScreen> {
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               GestureDetector(
+                onTap: () async {
+                  try{
+                    final googleAccount = await googleSignIn.signIn();
+                    if(googleAccount != null){
+                      final googleSignInAuthentication = await googleAccount.authentication;
+                      await AuthService.googleLogin(googleSignInAuthentication.accessToken!);
+                      Navigator.pushReplacement(context, MaterialPageRoute(builder: (context)=> const ContentScreen()));
+                      showSuccessToast('Login successfully');
+                    }
+                  } catch(err){
+                    googleSignIn.signOut();
+                  }
+                },
                   child: Container(
                       decoration: BoxDecoration(
                           border: Border.all(color: const Color(0xff1890ff)),

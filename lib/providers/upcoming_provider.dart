@@ -4,6 +4,7 @@ import 'package:advanced_mobile/models/schedule/booking_info_model.dart';
 import 'package:advanced_mobile/services/upcoming_service.dart';
 import 'package:advanced_mobile/utils/authentication_utils.dart';
 import 'package:advanced_mobile/utils/booking_info_utils.dart';
+import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:flutter/material.dart';
 
 class UpcomingProvider extends ChangeNotifier{
@@ -17,6 +18,8 @@ class UpcomingProvider extends ChangeNotifier{
   int historyCount = 0;
   int historyLength = 0;
   int historyCurrentLength = 10;
+  final firebaseAnalytics =  FirebaseAnalytics.instance;
+
 
 
   void removeState(){
@@ -30,10 +33,6 @@ class UpcomingProvider extends ChangeNotifier{
     historyCurrentLength = 10;
   }
 
-  void removeUpcomingClasses(){
-    upcomingClasses = [];
-    upComingCount = 0;
-  }
 
   void refreshUpcomingClasses(){
     upcomingClasses = [];
@@ -66,7 +65,7 @@ class UpcomingProvider extends ChangeNotifier{
     }
   }
 
-  Future<void> getUpcomingClasses(int page,int perPage,context) async{
+  Future<void> getUpcomingClasses(int page,int perPage,bool isRefresh,context) async{
     final response = await UpcomingService.getUpcomingClasses(page,perPage);
     if(response.data['statusCode'] == 401){
       logout(context);
@@ -99,7 +98,12 @@ class UpcomingProvider extends ChangeNotifier{
       }
       upComingCount = response.data['data']['count'];
       upComingCurrentLength = page*perPage;
-      upcomingClasses = upcomingClasses.followedBy(result).toList();
+      if(isRefresh){
+        upcomingClasses = result;
+      }
+      else{
+        upcomingClasses = upcomingClasses.followedBy(result).toList();
+      }
       notifyListeners();
     } else {
       throw Exception(response.data['message']);
@@ -143,6 +147,7 @@ class UpcomingProvider extends ChangeNotifier{
   Future<void> cancelClass(int cancelReasonId, String note,
       String scheduleDetailId,context) async{
     final response = await UpcomingService.cancelClass(cancelReasonId, note, scheduleDetailId);
+    firebaseAnalytics.logRefund(transactionId: scheduleDetailId,);
     if(response.data['statusCode'] == 401){
       logout(context);
     }
@@ -150,6 +155,17 @@ class UpcomingProvider extends ChangeNotifier{
       throw Exception(response.data['message']);
     }
     upComingCurrentLength -=1;
+    notifyListeners();
+  }
+
+  Future<void> editRequest(String note, String scheduleDetailId,context) async{
+    final response = await UpcomingService.editRequest(note, scheduleDetailId);
+    if(response.data['statusCode'] == 401){
+      logout(context);
+    }
+    if (response.data['statusCode'] != 200) {
+      throw Exception(response.data['message']);
+    }
     notifyListeners();
   }
 }

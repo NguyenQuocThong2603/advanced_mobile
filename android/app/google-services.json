@@ -1,0 +1,62 @@
+{
+  "project_info": {
+    "project_number": "1031510969032",
+    "project_id": "learnenglish-fbdbd",
+    "storage_bucket": "learnenglish-fbdbd.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1031510969032:android:ded3b4977a0eb1419bb3fd",
+        "android_client_info": {
+          "package_name": "com.thongnguyenquoc.LetTutor"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1031510969032-66r5ej8bi2nd04ialr73j6bvhgrs9le3.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.thongnguyenquoc.LetTutor",
+            "certificate_hash": "a4049c8013d47789aff8f2a3245e56f59eaaaeeb"
+          }
+        },
+        {
+          "client_id": "1031510969032-c3skvl8d1ohnas66ljndsactu48ej9md.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.thongnguyenquoc.LetTutor",
+            "certificate_hash": "1d81128b3829e6a23722686f5026369b196aa787"
+          }
+        },
+        {
+          "client_id": "1031510969032-c1g65mld3q9scv32t9qu27r0ph2vq8mf.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBGlSvUfREDn3gwTLinRqtcaQ53AGap8sQ"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1031510969032-7220fq269f9ud8ro6upsfotfug17n2li.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "1031510969032-iu21194196jqr4tj0uvdvbcaolt79tsq.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.advancedMobile"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

@@ -1050,6 +1050,56 @@ class S {
     );
   }
 
+  /// `Special request`
+  String get specialRequest {
+    return Intl.message(
+      'Special request',
+      name: 'specialRequest',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Wish topic`
+  String get wishTopic {
+    return Intl.message(
+      'Wish topic',
+      name: 'wishTopic',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `You can write in English or Vietnamese (Maximum 200 letters)`
+  String get youCanWriteEnglishOrVietnamese {
+    return Intl.message(
+      'You can write in English or Vietnamese (Maximum 200 letters)',
+      name: 'youCanWriteEnglishOrVietnamese',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Here is a list of the sessions you have booked`
+  String get hereAListOfSession {
+    return Intl.message(
+      'Here is a list of the sessions you have booked',
+      name: 'hereAListOfSession',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `You can track when the meeting starts, join the meeting with one click or cancel the meeting before 2 hours`
+  String get youCanTrackSession {
+    return Intl.message(
+      'You can track when the meeting starts, join the meeting with one click or cancel the meeting before 2 hours',
+      name: 'youCanTrackSession',
+      desc: '',
+      args: [],
+    );
+  }
+
   /// `Type a question`
   String get typeAQuestion {
     return Intl.message(
@@ -1250,6 +1300,56 @@ class S {
     );
   }
 
+  /// `Name can't be empty`
+  String get nameNotEmpty {
+    return Intl.message(
+      'Name can\'t be empty',
+      name: 'nameNotEmpty',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Country can't be empty`
+  String get countryNotEmpty {
+    return Intl.message(
+      'Country can\'t be empty',
+      name: 'countryNotEmpty',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Birthday can't be empty`
+  String get birthdayNotEmpty {
+    return Intl.message(
+      'Birthday can\'t be empty',
+      name: 'birthdayNotEmpty',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Level can't be empty`
+  String get levelNotEmpty {
+    return Intl.message(
+      'Level can\'t be empty',
+      name: 'levelNotEmpty',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Please select at least 1 subject`
+  String get wantToLearnNotEmpty {
+    return Intl.message(
+      'Please select at least 1 subject',
+      name: 'wantToLearnNotEmpty',
+      desc: '',
+      args: [],
+    );
+  }
+
   /// `No request for lesson`
   String get requestHint {
     return Intl.message(
@@ -1295,6 +1395,26 @@ class S {
     return Intl.message(
       'Session',
       name: 'session',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `The following is a list of lessons you have attended`
+  String get theFollowingIsAList {
+    return Intl.message(
+      'The following is a list of lessons you have attended',
+      name: 'theFollowingIsAList',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `You can review the details of the lessons you have attended`
+  String get youCanReviewTheDetails {
+    return Intl.message(
+      'You can review the details of the lessons you have attended',
+      name: 'youCanReviewTheDetails',
       desc: '',
       args: [],
     );

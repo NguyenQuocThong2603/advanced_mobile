@@ -34,6 +34,8 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("Asked by the tutor"),
         "balance": MessageLookupByLibrary.simpleMessage("Balance"),
         "birthday": MessageLookupByLibrary.simpleMessage("Birthday"),
+        "birthdayNotEmpty":
+            MessageLookupByLibrary.simpleMessage("Birthday can\'t be empty"),
         "book": MessageLookupByLibrary.simpleMessage("Book"),
         "bookSearch": MessageLookupByLibrary.simpleMessage("Search Books"),
         "booked": MessageLookupByLibrary.simpleMessage("Booked"),
@@ -58,6 +60,8 @@ class MessageLookup extends MessageLookupByLibrary {
         "conversationalEnglish":
             MessageLookupByLibrary.simpleMessage("Conversational English"),
         "country": MessageLookupByLibrary.simpleMessage("Country"),
+        "countryNotEmpty":
+            MessageLookupByLibrary.simpleMessage("Country can\'t be empty"),
         "courseTitle": MessageLookupByLibrary.simpleMessage("Courses"),
         "courses": MessageLookupByLibrary.simpleMessage("Courses"),
         "dark": MessageLookupByLibrary.simpleMessage("Dark mode"),
@@ -99,6 +103,8 @@ class MessageLookup extends MessageLookupByLibrary {
         "goToMeeting": MessageLookupByLibrary.simpleMessage("Go to meeting"),
         "helpUsUnderstand": MessageLookupByLibrary.simpleMessage(
             "Help us understand what\'s happening"),
+        "hereAListOfSession": MessageLookupByLibrary.simpleMessage(
+            "Here is a list of the sessions you have booked"),
         "hintRequest": MessageLookupByLibrary.simpleMessage(
             "Currently there are no requests for this class. Please write down any requests for the teacher."),
         "history": MessageLookupByLibrary.simpleMessage("History"),
@@ -112,6 +118,8 @@ class MessageLookup extends MessageLookupByLibrary {
         "lesson": MessageLookupByLibrary.simpleMessage("lesson"),
         "lessonLeft": MessageLookupByLibrary.simpleMessage("lessons left"),
         "lessonTime": MessageLookupByLibrary.simpleMessage("Lesson Time"),
+        "levelNotEmpty":
+            MessageLookupByLibrary.simpleMessage("Level can\'t be empty"),
         "light": MessageLookupByLibrary.simpleMessage("Light mode"),
         "login": MessageLookupByLibrary.simpleMessage("Login"),
         "logout": MessageLookupByLibrary.simpleMessage("Log out"),
@@ -119,6 +127,8 @@ class MessageLookup extends MessageLookupByLibrary {
         "moversSpeciality": MessageLookupByLibrary.simpleMessage("MOVERS"),
         "myLevel": MessageLookupByLibrary.simpleMessage("My level"),
         "name": MessageLookupByLibrary.simpleMessage("Name"),
+        "nameNotEmpty":
+            MessageLookupByLibrary.simpleMessage("Name can\'t be empty"),
         "nativeNationality": MessageLookupByLibrary.simpleMessage("Native"),
         "noUpcomingLesson": MessageLookupByLibrary.simpleMessage(
             "You have no upcoming lesson."),
@@ -177,6 +187,8 @@ class MessageLookup extends MessageLookupByLibrary {
         "signup": MessageLookupByLibrary.simpleMessage("Sign up"),
         "somethingWentWrong": MessageLookupByLibrary.simpleMessage(
             "Something went wrong, please try later!"),
+        "specialRequest":
+            MessageLookupByLibrary.simpleMessage("Special request"),
         "specialities": MessageLookupByLibrary.simpleMessage("Specialities"),
         "startersSpeciality": MessageLookupByLibrary.simpleMessage("STARTERS"),
         "startsIn": MessageLookupByLibrary.simpleMessage("starts in"),
@@ -186,6 +198,8 @@ class MessageLookup extends MessageLookupByLibrary {
             "Note the time of the week you want to study on LetTutor"),
         "submit": MessageLookupByLibrary.simpleMessage("Submit"),
         "successfully": MessageLookupByLibrary.simpleMessage("successfully"),
+        "theFollowingIsAList": MessageLookupByLibrary.simpleMessage(
+            "The following is a list of lessons you have attended"),
         "theme": MessageLookupByLibrary.simpleMessage("Theme"),
         "toeflSpeciality": MessageLookupByLibrary.simpleMessage("TOEFL"),
         "toeicSpeciality": MessageLookupByLibrary.simpleMessage("TOEIC"),
@@ -207,8 +221,17 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("Waiting for response"),
         "waitingRoom": MessageLookupByLibrary.simpleMessage("Waiting room"),
         "wantToLearn": MessageLookupByLibrary.simpleMessage("Want to learn"),
+        "wantToLearnNotEmpty": MessageLookupByLibrary.simpleMessage(
+            "Please select at least 1 subject"),
         "whatReasonTitle": MessageLookupByLibrary.simpleMessage(
             "What was the reason you cancel this booking"),
+        "wishTopic": MessageLookupByLibrary.simpleMessage("Wish topic"),
+        "youCanReviewTheDetails": MessageLookupByLibrary.simpleMessage(
+            "You can review the details of the lessons you have attended"),
+        "youCanTrackSession": MessageLookupByLibrary.simpleMessage(
+            "You can track when the meeting starts, join the meeting with one click or cancel the meeting before 2 hours"),
+        "youCanWriteEnglishOrVietnamese": MessageLookupByLibrary.simpleMessage(
+            "You can write in English or Vietnamese (Maximum 200 letters)"),
         "youHave": MessageLookupByLibrary.simpleMessage("You have"),
         "yourRegistration":
             MessageLookupByLibrary.simpleMessage("Your registration")

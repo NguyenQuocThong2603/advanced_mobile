@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:advanced_mobile/generated/l10n.dart';
 import 'package:advanced_mobile/models/schedule/schedule_model.dart';
 import 'package:advanced_mobile/models/tutor/tutor_model.dart';
@@ -6,6 +8,7 @@ import 'package:advanced_mobile/models/user/user_model.dart';
 import 'package:advanced_mobile/services/tutor_service.dart';
 import 'package:advanced_mobile/utils/authentication_utils.dart';
 import 'package:advanced_mobile/utils/tutor_utils.dart';
+import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:flutter/material.dart';
 import 'package:syncfusion_flutter_calendar/calendar.dart';
 
@@ -20,6 +23,7 @@ class TutorProvider extends ChangeNotifier{
   List<TimeRegion> regions = [];
   int count = 0;
   bool isLoading = false;
+  final firebaseAnalytics =  FirebaseAnalytics.instance;
 
 
 
@@ -50,7 +54,6 @@ class TutorProvider extends ChangeNotifier{
   }
   Future<void> getListTutors(String name,String speciality, String nationality,
       int page,int perPage,context) async{
-      print(perPage);
       final response = await TutorService.searchTutorByName(name,speciality,nationality,page, perPage);
       if(response.data['statusCode'] == 401){
         logout(context);
@@ -243,11 +246,28 @@ class TutorProvider extends ChangeNotifier{
     }
     if(index != null){
       final response = await TutorService.bookClass(bookingClass[0].scheduleDetails[0].id,note);
+      log('response: ${response.data}');
       if(response.data['statusCode'] == 401){
         logout(context);
       }
       if (response.data['statusCode'] != 200) {
         throw Exception(response.data['message']);
+      }
+      else{
+        final items = (response.data['data'] as List<dynamic>?)?.map((e) {
+              return AnalyticsEventItem(
+                itemId: e['scheduleDetailId'],
+                itemName: 'Booking',
+                currency: 'Lesson',
+                price: 1,
+              );
+            }
+        ).toList();
+
+        firebaseAnalytics.logPurchase(
+          transactionId: bookingClass[0].scheduleDetails.first.id,
+          items: items,
+        );
       }
     }
   }

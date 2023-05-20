@@ -194,10 +194,10 @@ class _CancelDialogState extends State<CancelDialog> {
                                     context
                                 );
                                 showSuccessToast(S.of(context).deleteBookingSuccess);
-                                widget.upcomingProvider.removeUpcomingClasses();
                                 await widget.upcomingProvider.getUpcomingClasses(
                                     1,
                                     widget.upcomingProvider.upComingCurrentLength,
+                                    true,
                                     context
                                 );
                                 Navigator.pop(context);

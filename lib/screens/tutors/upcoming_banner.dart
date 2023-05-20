@@ -69,10 +69,10 @@ class _UpcomingBannerState extends State<UpcomingBanner> {
         int startTimestamp = lastBooking!.scheduleDetailInfo!.startPeriodTimestamp;
         int endTimestamp = lastBooking!.scheduleDetailInfo!.endPeriodTimestamp;
         if(now > endTimestamp){
-          widget.upcomingProvider.removeUpcomingClasses();
           await widget.upcomingProvider.getUpcomingClasses(
               1,
               widget.upcomingProvider.upComingCurrentLength,
+              true,
               context
           );
         }

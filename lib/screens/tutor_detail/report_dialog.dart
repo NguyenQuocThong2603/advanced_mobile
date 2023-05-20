@@ -85,7 +85,7 @@ class _ReportDialogState extends State<ReportDialog> {
                       child: TextField(
                         controller: _reasonController,
                         maxLines: 6,
-                        style: TextStyle(fontSize: 15),
+                        style: const TextStyle(fontSize: 15),
                         decoration: InputDecoration(
                           fillColor: Colors.white,
                           border: const OutlineInputBorder(

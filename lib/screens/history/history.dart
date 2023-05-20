@@ -3,6 +3,7 @@ import 'package:advanced_mobile/generated/l10n.dart';
 import 'package:advanced_mobile/models/schedule/booking_info_model.dart';
 import 'package:advanced_mobile/models/schedule/class_review_model.dart';
 import 'package:advanced_mobile/providers/upcoming_provider.dart';
+import 'package:advanced_mobile/screens/history/about_history.dart';
 import 'package:advanced_mobile/widgets/toast.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
@@ -96,6 +97,16 @@ class _HistoryScreenState extends State<HistoryScreen> {
               padding: const EdgeInsets.symmetric(horizontal: 15),
               child: Column(
                 children: [
+                  const SizedBox(height: 16,),
+                  const AboutHistory(),
+                  const SizedBox(height: 16,),
+                  upcomingProvider.history.isEmpty ? const Expanded(
+                    child: Center(
+                      child: Image(
+                        image: AssetImage('asset/img/no-data-found.png'),
+                      ),
+                    ),
+                  ) :
                   Expanded(
                     child: ListView.builder(
                         controller: scrollController,

@@ -42,7 +42,7 @@ class _TutorsScreenState extends State<TutorsScreen>
     scrollController = ScrollController()..addListener(loadMore);
     WidgetsBinding.instance.addPostFrameCallback((_) async{
       context.read<TutorProvider>().removeState();
-      await context.read<UpcomingProvider>().getUpcomingClasses(1,10,context);
+      await context.read<UpcomingProvider>().getUpcomingClasses(1,10,false,context);
       await context.read<UpcomingProvider>().getTotalLessonTime(context);
       await context.read<TutorProvider>().searchTutorByName('',specialities(context)[selectedIndex]['key']!,'None',1,
           perPage,false,context);

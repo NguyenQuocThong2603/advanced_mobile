@@ -4,11 +4,13 @@ import 'package:advanced_mobile/config/preference.dart';
 import 'package:advanced_mobile/interceptors/interceptor.dart';
 import 'package:advanced_mobile/models/user/token_model.dart';
 import 'package:dio/dio.dart';
+import 'package:firebase_analytics/firebase_analytics.dart';
 
 class AuthService{
   static const String url = 'https://sandbox.api.lettutor.com';
   static final dio = DioInstance.dioWithoutToken;
   static final prefs = Preference.getInstance();
+  static final firebaseAnalytics =  FirebaseAnalytics.instance;
   static Future<void> register(String email, String password) async {
     final response = await dio.post('$url/auth/register',
       data: {
@@ -22,6 +24,7 @@ class AuthService{
           return status! < 600;
         }
       ));
+    firebaseAnalytics.logSignUp(signUpMethod: 'SignUpMethod');
     if(response.data['statusCode'] != null){
       throw Exception(response.data['message']);
     }
@@ -39,6 +42,34 @@ class AuthService{
             }
         )
     );
+    firebaseAnalytics.logLogin(loginMethod: 'LoginMethod');
+    if(response.data['statusCode'] == 200){
+      var tokens = response.data['tokens'];
+      String accessToken = tokens['access']['token'];
+      String expires = tokens['access']['expires'];
+      await prefs.setString(
+          'accessToken',
+          jsonEncode(Token(token: accessToken, expires: expires))
+      );
+    }
+    else {
+      throw Exception(response.data['message']);
+    }
+  }
+
+  static Future<void> googleLogin(String googleToken)async {
+    final response = await dio.post('$url/auth/google',
+        data: {
+          "access_token": googleToken
+        },
+        options: Options(
+            followRedirects: false,
+            validateStatus: (status) {
+              return status! < 600;
+            }
+        )
+    );
+    firebaseAnalytics.logLogin(loginMethod: 'GoogleLoginMethod');
     if(response.data['statusCode'] == 200){
       var tokens = response.data['tokens'];
       String accessToken = tokens['access']['token'];

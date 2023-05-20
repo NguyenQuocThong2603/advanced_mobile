@@ -58,4 +58,16 @@ class UpcomingService {
     ));
     return response;
   }
+
+  static Future<Response<dynamic>> editRequest(String note, String scheduleDetailId) async {
+    final response = await dio.post('$url/booking/student-request/$scheduleDetailId',data: {
+      "studentRequest": note
+    }, options: Options(
+        followRedirects: false,
+        validateStatus: (status) {
+          return status! < 600;
+        }
+    ));
+    return response;
+  }
 }

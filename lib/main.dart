@@ -1,4 +1,5 @@
 import 'package:advanced_mobile/config/preference.dart';
+import 'package:advanced_mobile/firebase_options.dart';
 import 'package:advanced_mobile/interceptors/interceptor.dart';
 import 'package:advanced_mobile/providers/chat_provider.dart';
 import 'package:advanced_mobile/providers/course.provider.dart';
@@ -7,6 +8,9 @@ import 'package:advanced_mobile/providers/tutor_provider.dart';
 import 'package:advanced_mobile/providers/upcoming_provider.dart';
 import 'package:advanced_mobile/providers/user_provider.dart';
 import 'package:advanced_mobile/screens/initial.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_crashlytics/firebase_crashlytics.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:provider/provider.dart';
@@ -16,6 +20,16 @@ Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Preference.getInstance().initPreference();
   DioInstance();
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
+  );
+  FlutterError.onError = (errorDetails) {
+    FirebaseCrashlytics.instance.recordFlutterFatalError(errorDetails);
+  };
+  PlatformDispatcher.instance.onError = (error, stack) {
+    FirebaseCrashlytics.instance.recordError(error, stack, fatal: true);
+    return true;
+  };
   runApp(const MyApp());
 }
 

@@ -36,16 +36,19 @@ Widget regionBuilder(BuildContext context, TimeRegionDetails timeRegionDetails){
 
   if(text == 'Can not book'){
     return Container(
-        width: 40,
-        alignment: Alignment.center,
-        height: 30,
-        decoration: BoxDecoration(
-            borderRadius:  const BorderRadius.all(Radius.circular(20)),
-            color: const Color(0xffe4e6eb),
-            border: Border.all(style: BorderStyle.solid,width: 0.2)
-        ),
-        child: Text(S.of(context).book,
-          style: TextStyle(color: AppColors.textGrey, fontSize: 8),)
+      alignment: Alignment.center,
+      child: Container(
+          width: 40,
+          alignment: Alignment.center,
+          height: 30,
+          decoration: BoxDecoration(
+              borderRadius:  const BorderRadius.all(Radius.circular(20)),
+              color: const Color(0xffe4e6eb),
+              border: Border.all(style: BorderStyle.solid,width: 0.2)
+          ),
+          child: Text(S.of(context).book,
+            style: TextStyle(color: AppColors.textGrey, fontSize: 8),)
+      ),
     );
   }
 

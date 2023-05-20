@@ -5,6 +5,7 @@ import 'package:advanced_mobile/providers/upcoming_provider.dart';
 import 'package:advanced_mobile/screens/tutor_detail/booking_dialog.dart';
 import 'package:advanced_mobile/screens/tutor_detail/report_dialog.dart';
 import 'package:advanced_mobile/screens/upcoming/cancel_dialog.dart';
+import 'package:advanced_mobile/screens/upcoming/edit_request_dialog.dart';
 import 'package:flutter/material.dart';
 
 void showBookingDialog(BuildContext context, TutorProvider tutorProvider, DateTime bookedDate, String tutorId){
@@ -26,5 +27,10 @@ void showReportDialog(BuildContext context,String tutorId, String tutorName,Tuto
 void showCancelDialog(BuildContext context,BookingInfo booking, UpcomingProvider upcomingProvider){
   showDialog(context: context, builder: (BuildContext context) =>
       CancelDialog(bookingInfo: booking,upcomingProvider: upcomingProvider,));
+}
+
+void showEditRequestDialog(BuildContext context,BookingInfo booking, UpcomingProvider upcomingProvider, int page, int perPage){
+  showDialog(context: context, builder: (BuildContext context) =>
+      EditRequestDialog(bookingInfo: booking,upcomingProvider: upcomingProvider,page:page,perPage: perPage,));
 }
 

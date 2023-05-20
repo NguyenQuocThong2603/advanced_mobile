@@ -2,6 +2,7 @@ import 'package:advanced_mobile/config/color.dart';
 import 'package:advanced_mobile/generated/l10n.dart';
 import 'package:advanced_mobile/models/schedule/booking_info_model.dart';
 import 'package:advanced_mobile/providers/upcoming_provider.dart';
+import 'package:advanced_mobile/screens/upcoming/about_upcoming.dart';
 import 'package:advanced_mobile/screens/video_call/video_call.dart';
 import 'package:advanced_mobile/utils/booking_info_utils.dart';
 import 'package:advanced_mobile/utils/formatDateFromTimestamp.dart';
@@ -31,7 +32,7 @@ class _UpcomingScreenState extends State<UpcomingScreen> {
     scrollController = ScrollController()..addListener(loadMore);
     WidgetsBinding.instance.addPostFrameCallback((_) async {
       context.read<UpcomingProvider>().refreshUpcomingClasses();
-      await context.read<UpcomingProvider>().getUpcomingClasses(1,10,context);
+      await context.read<UpcomingProvider>().getUpcomingClasses(1,10,false,context);
     });
   }
   @override
@@ -55,6 +56,7 @@ class _UpcomingScreenState extends State<UpcomingScreen> {
           await context.read<UpcomingProvider>().getUpcomingClasses(
               page,
               perPage,
+              false,
               context
           );
           if (mounted) {
@@ -84,6 +86,16 @@ class _UpcomingScreenState extends State<UpcomingScreen> {
             padding: const EdgeInsets.symmetric(horizontal: 15),
             child: Column(
               children: [
+                const SizedBox(height: 16,),
+                const AboutUpComing(),
+                const SizedBox(height: 16,),
+                upcomingProvider.upcomingClasses.isEmpty ? const Expanded(
+                  child: Center(
+                    child: Image(
+                      image: AssetImage('asset/img/no-data-found.png'),
+                    ),
+                  ),
+                ) :
                 Expanded(
                   child: ListView.builder(
                     itemCount: upcomingProvider.upcomingClasses.length,
@@ -235,7 +247,9 @@ class _UpcomingScreenState extends State<UpcomingScreen> {
                                         children: [
                                           Text(S.of(context).requestForLesson),
                                           TextButton(
-                                              onPressed: (){},
+                                              onPressed: (){
+                                                showEditRequestDialog(context, booking, upcomingProvider,page,perPage);
+                                              },
                                               child: Text(S.of(context).editRequest,)
                                           )
                                         ],
