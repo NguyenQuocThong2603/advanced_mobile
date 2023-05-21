@@ -14,3 +14,7 @@ Link: https://drive.google.com/file/d/1IDeVE7OoeOD5Vd4gglJ1QNMcyK60Uw2y/view?usp
 ## Milestone 2
 
 Link: https://www.youtube.com/watch?v=tyrkqDpjpPM
+
+## Milestone 3
+
+Link: https://youtu.be/rWUbodFEFdo
