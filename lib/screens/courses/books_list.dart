@@ -56,7 +56,7 @@ class _BookListState extends State<BookList> {
           page++;
         });
         try {
-          await context.read<CourseProvider>().getListBooks(page, size, name,levelSelected,categorySelected,context);
+          await context.read<CourseProvider>().getListBooks(1, size, name,levelSelected,categorySelected,context);
           if (mounted) {
             setState(() {
               isLoadMore = false;
@@ -92,7 +92,8 @@ class _BookListState extends State<BookList> {
                 setState(() {
                   name = searchInputController.text;
                 });
-                await courseProvider.getListCourses(page, size, searchInputController.text,
+                courseProvider.removeBooks();
+                await courseProvider.getListBooks(page, size, name,
                     levelSelected,categorySelected,context);
               },
             ),
@@ -136,7 +137,8 @@ class _BookListState extends State<BookList> {
                                 isSelected
                                     ? levelSelected.remove(e.key)
                                     : levelSelected.add(e.key);
-                                await courseProvider.getListCourses(page, size, searchInputController.text,
+                                courseProvider.removeBooks();
+                                await courseProvider.getListBooks(1, size, name,
                                     levelSelected,categorySelected,context);
                                 setState(() {});
                                 //This rebuilds the dropdownMenu Widget to update the check mark
@@ -226,7 +228,8 @@ class _BookListState extends State<BookList> {
                                 isSelected
                                     ? categorySelected.remove(e.key)
                                     : categorySelected.add(e.key);
-                                await courseProvider.getListCourses(page, size, name,
+                                courseProvider.removeBooks();
+                                await courseProvider.getListBooks(1, size, name,
                                     levelSelected, categorySelected, context);
                                 setState(() {});
                                 //This rebuilds the dropdownMenu Widget to update the check mark

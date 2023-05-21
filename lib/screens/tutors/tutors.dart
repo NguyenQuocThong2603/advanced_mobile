@@ -135,7 +135,7 @@ class _TutorsScreenState extends State<TutorsScreen>
                 ),
                 NationalitiesMenu(
                   speciality: specialities(context)[selectedIndex]['key']!,
-                  name: searchInputController.text,
+                  name: name,
                   nationalities: tutorProvider.nationalities(context),
                   tutorProvider: tutorProvider,
                   setFilter: setFilter,

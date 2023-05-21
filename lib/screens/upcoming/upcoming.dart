@@ -284,7 +284,10 @@ class _UpcomingScreenState extends State<UpcomingScreen> {
                                         onPressed: !checkDisableGoToMeeting(booking,upcomingProvider) ? (){
                                           Navigator.push(context,
                                               MaterialPageRoute(builder: (context) =>
-                                                  VideoCallScreen(upcomingProvider:upcomingProvider,upcomingClasses: upcomingProvider.upcomingClasses,)));
+                                                  VideoCallScreen(
+                                                    upcomingProvider:upcomingProvider,
+                                                    upcomingClasses: upcomingProvider.upcomingClasses,
+                                                    bookingInfo: booking,)));
                                         } : null,
                                         child: Text(S.of(context).goToMeeting,style: const TextStyle(color: Colors.white),)
                                     ),

@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:advanced_mobile/config/color.dart';
 import 'package:advanced_mobile/config/level.dart';
 import 'package:advanced_mobile/config/specialities.dart';
@@ -49,6 +51,8 @@ class _DetailInfoState extends State<DetailInfo> {
     setState(() {
       errorTextName = errorText;
     });
+    bool a=errorText == null ? true : false;
+    log('name: $a');
     return errorText == null ? true : false;
   }
 
@@ -60,6 +64,8 @@ class _DetailInfoState extends State<DetailInfo> {
     setState(() {
       errorTextCountry = errorText;
     });
+    bool a=errorText == null ? true : false;
+    log('country: $a');
     return errorText == null ? true : false;
   }
 
@@ -71,6 +77,8 @@ class _DetailInfoState extends State<DetailInfo> {
     setState(() {
       errorTextBirthday = errorText;
     });
+    bool a=errorText == null ? true : false;
+    log('birthday: $a');
     return errorText == null ? true : false;
   }
   bool validateLevelInput(){
@@ -81,6 +89,8 @@ class _DetailInfoState extends State<DetailInfo> {
     setState(() {
       errorTextLevel = errorText;
     });
+    bool a=errorText == null ? true : false;
+    log('level: $a');
     return errorText == null ? true : false;
   }
   bool validateWantToLearnInput(){
@@ -92,7 +102,8 @@ class _DetailInfoState extends State<DetailInfo> {
     setState(() {
       isWantToLearnEmpty;
     });
-    return isWantToLearnEmpty;
+    log('wantToLearn: $isWantToLearnEmpty');
+    return !isWantToLearnEmpty;
   }
 
   @override
@@ -108,6 +119,7 @@ class _DetailInfoState extends State<DetailInfo> {
     learnTopics = widget.userProvider.userInfo!.learnTopics!.map((e) => e.id).toList();
     testPreparations = widget.userProvider.userInfo!.testPreparations!.map((e) => e.id).toList();
     birthday = widget.userProvider.userInfo!.birthday ?? "" ;
+    birthDayInputController.text = birthday;
     countryCode = widget.userProvider.userInfo!.country;
     level = widget.userProvider.userInfo!.level;
   }
@@ -444,6 +456,7 @@ class _DetailInfoState extends State<DetailInfo> {
                           validateCountryInput(),
                           validateLevelInput(),validateBirthdayInput(),
                         validateWantToLearnInput()].every((element) => element == true);
+                        log('isValid $isValid');
                         if(isValid){
                           final futures = <Future<void>>[];
                           futures.add(widget.userProvider.updateUserInfo(birthday,

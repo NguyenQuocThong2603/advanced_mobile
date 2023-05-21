@@ -121,7 +121,11 @@ class _UpcomingBannerState extends State<UpcomingBanner> {
                       onPressed: (){
                         Navigator.push(context,
                             MaterialPageRoute(builder: (context) =>
-                            VideoCallScreen(upcomingProvider:widget.upcomingProvider,upcomingClasses: widget.upcomingClasses,)));
+                            VideoCallScreen(
+                              upcomingProvider:widget.upcomingProvider,
+                              upcomingClasses: widget.upcomingClasses,
+                              bookingInfo: widget.upcomingClasses[0],
+                            )));
                       },
                       style: ButtonStyle(
                         backgroundColor: MaterialStateColor.resolveWith((states) => Colors.white),

@@ -90,11 +90,12 @@ class _CourseListState extends State<CourseList> {
                       borderSide: BorderSide.none,
                       borderRadius: BorderRadius.all(Radius.circular(20))),
                   hintText: S.of(context).searchCourses),
-              onSubmitted: (value) async {
+                onSubmitted: (value) async {
                 setState(() {
                   name = searchInputController.text;
                 });
-                await courseProvider.getListCourses(page, size, searchInputController.text,
+                courseProvider.removeCourses();
+                await courseProvider.getListCourses(1, size, searchInputController.text,
                     levelSelected,categorySelected,context);
               },
             ),
@@ -138,7 +139,8 @@ class _CourseListState extends State<CourseList> {
                                 isSelected
                                     ? levelSelected.remove(e.key)
                                     : levelSelected.add(e.key);
-                                await courseProvider.getListCourses(page, size, searchInputController.text,
+                                courseProvider.removeCourses();
+                                await courseProvider.getListCourses(1, size, name,
                                     levelSelected,categorySelected,context);
                                 setState(() {});
                                 //This rebuilds the dropdownMenu Widget to update the check mark
@@ -228,7 +230,8 @@ class _CourseListState extends State<CourseList> {
                                 isSelected
                                     ? categorySelected.remove(e.key)
                                     : categorySelected.add(e.key);
-                                await courseProvider.getListCourses(page, size, name,
+                                courseProvider.removeCourses();
+                                await courseProvider.getListCourses(1, size, name,
                                     levelSelected, categorySelected, context);
                                 setState(() {});
                                 //This rebuilds the dropdownMenu Widget to update the check mark

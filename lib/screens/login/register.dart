@@ -81,7 +81,10 @@ class _RegisterScreenState extends State<RegisterScreen> {
           title: RichText(
               text: TextSpan(
                   text: "${S.of(context).yourRegistration} ",
-                  style: const TextStyle(fontSize: 16),
+                  style: TextStyle(
+                      fontSize: 16,
+                      color: Theme.of(context).brightness == Brightness.light ?Colors.black : Colors.white
+                  ),
                   children: [
                     TextSpan(
                         text: '${S.of(context).successfully}.',
@@ -95,7 +98,10 @@ class _RegisterScreenState extends State<RegisterScreen> {
                 RichText(
                   text: TextSpan(
                       text: "${S.of(context).receivedEmail} ",
-                      style: const TextStyle(fontSize: 16),
+                      style: TextStyle(
+                          fontSize: 16,
+                          color: Theme.of(context).brightness == Brightness.light ?Colors.black : Colors.white
+                      ),
                       children: [
                         TextSpan(
                             text: email,

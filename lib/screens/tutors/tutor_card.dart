@@ -52,7 +52,18 @@ class _TutorCardState extends State<TutorCard> {
               child: InkWell(
                 onTap: (){
                   Navigator.push(context,
-                      MaterialPageRoute(builder: (context) => TutorDetailScreen(tutorId: widget.tutor.userId)));
+                      MaterialPageRoute(builder: (context) => TutorDetailScreen(tutorId: widget.tutor.userId)))
+                  .then((value) async {
+                    int currentLength = widget.page * widget.perPage;
+                    await widget.tutorProvider.getListTutors(
+                        widget.name,
+                        widget.speciality,
+                        widget.nationality,
+                        1,
+                        currentLength,
+                        context);
+                    }
+                  );
                 },
                 child: Container(
                   margin: const EdgeInsets.all(10),

@@ -19,11 +19,13 @@ class VideoCallScreen extends StatefulWidget {
   const VideoCallScreen({
     Key? key,
     required this.upcomingClasses,
-    required this.upcomingProvider
+    required this.upcomingProvider,
+    required this.bookingInfo
   }) : super(key: key);
 
   final List<BookingInfo> upcomingClasses;
   final UpcomingProvider upcomingProvider;
+  final BookingInfo bookingInfo;
   @override
   State<VideoCallScreen> createState() => _VideoCallScreenState();
 }
@@ -44,7 +46,7 @@ class _VideoCallScreenState extends State<VideoCallScreen> {
   @override
   void initState() {
     super.initState();
-    lastBooking = widget.upcomingClasses[0];
+    lastBooking = widget.bookingInfo;
     base64Decoded = base64.decode(base64.normalize(lastBooking.studentMeetingLink.split("token=")[1].split(".")[1]));
     urlObject = utf8.decode(base64Decoded);
     jsonRes = json.decode(urlObject);
